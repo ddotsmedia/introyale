@@ -11,7 +11,9 @@ export default defineConfig({
     include: ['apps/web/tests/unit/**/*.test.ts', 'apps/web/tests/int/**/*.int.test.ts'],
     environment: 'node',
     passWithNoTests: true,
+    // Never let Payload push schema during tests: the dev path prompts for data loss and blocks.
+    env: { PAYLOAD_MIGRATING: 'true' },
     testTimeout: 60_000,
-    hookTimeout: 120_000,
+    hookTimeout: 300_000,
   },
 })

@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Picture, type MediaLike } from './Picture'
+import { Picture, type MediaInput } from './Picture'
 
-export type Hotspot = { x: number; y: number; label: string; media?: MediaLike }
+export type Hotspot = { x: number; y: number; label: string; media?: MediaInput }
 
 /** Plan with keyboard-operable hotspots. The list below is the full, non-visual equivalent. */
-export function PlanHotspots({ plan, hotspots }: { plan: MediaLike; hotspots: Hotspot[] }) {
+export function PlanHotspots({ plan, hotspots }: { plan: MediaInput; hotspots: Hotspot[] }) {
   const [active, setActive] = useState<number | null>(null)
   const selected = active === null ? null : hotspots[active]
   return (

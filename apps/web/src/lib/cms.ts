@@ -12,10 +12,9 @@ export function cms(): Promise<Payload> {
 /** Public reads: `published` only. Access rules in the collections enforce it too. */
 const published = { 'workflow.status': { equals: 'published' } } as const
 
-export async function getPageBySlug<T extends 'pages' | 'sectors' | 'services' | 'team-members'>(
-  collection: T,
-  slug: string,
-): Promise<DataFromCollectionSlug<T> | null> {
+export async function getPageBySlug<
+  T extends 'pages' | 'sectors' | 'services' | 'team-members' | 'projects',
+>(collection: T, slug: string): Promise<DataFromCollectionSlug<T> | null> {
   const payload = await cms()
   const res = await payload.find({
     collection,

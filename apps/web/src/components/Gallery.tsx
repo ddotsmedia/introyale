@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { Picture, type MediaLike } from './Picture'
+import { Picture, type MediaInput } from './Picture'
 
-export type GalleryItem = { media: MediaLike; caption?: string | null }
+export type GalleryItem = { media: MediaInput; caption?: string | null }
 
 /** Thumbnail grid with a native modal <dialog> lightbox (Esc, focus trap and focus return built in). */
 export function Gallery({ items }: { items: GalleryItem[] }) {

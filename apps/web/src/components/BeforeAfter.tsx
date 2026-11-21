@@ -1,7 +1,7 @@
 'use client'
 
 import { useId, useState } from 'react'
-import { Picture, type MediaLike } from './Picture'
+import { Picture, type MediaInput } from './Picture'
 
 /** Before/after reveal driven by a native range input (keyboard: arrows, Home, End). */
 export function BeforeAfter({
@@ -9,8 +9,8 @@ export function BeforeAfter({
   after,
   caption,
 }: {
-  before: MediaLike
-  after: MediaLike
+  before: MediaInput
+  after: MediaInput
   caption?: string | null
 }) {
   const [pos, setPos] = useState(50)

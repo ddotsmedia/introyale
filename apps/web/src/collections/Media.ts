@@ -35,12 +35,19 @@ export const Media: CollectionConfig = {
     staticDir: process.env.MEDIA_DIR ?? 'media',
     // SVG is excluded at launch (sanitisation not yet in place); see docs/decisions-log.md.
     mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'application/pdf'],
-    // Sizes per SPEC §5.2. Sharp strips EXIF on output. AVIF variants land in M6.
-    imageSizes: [480, 768, 1080, 1440, 1920, 2560].map((w) => ({
-      name: `w${String(w)}`,
-      width: w,
-      formatOptions: { format: 'webp', options: { quality: 80 } },
-    })),
+    // Sizes per SPEC §5.2 in WebP (w*) and AVIF (a*). Sharp strips EXIF on output.
+    imageSizes: [480, 768, 1080, 1440, 1920, 2560].flatMap((w) => [
+      {
+        name: `w${String(w)}`,
+        width: w,
+        formatOptions: { format: 'webp', options: { quality: 80 } },
+      },
+      {
+        name: `a${String(w)}`,
+        width: w,
+        formatOptions: { format: 'avif', options: { quality: 55, effort: 2 } },
+      },
+    ]),
     focalPoint: true,
   },
   fields: [
