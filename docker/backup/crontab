@@ -1,0 +1,2 @@
+# Nightly 02:30 Asia/Dubai (SPEC §2.8)
+30 2 * * * /usr/local/bin/backup.sh

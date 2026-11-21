@@ -1,0 +1,160 @@
+# Base platform. Always run with -p introyale-<env> and an env overlay (SPEC §2).
+x-logging: &logging
+  driver: json-file
+  options: { max-size: '10m', max-file: '5' }
+
+x-hardening: &hardening
+  restart: unless-stopped
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging: *logging
+
+x-app-env: &app-env
+  NODE_ENV: production
+  APP_VERSION: ${IMAGE_TAG:-dev}
+  PAYLOAD_SECRET_FILE: /run/secrets/payload_secret
+  DATABASE_URL_FILE: /run/secrets/database_url
+  FEATURE_AR: ${FEATURE_AR:-false}
+  FEATURE_CRM: ${FEATURE_CRM:-false}
+  FEATURE_CLOUDFLARE: ${FEATURE_CLOUDFLARE:-false}
+  NEXT_TELEMETRY_DISABLED: '1'
+
+services:
+  migrate:
+    image: ${WEB_IMAGE:-introyale-web:local}
+    command: ['node', '/app/cli/dist/migrate.js']
+    restart: 'no'
+    logging: *logging
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    read_only: true
+    tmpfs: ['/tmp']
+    environment: *app-env
+    secrets: [payload_secret, database_url]
+    networks: [internal]
+    depends_on:
+      db: { condition: service_healthy }
+
+  web:
+    <<: *hardening
+    image: ${WEB_IMAGE:-introyale-web:local}
+    command: ['node', '/app/server/apps/web/server.js']
+    read_only: true
+    tmpfs: ['/tmp']
+    mem_limit: 1g
+    environment: *app-env
+    secrets: [payload_secret, database_url]
+    networks: [internal, edge]
+    volumes:
+      - ${MEDIA_DIR:-./media/dev}:/media
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+
+  worker:
+    <<: *hardening
+    image: ${WEB_IMAGE:-introyale-web:local}
+    command: ['node', '/app/cli/dist/worker.js']
+    read_only: true
+    tmpfs: ['/tmp']
+    mem_limit: 512m
+    environment: *app-env
+    secrets: [payload_secret, database_url, smtp_password]
+    networks: [internal, egress]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+
+  db:
+    <<: *hardening
+    image: pgvector/pgvector:pg16@sha256:484e838076e04939d27d3e176e91c86eea96236126023be8d3059761122e579f
+    mem_limit: 1g
+    environment:
+      POSTGRES_DB: introyale
+      POSTGRES_USER: introyale_app
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    secrets: [db_password, umami_db_password, backup_db_password]
+    volumes:
+      - ${DB_DIR:-./data/db-dev}:/var/lib/postgresql/data
+      - ./docker/db/init-roles.sh:/docker-entrypoint-initdb.d/10-roles.sh:ro
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U introyale_app -d introyale"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backup:
+    <<: *hardening
+    build:
+      context: .
+      dockerfile: docker/backup.Dockerfile
+    image: ${BACKUP_IMAGE:-introyale-backup:local}
+    mem_limit: 256m
+    environment:
+      PGHOST: db
+      PGDATABASE: introyale
+      PGUSER: backup
+      PGPASSWORD_FILE: /run/secrets/backup_db_password
+      RESTIC_PASSWORD_FILE: /run/secrets/restic_password
+      RESTIC_REPOSITORY: /backups/restic-local
+      BACKUP_SFTP_TARGET: ${BACKUP_SFTP_TARGET:-}
+    secrets: [backup_db_password, restic_password, backup_sftp_key]
+    volumes:
+      - ${MEDIA_DIR:-./media/dev}:/media:ro
+      - ${BACKUP_DIR:-./backups/dev}:/backups
+    networks: [internal, egress]
+    healthcheck:
+      test: ["CMD-SHELL", "test $(( $(date +%s) - $(cat /backups/last_success 2>/dev/null || echo 0) )) -lt 93600"]
+      interval: 15m
+      timeout: 5s
+      retries: 3
+
+  umami:
+    <<: *hardening
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    mem_limit: 512m
+    environment:
+      DATABASE_URL: postgresql://umami@db:5432/umami
+      DATABASE_TYPE: postgresql
+    secrets: [umami_app_secret, umami_db_password]
+    networks: [internal, edge]
+    depends_on:
+      db: { condition: service_healthy }
+
+  # Mode B only (dedicated VPS). Mode A uses host Nginx instead.
+  proxy:
+    <<: *hardening
+    profiles: [edge]
+    image: caddy:2
+    ports: ['80:80', '443:443']
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    networks: [edge]
+
+secrets:
+  payload_secret: { file: "${SECRETS_DIR:-./secrets/dev}/payload_secret.txt" }
+  database_url: { file: "${SECRETS_DIR:-./secrets/dev}/database_url.txt" }
+  db_password: { file: "${SECRETS_DIR:-./secrets/dev}/db_password.txt" }
+  umami_db_password: { file: "${SECRETS_DIR:-./secrets/dev}/umami_db_password.txt" }
+  umami_app_secret: { file: "${SECRETS_DIR:-./secrets/dev}/umami_app_secret.txt" }
+  backup_db_password: { file: "${SECRETS_DIR:-./secrets/dev}/backup_db_password.txt" }
+  restic_password: { file: "${SECRETS_DIR:-./secrets/dev}/restic_password.txt" }
+  backup_sftp_key: { file: "${SECRETS_DIR:-./secrets/dev}/backup_sftp_key.txt" }
+  smtp_password: { file: "${SECRETS_DIR:-./secrets/dev}/smtp_password.txt" }
+
+networks:
+  internal:
+    internal: true
+  edge: {}
+  egress: {}

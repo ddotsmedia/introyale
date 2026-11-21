@@ -6,6 +6,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { Users } from './collections/Users'
 import { readSecret } from './lib/secrets'
+import { migrations } from './migrations'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -18,6 +19,9 @@ export default buildConfig({
   editor: lexicalEditor(),
   secret: readSecret('PAYLOAD_SECRET'),
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
-  db: postgresAdapter({ pool: { connectionString: readSecret('DATABASE_URL') } }),
+  db: postgresAdapter({
+    pool: { connectionString: readSecret('DATABASE_URL') },
+    prodMigrations: migrations,
+  }),
   sharp,
 })

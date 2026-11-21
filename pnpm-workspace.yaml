@@ -4,3 +4,6 @@ allowBuilds:
   sharp: true
   esbuild: true
   unrs-resolver: true
+overrides:
+  esbuild: 0.28.2
+  happy-dom: 21.0.4

@@ -12,3 +12,5 @@ media/
 backups/
 *.log
 *.tsbuildinfo
+data/
+secrets/
