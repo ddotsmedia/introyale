@@ -1,14 +1,24 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { buildCsp, newNonce, staticSecurityHeaders } from './lib/csp'
 import { getRedirectMap } from './lib/redirects'
 
 /**
  * Request-level policy (Next 16 `proxy` convention, Node runtime):
+ *  - a per-request CSP nonce, passed to Next so its scripts carry it (SPEC §2.7)
+ *  - security headers on every response (HSTS in production)
  *  - legacy and CMS redirects (301/302) and gone pages (410), SPEC §4 and §5.2
- *  - X-Robots-Tag noindex on every response when ROBOTS_NOINDEX=true (staging, SPEC §2.3)
+ *  - X-Robots-Tag noindex when ROBOTS_NOINDEX=true (staging, SPEC §2.3)
  */
 export async function proxy(request: NextRequest): Promise<NextResponse> {
-  const hit = (await getRedirectMap()).get(request.nextUrl.pathname)
+  const production = process.env.NODE_ENV === 'production'
+  const nonce = newNonce()
+  const csp = buildCsp(nonce, { dev: !production, umamiOrigin: process.env.UMAMI_ORIGIN ?? null })
 
+  // Next reads the nonce from the request's CSP header and applies it to its own inline scripts.
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set('Content-Security-Policy', csp)
+
+  const hit = (await getRedirectMap()).get(request.nextUrl.pathname)
   let response: NextResponse
   if (hit?.type === 410) {
     response = new NextResponse('Gone', { status: 410, headers: { 'content-type': 'text/plain' } })
@@ -16,9 +26,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     // The rule's target may carry a query or hash (e.g. /work?sector=commercial, /studio#clients).
     response = NextResponse.redirect(new URL(hit.to, request.url), hit.type)
   } else {
-    response = NextResponse.next()
+    response = NextResponse.next({ request: { headers: requestHeaders } })
   }
 
+  response.headers.set('Content-Security-Policy', csp)
+  for (const [name, value] of Object.entries(staticSecurityHeaders(production))) {
+    response.headers.set(name, value)
+  }
   if (process.env.ROBOTS_NOINDEX === 'true') {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
   }

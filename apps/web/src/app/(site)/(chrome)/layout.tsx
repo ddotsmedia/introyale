@@ -5,6 +5,7 @@ import { StickyActionBar } from '@/components/StickyActionBar'
 import { globalDoc, verifiedFact } from '@/lib/cms'
 import { publishedPostCount } from '@/lib/journal'
 import { JsonLd } from '@/components/JsonLd'
+import { WebVitals } from '@/components/WebVitals'
 import { organization, website, localBusiness } from '@/lib/schema'
 import { SITE_URL } from '@/lib/seo'
 
@@ -44,6 +45,7 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
   return (
     <>
       <JsonLd data={ld} />
+      <WebVitals />
       <Header brand={brand} nav={items} />
       <main id="main" className="pb-16 md:pb-0">
         {children}
