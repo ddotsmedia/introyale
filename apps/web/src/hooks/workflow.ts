@@ -6,6 +6,7 @@ import type {
 } from 'payload'
 import { publishGateErrors, type GateContext, type MediaInfo } from '../lib/publishGates'
 import { checkTransition, type Status } from '../lib/workflow'
+import { revalidateFor } from '../lib/revalidate'
 import type { Role } from '../lib/roles'
 
 type Doc = Record<string, unknown> & { id?: unknown; workflow?: { status?: Status } }
@@ -93,6 +94,7 @@ export const auditAfterChange: CollectionAfterChangeHook = async ({
   operation,
 }) => {
   if (collection.slug === 'audit-log') return doc as Doc
+  await revalidateFor(collection.slug, doc as Record<string, unknown>)
   const fromStatus = (previousDoc as Doc | undefined)?.workflow?.status ?? null
   const toStatus = (doc as Doc).workflow?.status ?? null
   await req.payload.create({

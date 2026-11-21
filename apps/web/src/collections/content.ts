@@ -223,6 +223,8 @@ export const Pages: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', localized: true, required: true },
     slugField,
+    { name: 'intro', type: 'textarea', localized: true },
+    rel('hero', 'media'),
     { name: 'body', type: 'textarea', localized: true },
     seoField,
     workflowField,

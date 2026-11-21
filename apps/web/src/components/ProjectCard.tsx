@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Picture, type MediaLike } from './Picture'
+import { Picture, type MediaInput } from './Picture'
 
 export function ProjectCard({
   href,
@@ -13,7 +13,7 @@ export function ProjectCard({
   title: string
   areaLabel?: string | null
   year?: number | null
-  hero?: MediaLike
+  hero?: MediaInput
   /** Shared element name for the card → case study View Transition (M4). */
   viewTransitionName?: string
 }) {

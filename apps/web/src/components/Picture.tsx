@@ -1,3 +1,6 @@
+/** A Payload relation: populated object, bare ID (unresolved), or empty. */
+export type MediaInput = MediaLike | number | null | undefined
+
 export type MediaVariant = { url?: string | null; width?: number | null } | null | undefined
 
 export type MediaLike = {
@@ -15,25 +18,27 @@ export function Picture({
   priority = false,
   className,
 }: {
-  media: MediaLike | undefined
+  /** Payload relations are IDs until populated: an unresolved ID renders nothing. */
+  media: MediaInput
   sizes?: string
   priority?: boolean
   className?: string
 }) {
-  if (!media?.url || !media.alt) return null
-  const variants = Object.values(media.sizes ?? {}).filter(
+  const m = typeof media === 'object' ? media : null
+  if (!m?.url || !m.alt) return null
+  const variants = Object.values(m.sizes ?? {}).filter(
     (v): v is { url: string; width: number } => !!v?.url && !!v.width,
   )
   const srcSet = variants.map((v) => `${v.url} ${String(v.width)}w`).join(', ')
   return (
     // Plain img: Payload serves the variants; Next image optimisation is off (SPEC C12).
     <img
-      src={media.url}
+      src={m.url}
       srcSet={srcSet || undefined}
       sizes={sizes}
-      alt={media.alt}
-      width={media.width ?? undefined}
-      height={media.height ?? undefined}
+      alt={m.alt}
+      width={m.width ?? undefined}
+      height={m.height ?? undefined}
       loading={priority ? 'eager' : 'lazy'}
       fetchPriority={priority ? 'high' : undefined}
       decoding="async"

@@ -661,6 +661,8 @@ export interface Page {
   id: number;
   title: string;
   slug: string;
+  intro?: string | null;
+  hero?: (number | null) | Media;
   body?: string | null;
   seo?: {
     metaTitle?: string | null;
@@ -1499,6 +1501,8 @@ export interface FaqsSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  intro?: T;
+  hero?: T;
   body?: T;
   seo?:
     | T

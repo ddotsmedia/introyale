@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { Picture, type MediaLike } from './Picture'
+import { Picture, type MediaInput } from './Picture'
 
 /** Accordion built on native <details>: keyboard and screen-reader behaviour come from the platform. */
 export function Accordion({ items }: { items: { question: string; answer: string }[] }) {
@@ -97,7 +97,7 @@ export function TeamCard({
 }: {
   name: string
   role: string
-  photo?: MediaLike
+  photo?: MediaInput
   consentGiven: boolean
 }) {
   if (!consentGiven) return null
