@@ -1,14 +1,17 @@
 import { notFound } from 'next/navigation'
-import { Accordion, Breadcrumbs, CtaBand, ProcessTimeline, Prose } from '@/components/Structure'
-import { ProjectCard } from '@/components/ProjectCard'
+import type { Metadata } from 'next'
+import { BlockRenderer } from '@/components/blocks/BlockRenderer'
+import { Hero } from '@/components/blocks/Hero'
+import { container, sectionPad } from '@/components/blocks/shared'
+import { JsonLd } from '@/components/JsonLd'
+import { Accordion } from '@/components/Structure'
 import { getPageBySlug } from '@/lib/cms'
+import * as schema from '@/lib/schema'
+import { pageMetadata, SITE_URL } from '@/lib/seo'
+import { seoDefaults } from '@/lib/site'
+import { ui } from '@/messages/en'
 
 export const dynamic = 'force-dynamic'
-
-import type { Metadata } from 'next'
-import { JsonLd } from '@/components/JsonLd'
-import { pageMetadata, SITE_URL } from '@/lib/seo'
-import * as schema from '@/lib/schema'
 
 export async function generateMetadata({
   params,
@@ -28,21 +31,20 @@ export async function generateMetadata({
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const doc = await getPageBySlug('services', slug)
+  const [doc, defaults] = await Promise.all([getPageBySlug('services', slug), seoDefaults()])
   if (!doc) notFound()
   const faqs = (doc.faqs ?? []).filter((f) => typeof f === 'object')
-  const proof = (doc.proofProjects ?? []).filter((p) => typeof p === 'object')
-
+  const sector = typeof doc.sector === 'object' ? doc.sector : null
   const ld = [
     schema.service({
       name: doc.title,
       description: doc.summary ?? null,
       url: `${SITE_URL}/services/${slug}`,
-      providerName: 'Introyale Interiors',
+      providerName: defaults.siteName,
     }),
     schema.breadcrumb([
-      { name: 'Home', url: SITE_URL },
-      { name: 'Services', url: `${SITE_URL}/services` },
+      { name: ui.home, url: SITE_URL },
+      { name: ui.services, url: `${SITE_URL}/services` },
       { name: doc.title, url: `${SITE_URL}/services/${slug}` },
     ]),
     schema.faqPage(
@@ -54,48 +56,30 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
     ),
   ]
   return (
-    <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+    <>
       <JsonLd data={ld} />
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Services', href: '/services' },
-          { label: doc.title },
-        ]}
+      <Hero
+        block={{
+          blockType: 'hero',
+          eyebrow: sector?.title,
+          headline: doc.title,
+          subhead: doc.summary,
+          image: doc.image ?? sector?.hero,
+          size: 'banner',
+          overlay: 50,
+        }}
       />
-      <h1 className="font-display text-ink mt-6 text-4xl">{doc.title}</h1>
-      {doc.summary && (
-        <Prose>
-          <p>{doc.summary}</p>
-        </Prose>
-      )}
-      {(doc.processSteps ?? []).length > 0 && (
-        <div className="mt-10">
-          <ProcessTimeline steps={(doc.processSteps ?? []).map((s) => ({ title: s.step }))} />
-        </div>
-      )}
       {faqs.length > 0 && (
-        <div className="mt-10">
-          <Accordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
-        </div>
+        <section className={`${sectionPad} bg-ivory`}>
+          <div className={`${container} max-w-4xl`}>
+            <h2 className="display text-[clamp(2rem,4vw,3rem)]">{ui.faq}</h2>
+            <div className="mt-5">
+              <Accordion items={faqs.map((f) => ({ question: f.question, answer: f.answer }))} />
+            </div>
+          </div>
+        </section>
       )}
-      {proof.length > 0 && (
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {proof.map((p) => (
-            <ProjectCard
-              key={p.id}
-              href={`/work/${p.slug}`}
-              title={p.publicTitle ?? p.title}
-              areaLabel={p.areaLabel}
-              year={p.year}
-              hero={p.hero}
-            />
-          ))}
-        </div>
-      )}
-      <div className="mt-12">
-        <CtaBand heading="Discuss this service" href="/start" label="Start a project" />
-      </div>
-    </article>
+      <BlockRenderer layout={doc.layout} />
+    </>
   )
 }

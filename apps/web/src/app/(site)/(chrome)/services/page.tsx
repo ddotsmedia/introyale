@@ -1,32 +1,19 @@
-import Link from 'next/link'
-import { Breadcrumbs } from '@/components/Structure'
-import { listPublished } from '@/lib/cms'
+import type { Metadata } from 'next'
+import { ServicesList } from '@/components/blocks/ServicesList'
+import { PageHeader } from '@/components/PageHeader'
+import { pageMetadata } from '@/lib/seo'
+import { ui } from '@/messages/en'
 
 export const dynamic = 'force-dynamic'
 
-export default async function ServicesIndex() {
-  const services = await listPublished('services')
+export const generateMetadata = (): Promise<Metadata> =>
+  pageMetadata({ fallbackTitle: ui.services, path: '/services' })
+
+export default function ServicesIndex() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Services' }]} />
-      <h1 className="font-display text-ink mt-6 text-4xl">Services</h1>
-      {services.length === 0 ? (
-        <p className="text-taupe mt-6">No services are published yet.</p>
-      ) : (
-        <ul className="mt-8 grid gap-6 md:grid-cols-2">
-          {services.map((s) => (
-            <li key={s.id}>
-              <Link
-                href={`/services/${s.slug}`}
-                className="font-display text-ink text-2xl underline"
-              >
-                {s.title}
-              </Link>
-              {s.summary && <p className="text-ink/90 mt-2">{s.summary}</p>}
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+    <>
+      <PageHeader title={ui.services} />
+      <ServicesList block={{ blockType: 'servicesList' }} />
+    </>
   )
 }

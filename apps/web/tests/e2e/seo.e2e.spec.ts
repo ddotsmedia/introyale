@@ -18,6 +18,10 @@ test.describe('legacy redirects (M9)', () => {
 
 test.describe('crawl surface (M9)', () => {
   test('robots.txt points to the sitemap when indexing is allowed', async ({ request }) => {
+    test.skip(
+      process.env.ROBOTS_NOINDEX === 'true',
+      'staging and local previews disallow everything',
+    )
     const res = await request.get('/robots.txt')
     expect(res.status()).toBe(200)
     expect(await res.text()).toContain('Sitemap:')

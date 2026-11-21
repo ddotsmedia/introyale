@@ -24,6 +24,18 @@ export const SiteSettings: GlobalConfig = {
     { name: 'tagline', type: 'text', localized: true },
     { name: 'ctaLabel', type: 'text', localized: true },
     { name: 'ctaLink', type: 'text' },
+    {
+      name: 'closingCta',
+      type: 'group',
+      admin: { description: 'Closing call-to-action band used at the end of case studies' },
+      fields: [
+        { name: 'heading', type: 'text', localized: true },
+        { name: 'text', type: 'textarea', localized: true },
+        { name: 'image', type: 'upload', relationTo: 'media' },
+        { name: 'buttonLabel', type: 'text', localized: true },
+        { name: 'buttonHref', type: 'text' },
+      ],
+    },
   ],
 }
 
@@ -144,6 +156,14 @@ export const ConsultationSettings: GlobalConfig = {
       ],
     },
     { name: 'slaText', type: 'text', localized: true },
+    {
+      name: 'consentText',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Label for the consent checkbox on the contact and consultation forms',
+      },
+    },
     {
       name: 'routingRules',
       type: 'array',

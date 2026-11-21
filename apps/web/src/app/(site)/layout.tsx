@@ -1,13 +1,20 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import '../../styles/globals.css'
-import { SITE_DESCRIPTION } from '../../lib/seo'
+import { seoDefaults } from '../../lib/site'
 
-export const metadata: Metadata = {
-  title: { default: 'Introyale Interiors', template: '%s · Introyale Interiors' },
-  description: SITE_DESCRIPTION,
-  // Staging is fully noindex (SPEC §2.3): robots.txt, X-Robots-Tag and this meta all agree.
-  robots: process.env.ROBOTS_NOINDEX === 'true' ? { index: false, follow: false } : undefined,
+// Metadata comes from the CMS at request time, so nothing under this layout is prerendered at build.
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const d = await seoDefaults()
+  return {
+    title: d.siteName ? { default: d.siteName, template: d.titleTemplate ?? '%s' } : undefined,
+    description: d.description ?? undefined,
+    icons: d.iconUrl ? { icon: d.iconUrl } : undefined,
+    // Staging is fully noindex (SPEC §2.3): robots.txt, X-Robots-Tag and this meta all agree.
+    robots: process.env.ROBOTS_NOINDEX === 'true' ? { index: false, follow: false } : undefined,
+  }
 }
 
 // Locale and direction come from the route (M5). English is the only live locale at launch (D15).

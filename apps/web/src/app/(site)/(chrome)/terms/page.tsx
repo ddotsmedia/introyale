@@ -1,7 +1,10 @@
-import { LegalPage } from '@/components/LegalPage'
+import type { Metadata } from 'next'
+import { CmsPage, cmsPageMetadata } from '@/components/CmsPage'
 
 export const dynamic = 'force-dynamic'
 
-export default function Terms() {
-  return <LegalPage slug="terms" label="Terms" />
+export const generateMetadata = (): Promise<Metadata> => cmsPageMetadata('terms', '/terms')
+
+export default function Page() {
+  return <CmsPage slug="terms" />
 }

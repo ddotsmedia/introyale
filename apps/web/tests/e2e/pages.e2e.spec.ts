@@ -2,17 +2,26 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
 
 const WCAG = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']
-// Unverified claims from the live site (SPEC C9). They must never render until verified.
-const UNVERIFIED_CLAIMS = ['1050', '1,050', '50+', '10+ years']
+// Admin-only placeholders and demo text must never reach a public page.
+const LEAKS = ['[CONFIRM]', '[DEMO]']
 
-test.describe('core pages render only CMS content (M5)', () => {
-  for (const path of ['/', '/services', '/studio', '/contact']) {
-    test(`${path} is accessible and shows no unverified claims`, async ({ page }) => {
+test.describe('core pages render only public CMS content', () => {
+  for (const path of [
+    '/',
+    '/work',
+    '/residential',
+    '/services',
+    '/studio',
+    '/clients',
+    '/contact',
+  ]) {
+    test(`${path} is accessible and leaks no admin-only text`, async ({ page }) => {
       const res = await page.goto(path)
       expect(res?.status()).toBe(200)
       await expect(page.locator('main')).toBeVisible()
-      const text = (await page.locator('main').innerText()).replace(/\s+/g, ' ')
-      for (const claim of UNVERIFIED_CLAIMS) expect(text).not.toContain(claim)
+      await expect(page.locator('h1')).toHaveCount(1)
+      const text = (await page.locator('body').innerText()).replace(/\s+/g, ' ')
+      for (const leak of LEAKS) expect(text).not.toContain(leak)
       const results = await new AxeBuilder({ page }).withTags(WCAG).analyze()
       expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([])
     })
@@ -24,10 +33,8 @@ test.describe('core pages render only CMS content (M5)', () => {
     await expect(page.getByRole('heading', { name: 'Page not found' })).toBeVisible()
   })
 
-  test('sector pages 404 until a sector is published (never invented content)', async ({
-    page,
-  }) => {
-    const res = await page.goto('/residential')
+  test('an unknown sector slug is a 404, never invented content', async ({ page }) => {
+    const res = await page.goto('/not-a-sector')
     expect(res?.status()).toBe(404)
   })
 

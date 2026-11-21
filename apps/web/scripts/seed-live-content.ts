@@ -22,6 +22,10 @@ import {
   SITE,
   SOURCE,
   START,
+  THANKS,
+  WORK,
+  CLOSING_CTA,
+  CONSENT_TEXT,
 } from './live-content'
 
 if (process.env.ENV !== 'local') {
@@ -516,6 +520,10 @@ await page('contact', 'Contact', SEO.contact, [
     form: 'contact',
   },
 ])
+await page('work', 'Projects', SEO.work, [banner(WORK.eyebrow, WORK.headline, 'banner2.jpg')])
+await page('thank-you', 'Thank you', SEO.thanks, [
+  banner(undefined, THANKS.heading, 'banner4.jpg', THANKS.text),
+])
 await page('start', 'Start a project', SEO.start, [
   banner('Consultation', START.heading, 'bookbg.jpg', START.intro),
   { blockType: 'enquiryForm', heading: undefined, intro: undefined, form: 'consultation' },
@@ -551,6 +559,27 @@ await setGlobal('site-settings', (g) => typeof g.name === 'string' && g.name !==
   ctaLabel: SITE.ctaLabel,
   ctaLink: SITE.ctaLink,
 })
+// Closing call-to-action (end of case studies): backfilled when empty, never overwritten.
+{
+  const current = (await payload.findGlobal({ slug: 'site-settings', depth: 0, ...system })) as {
+    closingCta?: { heading?: string | null }
+  }
+  if (!current.closingCta?.heading) {
+    await payload.updateGlobal({
+      slug: 'site-settings',
+      data: {
+        closingCta: {
+          heading: CLOSING_CTA.heading,
+          image: img('servicebg.jpg'),
+          buttonLabel: CLOSING_CTA.buttonLabel,
+          buttonHref: CLOSING_CTA.buttonHref,
+        },
+      } as never,
+      ...write,
+    })
+    counts.created += 1
+  }
+}
 await setGlobal('navigation', (g) => Array.isArray(g.items) && g.items.length > 0, {
   items: [
     { label: 'Studio', link: '/studio' },
@@ -677,6 +706,37 @@ await setGlobal('home-page', (g) => Array.isArray(g.layout) && g.layout.length >
   layout: homeLayout,
   seo: { metaTitle: clip(SEO.home.title, 60), metaDescription: clip(SEO.home.description, 160) },
 })
+
+// Backfill: consent checkbox label for the forms (never overwritten once set).
+{
+  const cs = (await payload.findGlobal({ slug: 'consultation-settings', depth: 0, ...system })) as {
+    consentText?: string | null
+  }
+  if (!cs.consentText) {
+    await payload.updateGlobal({
+      slug: 'consultation-settings',
+      data: { consentText: CONSENT_TEXT },
+      ...write,
+    })
+  }
+}
+
+// Backfill: a see-all link on the home services preview (only where none is set).
+{
+  const home = (await payload.findGlobal({ slug: 'home-page', depth: 0, ...system })) as {
+    layout?: Block[]
+  }
+  const current = home.layout ?? []
+  const layout = current.map((b) => {
+    const link = b.viewAll as { href?: string } | undefined
+    return b.blockType === 'servicesList' && !link?.href
+      ? { ...b, viewAll: cta(HOME.services.viewAll, '/services') }
+      : b
+  })
+  if (layout.some((b, i) => b !== current[i])) {
+    await payload.updateGlobal({ slug: 'home-page', data: { layout } as never, ...write })
+  }
+}
 
 console.log(
   `import: done. created ${String(counts.created)}, skipped ${String(counts.skipped)}, demo records removed ${String(counts.removed)}`,

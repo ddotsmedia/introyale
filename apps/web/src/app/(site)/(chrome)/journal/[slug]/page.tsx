@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ui } from '@/messages/en'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { RichText } from '@payloadcms/richtext-lexical/react'
@@ -44,28 +45,31 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
   }
 
   return (
-    <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+    <article className="mx-auto max-w-[1440px] px-2 py-5 md:px-3">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Breadcrumbs
         items={[
-          { label: 'Home', href: '/' },
-          { label: 'Journal', href: '/journal' },
+          { label: ui.home, href: '/' },
+          { label: ui.journal.title, href: '/journal' },
           { label: post.title },
         ]}
       />
-      <h1 className="font-display text-ink mt-6 text-4xl">{post.title}</h1>
-      <p className="text-taupe mt-2 text-sm">
+      <h1 className="font-display text-ink mt-3 text-4xl">{post.title}</h1>
+      <p className="text-taupe mt-1 text-sm">
         {author ? `${author.name} · ` : ''}
-        {String(readingMinutes(root))} min read
+        {String(readingMinutes(root))} {ui.journal.minRead}
       </p>
       {toc.length > 0 && (
-        <nav aria-label="Contents" className="border-travertine mt-6 border-s-2 ps-4 text-sm">
-          <ul className="space-y-1">
+        <nav
+          aria-label={ui.journal.contents}
+          className="border-travertine mt-3 border-s-2 ps-2 text-sm"
+        >
+          <ul className="space-y-0.5">
             {toc.map((h) => (
-              <li key={h.id} className={h.level === 3 ? 'ms-4' : ''}>
+              <li key={h.id} className={h.level === 3 ? 'ms-2' : ''}>
                 <a href={`#${h.id}`} className="underline">
                   {h.text}
                 </a>
@@ -74,15 +78,15 @@ export default async function Article({ params }: { params: Promise<{ slug: stri
           </ul>
         </nav>
       )}
-      <div className="mt-8 max-w-prose">
+      <div className="mt-4 max-w-prose">
         <RichText data={post.body as unknown as Parameters<typeof RichText>[0]['data']} />
       </div>
       {related.length > 0 && (
-        <aside aria-labelledby="related" className="mt-12">
+        <aside aria-labelledby="related" className="mt-6">
           <h2 id="related" className="font-display text-ink text-2xl">
-            Related projects
+            {ui.journal.related}
           </h2>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-2 space-y-1">
             {related.map((p) => (
               <li key={p.id}>
                 <Link href={`/work/${p.slug}`} className="underline">

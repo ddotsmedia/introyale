@@ -1,69 +1,60 @@
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/Footer'
-import { Header, type NavItem } from '@/components/Header'
-import { StickyActionBar } from '@/components/StickyActionBar'
-import { globalDoc, verifiedFact } from '@/lib/cms'
-import { publishedPostCount } from '@/lib/journal'
+import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
+import { StickyActionBar } from '@/components/StickyActionBar'
 import { WebVitals } from '@/components/WebVitals'
 import { organization, website, localBusiness } from '@/lib/schema'
 import { SITE_URL } from '@/lib/seo'
+import { siteChrome } from '@/lib/site'
 
 export const dynamic = 'force-dynamic'
 
-function displayName(value: unknown): string {
-  return typeof value === 'string' && value.trim() !== '' ? value : 'Introyale Interiors'
-}
-
 /** Public chrome: header, footer and mobile action bar. Everything shown comes from the CMS or verified facts. */
 export default async function ChromeLayout({ children }: { children: ReactNode }) {
-  const [nav, settings, footer, address, phone, email, journalCount] = await Promise.all([
-    globalDoc('navigation'),
-    globalDoc('site-settings'),
-    globalDoc('footer'),
-    verifiedFact('address'),
-    verifiedFact('phone'),
-    verifiedFact('email'),
-    publishedPostCount(),
-  ])
-  // Journal stays out of navigation until three articles are published (SPEC C15).
-  const items: NavItem[] = (nav.items ?? [])
-    .filter((i) => i.label && i.link)
-    .filter((i) => journalCount >= 3 || !i.link.startsWith('/journal'))
-    .map((i) => ({ label: i.label, href: i.link }))
-  // The global may be unsaved, so its name can be missing at runtime.
-  const brand = displayName(settings.name)
-  const digits = phone ? phone.replace(/[^\d]/g, '') : null
+  const c = await siteChrome()
+  const digits = c.phone ? c.phone.replace(/[^\d+]/g, '') : null
 
   // Site-wide structured data. LocalBusiness is emitted only with verified address and phone (SPEC §5.2).
   const ld = [
-    organization({ name: brand, url: SITE_URL, email, telephone: phone }),
-    website({ name: brand, url: SITE_URL }),
-    localBusiness({ name: brand, url: SITE_URL, telephone: phone, address }),
+    organization({ name: c.brand, url: SITE_URL, email: c.email, telephone: c.phone }),
+    website({ name: c.brand, url: SITE_URL }),
+    localBusiness({ name: c.brand, url: SITE_URL, telephone: c.phone, address: c.address }),
   ]
 
   return (
     <>
       <JsonLd data={ld} />
       <WebVitals />
-      <Header brand={brand} nav={items} />
-      <main id="main" className="pb-16 md:pb-0">
+      <Header
+        brand={c.brand}
+        logo={c.logo}
+        logoLight={c.footerLogo}
+        nav={c.nav}
+        cta={c.cta}
+        phone={c.phone}
+        whatsappHref={c.whatsappHref}
+      />
+      <main id="main" className="pb-14 md:pb-0">
         {children}
       </main>
       <Footer
-        brand={brand}
-        copy={footer.copy ?? null}
-        links={(footer.links ?? []).flatMap((l) =>
-          l.label && l.link ? [{ label: l.label, href: l.link }] : [],
-        )}
-        address={address}
-        phone={phone}
-        email={email}
+        brand={c.brand}
+        logo={c.footerLogo}
+        tagline={c.tagline}
+        copy={c.footerCopy}
+        columns={c.footerColumns}
+        legal={c.legal}
+        address={c.address}
+        phone={c.phone}
+        whatsappHref={c.whatsappHref}
+        email={c.email}
+        social={c.social}
       />
       <StickyActionBar
-        callHref={phone ? `tel:${phone.replace(/\s/g, '')}` : null}
-        whatsappHref={digits ? `https://wa.me/${digits}` : null}
-        startHref="/start"
+        callHref={digits ? `tel:${digits}` : null}
+        whatsappHref={c.whatsappHref}
+        cta={c.cta}
       />
     </>
   )

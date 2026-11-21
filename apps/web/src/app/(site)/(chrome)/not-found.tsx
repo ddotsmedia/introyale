@@ -1,13 +1,19 @@
 import Link from 'next/link'
+import { PageHeader } from '@/components/PageHeader'
+import { container, sectionPad } from '@/components/blocks/shared'
+import { ui } from '@/messages/en'
 
 export default function NotFound() {
   return (
-    <section className="mx-auto max-w-[1440px] px-4 py-24 text-center md:px-6">
-      <h1 className="font-display text-ink text-4xl">Page not found</h1>
-      <p className="text-taupe mt-4">The page you were looking for has moved or does not exist.</p>
-      <Link href="/" className="mt-8 inline-block underline">
-        Back to home
-      </Link>
-    </section>
+    <>
+      <PageHeader title={ui.notFound.title} intro={ui.notFound.body} />
+      <div className={`${sectionPad} bg-ivory`}>
+        <div className={container}>
+          <Link href="/" className="eyebrow border-b border-current pb-0.5">
+            {ui.notFound.link}
+          </Link>
+        </div>
+      </div>
+    </>
   )
 }

@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
-
-export const SITE_DESCRIPTION =
-  'Introyale Interiors is an interior design studio. Browse our projects and start a conversation.'
+import { seoDefaults } from './site'
 
 export const SITE_URL = (process.env.PUBLIC_URL ?? 'http://localhost:3000').replace(/\/$/, '')
 
@@ -16,18 +14,20 @@ export type SeoFields =
   | undefined
 
 /**
- * Page metadata from the CMS seo group, with fallbacks (SPEC §5.1, M9).
+ * Page metadata from the CMS seo group, with fallbacks to the SEO defaults global (SPEC §5.1).
  * Titles are capped at 60 and descriptions at 160 characters by the collection schema.
  */
-export function pageMetadata(p: {
+export async function pageMetadata(p: {
   seo?: SeoFields
   fallbackTitle: string
   fallbackDescription?: string | null
   path: string
   image?: string | null
-}): Metadata {
+}): Promise<Metadata> {
+  const defaults = await seoDefaults()
   const canonical = p.seo?.canonicalOverride || `${SITE_URL}${p.path}`
-  const description = p.seo?.metaDescription || p.fallbackDescription || SITE_DESCRIPTION
+  const description =
+    p.seo?.metaDescription || p.fallbackDescription || defaults.description || undefined
   const title = p.seo?.metaTitle || p.fallbackTitle
   return {
     title,

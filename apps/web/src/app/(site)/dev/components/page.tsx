@@ -40,7 +40,7 @@ const nav = [
 
 function Showcase({ p }: { p: string }) {
   return (
-    <div className="mx-auto max-w-[1440px] space-y-16 px-4 py-10 md:px-6">
+    <div className="mx-auto max-w-[1440px] space-y-8 px-2 py-5 md:px-3">
       <Breadcrumbs
         items={[{ label: 'Home', href: '/' }, { label: 'Work', href: '/work' }, { label: 'Villa' }]}
       />
@@ -60,12 +60,11 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-cards`} className="font-display text-3xl">
           Project card
         </h2>
-        <div className="mt-4 grid gap-6 md:grid-cols-3">
+        <div className="mt-2 grid gap-3 md:grid-cols-3">
           <ProjectCard
             href="/work/sample"
             title="Sample project"
-            areaLabel="District"
-            year={2025}
+            meta={['District', 2025]}
             hero={img('#D9D2C7', 'Hero')}
           />
         </div>
@@ -74,8 +73,9 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-filter`} className="font-display text-3xl">
           Filter bar
         </h2>
-        <div className="mt-4">
+        <div className="mt-2">
           <FilterBar
+            basePath="/dev/components"
             current={{}}
             filters={[
               {
@@ -94,7 +94,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-gallery`} className="font-display text-3xl">
           Gallery and lightbox
         </h2>
-        <div className="mt-4">
+        <div className="mt-2">
           <Gallery
             items={[
               { media: img('#EFE8DD', 'One') },
@@ -108,7 +108,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-ba`} className="font-display text-3xl">
           Before and after
         </h2>
-        <div className="mt-4 max-w-3xl">
+        <div className="mt-2 max-w-3xl">
           <BeforeAfter
             before={img('#D9D2C7', 'Before')}
             after={img('#EFE8DD', 'After')}
@@ -120,7 +120,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-plan`} className="font-display text-3xl">
           Plan hotspots
         </h2>
-        <div className="mt-4 max-w-3xl">
+        <div className="mt-2 max-w-3xl">
           <PlanHotspots
             plan={img('#EFE8DD', 'Plan')}
             hotspots={[
@@ -134,7 +134,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-acc`} className="font-display text-3xl">
           Accordion
         </h2>
-        <div className="mt-4">
+        <div className="mt-2">
           <Accordion
             items={[
               {
@@ -149,7 +149,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-step`} className="font-display text-3xl">
           Stepper
         </h2>
-        <div className="mt-4">
+        <div className="mt-2">
           <Stepper steps={['Project', 'Space', 'Budget', 'Contact']} current={1} />
         </div>
       </section>
@@ -157,7 +157,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-team`} className="font-display text-3xl">
           Team card and testimonial
         </h2>
-        <div className="mt-4 grid gap-8 md:grid-cols-2">
+        <div className="mt-2 grid gap-4 md:grid-cols-2">
           <TeamCard
             name="Team member"
             role="Designer"
@@ -171,7 +171,7 @@ function Showcase({ p }: { p: string }) {
         <h2 id={`${p}-h-process`} className="font-display text-3xl">
           Process timeline
         </h2>
-        <div className="mt-4">
+        <div className="mt-2">
           <ProcessTimeline
             steps={[
               { title: 'Brief', text: 'We listen first.' },
@@ -222,9 +222,9 @@ export default function ComponentsShowcase() {
         </div>
       </section>
       <StickyActionBar
-        callHref="tel:+971527754585"
-        whatsappHref="https://wa.me/971527754585"
-        startHref="/start"
+        callHref="tel:0"
+        whatsappHref="https://wa.me/0"
+        cta={{ label: 'Start', href: '/start' }}
       />
     </main>
   )

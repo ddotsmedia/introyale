@@ -1,5 +1,6 @@
 'use client'
 
+import { ui } from '@/messages/en'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { AltchaWidget } from './AltchaWidget'
 import {
@@ -32,10 +33,17 @@ type Props = {
   budgetBands: { label: string }[]
   startToken: string
   sourcePage: string
+  consentText?: string | null
 }
 
 /** Four-step consultation (SPEC brief §10). One form, so every step submits together. */
-export function ConsultationForm({ defaultSector, budgetBands, startToken, sourcePage }: Props) {
+export function ConsultationForm({
+  defaultSector,
+  budgetBands,
+  startToken,
+  sourcePage,
+  consentText,
+}: Props) {
   const [state, action, pending] = useActionState<ActionState, FormData>(submitConsultation, null)
   const [step, setStep] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
@@ -105,7 +113,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
   const errorList = Object.entries(errors)
 
   return (
-    <form ref={formRef} action={action} onChange={save} className="mt-8 space-y-8" noValidate>
+    <form ref={formRef} action={action} onChange={save} className="mt-4 space-y-4" noValidate>
       <input type="hidden" name="startedAt" value={startToken} />
       <input type="hidden" name="sourcePage" value={sourcePage} />
       {/* Honeypot: hidden from people, visible to bots. */}
@@ -116,7 +124,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         </label>
       </div>
 
-      <ol className="flex flex-wrap gap-3 text-sm" aria-label="Steps">
+      <ol className="flex flex-wrap gap-1.5 text-sm" aria-label="Steps">
         {STEPS.map((label, i) => (
           <li
             key={label}
@@ -129,10 +137,10 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
       </ol>
 
       {state && !state.ok && (state.message || errorList.length > 0) && (
-        <div role="alert" className="border-error text-error border p-4">
+        <div role="alert" className="border-error text-error border p-2">
           {state.message && <p>{state.message}</p>}
           {errorList.length > 0 && (
-            <ul className="mt-2 list-disc ps-5">
+            <ul className="mt-1 list-disc ps-2.5">
               {errorList.map(([k, m]) => (
                 <li key={k}>{m}</li>
               ))}
@@ -141,7 +149,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         </div>
       )}
 
-      <fieldset hidden={step !== 0} className="space-y-6">
+      <fieldset hidden={step !== 0} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Your project</legend>
         <Select
           name="sector"
@@ -155,10 +163,10 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         <Text name="propertyType" label="Property type" error={errors.propertyType} />
         <Text name="approxArea" label="Approximate area" error={errors.approxArea} />
         <fieldset>
-          <legend className="text-ink mb-2 text-sm font-semibold">Services of interest</legend>
-          <div className="grid gap-2 sm:grid-cols-2">
+          <legend className="text-ink mb-1 text-sm font-semibold">Services of interest</legend>
+          <div className="grid gap-1 sm:grid-cols-2">
             {['Interior design', 'Fit-out', 'Refurbishment', 'Joinery', 'Furniture'].map((s) => (
-              <label key={s} className="flex items-center gap-2 text-sm">
+              <label key={s} className="flex items-center gap-1 text-sm">
                 <input type="checkbox" name="services" value={s} /> {s}
               </label>
             ))}
@@ -166,7 +174,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         </fieldset>
       </fieldset>
 
-      <fieldset hidden={step !== 1} className="space-y-6">
+      <fieldset hidden={step !== 1} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Space and timing</legend>
         <Select
           name="stage"
@@ -188,7 +196,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         <Text name="plansLink" label="Link to plans (optional, https)" error={errors.plansLink} />
       </fieldset>
 
-      <fieldset hidden={step !== 2} className="space-y-6">
+      <fieldset hidden={step !== 2} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Contact details</legend>
         <Text name="name" label="Name" error={errors.name} autoComplete="name" required />
         <Text
@@ -216,30 +224,25 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
         <Text name="preferredTime" label="Preferred time (optional)" error={errors.preferredTime} />
       </fieldset>
 
-      <fieldset hidden={step !== 3} className="space-y-6">
+      <fieldset hidden={step !== 3} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Review and send</legend>
-        <p className="text-ink/90">
-          Check your details, then send. You can go back to change anything.
-        </p>
-        <label className="flex items-start gap-3 text-sm">
-          <input type="checkbox" name="consent" required className="mt-1" />
-          <span>
-            I agree that Introyale Interiors may contact me about this enquiry. See our privacy
-            notice.
-          </span>
+        <p className="text-ink/90">{ui.form.review}</p>
+        <label className="flex items-start gap-1.5 text-sm">
+          <input type="checkbox" name="consent" required className="mt-0.5" />
+          <span>{consentText || ui.form.consent}</span>
         </label>
         {errors.consent && <p className="text-error text-sm">{errors.consent}</p>}
         <AltchaWidget />
       </fieldset>
 
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-2">
         {step > 0 && (
           <button
             type="button"
             onClick={() => {
               setStep(step - 1)
             }}
-            className="min-h-11 px-4 underline"
+            className="min-h-5.5 px-2 underline"
           >
             Back
           </button>
@@ -251,7 +254,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
           onClick={() => {
             setStep(step + 1)
           }}
-          className="bg-ink text-ivory min-h-11 px-6 py-3"
+          className="bg-ink text-ivory min-h-5.5 px-3 py-1.5"
         >
           Continue
         </button>
@@ -259,7 +262,7 @@ export function ConsultationForm({ defaultSector, budgetBands, startToken, sourc
           type="submit"
           hidden={step < STEPS.length - 1}
           disabled={pending}
-          className="bg-ink text-ivory min-h-11 px-6 py-3 disabled:opacity-60"
+          className="bg-ink text-ivory min-h-5.5 px-3 py-1.5 disabled:opacity-60"
         >
           {pending ? 'Sending…' : 'Send request'}
         </button>
@@ -279,7 +282,7 @@ type Common = {
 function Text({ name, label, error, type = 'text', ...rest }: Common & { type?: string }) {
   const id = `f-${name}`
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-0.5">
       <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
@@ -290,7 +293,7 @@ function Text({ name, label, error, type = 'text', ...rest }: Common & { type?: 
         required={rest.required}
         autoComplete={rest.autoComplete}
         aria-invalid={!!error}
-        className="border-travertine bg-ivory min-h-11 border px-3"
+        className="border-travertine bg-ivory min-h-5.5 border px-1.5"
       />
       {error && <p className="text-error text-sm">{error}</p>}
     </div>
@@ -300,7 +303,7 @@ function Text({ name, label, error, type = 'text', ...rest }: Common & { type?: 
 function Area({ name, label, error, rows }: Common & { rows: number }) {
   const id = `f-${name}`
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-0.5">
       <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
@@ -309,7 +312,7 @@ function Area({ name, label, error, rows }: Common & { rows: number }) {
         name={name}
         rows={rows}
         aria-invalid={!!error}
-        className="border-travertine bg-ivory border px-3 py-2"
+        className="border-travertine bg-ivory border px-1.5 py-1"
       />
       {error && <p className="text-error text-sm">{error}</p>}
     </div>
@@ -325,7 +328,7 @@ function Select({
 }: Common & { options: { value: string; label: string }[] }) {
   const id = `f-${name}`
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-0.5">
       <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
@@ -334,7 +337,7 @@ function Select({
         name={name}
         required={required}
         aria-invalid={!!error}
-        className="border-travertine bg-ivory min-h-11 border px-3"
+        className="border-travertine bg-ivory min-h-5.5 border px-1.5"
       >
         <option value="">Choose</option>
         {options.map((o) => (

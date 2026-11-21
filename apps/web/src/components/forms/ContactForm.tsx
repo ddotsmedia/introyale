@@ -1,15 +1,22 @@
 'use client'
 
+import { ui } from '@/messages/en'
 import { useActionState } from 'react'
 import { submitContact, type ContactState } from '@/app/(site)/(chrome)/start/actions/contact'
 import { AltchaWidget } from './AltchaWidget'
 
 /** General contact form. Same guard chain as /start (honeypot, timing, proof-of-work, limits). */
-export function ContactForm({ startToken }: { startToken: string }) {
+export function ContactForm({
+  startToken,
+  consentText,
+}: {
+  startToken: string
+  consentText?: string | null
+}) {
   const [state, action, pending] = useActionState<ContactState, FormData>(submitContact, null)
   const errors = state && !state.ok ? (state.errors ?? {}) : {}
   return (
-    <form action={action} className="mt-8 max-w-prose space-y-6" noValidate>
+    <form action={action} className="mt-4 max-w-prose space-y-3" noValidate>
       <input type="hidden" name="startedAt" value={startToken} />
       <input type="hidden" name="sourcePage" value="/contact" />
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
@@ -19,7 +26,7 @@ export function ContactForm({ startToken }: { startToken: string }) {
         </label>
       </div>
       {state && !state.ok && state.message && (
-        <p role="alert" className="border-error text-error border p-4">
+        <p role="alert" className="border-error text-error border p-2">
           {state.message}
         </p>
       )}
@@ -32,7 +39,7 @@ export function ContactForm({ startToken }: { startToken: string }) {
         error={errors.phone}
         autoComplete="tel"
       />
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-0.5">
         <label htmlFor="f-message" className="text-sm font-semibold">
           Message
         </label>
@@ -41,22 +48,20 @@ export function ContactForm({ startToken }: { startToken: string }) {
           name="message"
           rows={5}
           aria-invalid={!!errors.message}
-          className="border-travertine bg-ivory border px-3 py-2"
+          className="border-travertine bg-ivory border px-1.5 py-1"
         />
         {errors.message && <p className="text-error text-sm">{errors.message}</p>}
       </div>
-      <label className="flex items-start gap-3 text-sm">
-        <input type="checkbox" name="consent" required className="mt-1" />
-        <span>
-          I agree that Introyale Interiors may reply to my message. See our privacy notice.
-        </span>
+      <label className="flex items-start gap-1.5 text-sm">
+        <input type="checkbox" name="consent" required className="mt-0.5" />
+        <span>{consentText || ui.form.consent}</span>
       </label>
       {errors.consent && <p className="text-error text-sm">{errors.consent}</p>}
       <AltchaWidget />
       <button
         type="submit"
         disabled={pending}
-        className="bg-ink text-ivory min-h-11 px-6 py-3 disabled:opacity-60"
+        className="bg-ink text-ivory min-h-5.5 px-3 py-1.5 disabled:opacity-60"
       >
         {pending ? 'Sending…' : 'Send message'}
       </button>
@@ -79,7 +84,7 @@ function Field({
 }) {
   const id = `f-${name}`
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-0.5">
       <label htmlFor={id} className="text-sm font-semibold">
         {label}
       </label>
@@ -89,7 +94,7 @@ function Field({
         type={type}
         autoComplete={autoComplete}
         aria-invalid={!!error}
-        className="border-travertine bg-ivory min-h-11 border px-3"
+        className="border-travertine bg-ivory min-h-5.5 border px-1.5"
       />
       {error && <p className="text-error text-sm">{error}</p>}
     </div>

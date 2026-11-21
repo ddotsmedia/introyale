@@ -426,9 +426,33 @@ export const SEO = {
     description:
       'Contact Introyale Interiors in Abu Dhabi to get a quote, book a free consultation or leave feedback.',
   },
+  work: {
+    title: 'Projects | Introyale Interiors',
+    description:
+      'Residential, commercial and hospitality & leisure interior design projects by Introyale Interiors in the UAE.',
+  },
+  thanks: {
+    title: 'Thank you | Introyale Interiors',
+    description: 'Your request has been received by Introyale Interiors.',
+  },
   start: {
     title: 'Book a free consultation | Introyale Interiors',
     description:
       'Book a free consultation with an expert interior designer at Introyale Interiors, Abu Dhabi.',
   },
 }
+
+export const THANKS = {
+  heading: 'Thank you',
+  text: 'Thank you for the message. Our team will connect with you shortly.',
+}
+
+export const WORK = { eyebrow: 'Portfolio', headline: 'Create. Update. Renovate.' }
+
+export const CLOSING_CTA = {
+  heading: 'Get your free expert consultancy',
+  buttonLabel: 'Contact now',
+  buttonHref: '/contact',
+}
+
+export const CONSENT_TEXT = 'I agree that Introyale Interiors may contact me about this enquiry.'

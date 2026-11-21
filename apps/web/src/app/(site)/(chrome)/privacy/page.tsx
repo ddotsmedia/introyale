@@ -1,7 +1,10 @@
-import { LegalPage } from '@/components/LegalPage'
+import type { Metadata } from 'next'
+import { CmsPage, cmsPageMetadata } from '@/components/CmsPage'
 
 export const dynamic = 'force-dynamic'
 
-export default function Privacy() {
-  return <LegalPage slug="privacy" label="Privacy" />
+export const generateMetadata = (): Promise<Metadata> => cmsPageMetadata('privacy', '/privacy')
+
+export default function Page() {
+  return <CmsPage slug="privacy" />
 }

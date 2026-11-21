@@ -3224,6 +3224,16 @@ export interface SiteSetting {
   tagline?: string | null;
   ctaLabel?: string | null;
   ctaLink?: string | null;
+  /**
+   * Closing call-to-action band used at the end of case studies
+   */
+  closingCta?: {
+    heading?: string | null;
+    text?: string | null;
+    image?: (number | null) | Media;
+    buttonLabel?: string | null;
+    buttonHref?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3628,6 +3638,10 @@ export interface ConsultationSetting {
       }[]
     | null;
   slaText?: string | null;
+  /**
+   * Label for the consent checkbox on the contact and consultation forms
+   */
+  consentText?: string | null;
   routingRules?:
     | {
         sector?: (number | null) | Sector;
@@ -3689,6 +3703,15 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   tagline?: T;
   ctaLabel?: T;
   ctaLink?: T;
+  closingCta?:
+    | T
+    | {
+        heading?: T;
+        text?: T;
+        image?: T;
+        buttonLabel?: T;
+        buttonHref?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -4020,6 +4043,7 @@ export interface ConsultationSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   slaText?: T;
+  consentText?: T;
   routingRules?:
     | T
     | {

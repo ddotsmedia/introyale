@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ui } from '@/messages/en'
 import { notFound } from 'next/navigation'
 import { Breadcrumbs } from '@/components/Structure'
 import { cms } from '@/lib/cms'
@@ -21,11 +22,11 @@ export default async function JournalIndex() {
     payload.find({ collection: 'journal-categories', limit: 50, depth: 0, overrideAccess: true }),
   ])
   return (
-    <section className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Journal' }]} />
-      <h1 className="font-display text-ink mt-6 text-4xl">Journal</h1>
+    <section className="mx-auto max-w-[1440px] px-2 py-5 md:px-3">
+      <Breadcrumbs items={[{ label: ui.home, href: '/' }, { label: ui.journal.title }]} />
+      <h1 className="font-display text-ink mt-3 text-4xl">{ui.journal.title}</h1>
       {categories.docs.length > 0 && (
-        <ul className="mt-4 flex flex-wrap gap-4 text-sm">
+        <ul className="mt-2 flex flex-wrap gap-2 text-sm">
           {categories.docs.map((c) => (
             <li key={c.id}>
               <Link href={`/journal/category/${c.slug}`} className="underline">
@@ -35,13 +36,13 @@ export default async function JournalIndex() {
           ))}
         </ul>
       )}
-      <ul className="mt-10 grid gap-8 md:grid-cols-2">
+      <ul className="mt-5 grid gap-4 md:grid-cols-2">
         {posts.docs.map((p) => (
           <li key={p.id}>
             <Link href={`/journal/${p.slug}`} className="font-display text-ink text-2xl underline">
               {p.title}
             </Link>
-            {p.excerpt && <p className="text-ink/90 mt-2">{p.excerpt}</p>}
+            {p.excerpt && <p className="text-ink/90 mt-1">{p.excerpt}</p>}
           </li>
         ))}
       </ul>

@@ -4,6 +4,8 @@ import * as migration_20261121_121638_m5_pages from './20261121_121638_m5_pages'
 import * as migration_20261121_123007_m6_avif from './20261121_123007_m6_avif'
 import * as migration_20261121_125809_m8_leads from './20261121_125809_m8_leads'
 import * as migration_20261121_193207_m10_7_blocks from './20261121_193207_m10_7_blocks'
+import * as migration_20261121_194543_m10_7_closing_cta from './20261121_194543_m10_7_closing_cta'
+import * as migration_20261121_201245_m10_7_consent from './20261121_201245_m10_7_consent'
 
 export const migrations = [
   {
@@ -35,5 +37,15 @@ export const migrations = [
     up: migration_20261121_193207_m10_7_blocks.up,
     down: migration_20261121_193207_m10_7_blocks.down,
     name: '20261121_193207_m10_7_blocks',
+  },
+  {
+    up: migration_20261121_194543_m10_7_closing_cta.up,
+    down: migration_20261121_194543_m10_7_closing_cta.down,
+    name: '20261121_194543_m10_7_closing_cta',
+  },
+  {
+    up: migration_20261121_201245_m10_7_consent.up,
+    down: migration_20261121_201245_m10_7_consent.down,
+    name: '20261121_201245_m10_7_consent',
   },
 ]

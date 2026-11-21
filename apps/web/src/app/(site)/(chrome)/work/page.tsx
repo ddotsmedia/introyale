@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Breadcrumbs } from '@/components/Structure'
+import { BlockRenderer } from '@/components/blocks/BlockRenderer'
+import { container, sectionPad } from '@/components/blocks/shared'
 import { FilterBar } from '@/components/FilterBar'
 import { ProjectCard } from '@/components/ProjectCard'
-import { cms } from '@/lib/cms'
+import { cms, getPageBySlug } from '@/lib/cms'
 import {
   PAGE_SIZE,
   isNoindexFilter,
@@ -11,44 +12,58 @@ import {
   parsePage,
   projectWhere,
 } from '@/lib/projectFilters'
+import { pageMetadata } from '@/lib/seo'
+import { ui } from '@/messages/en'
 
 export const dynamic = 'force-dynamic'
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>
 
-const pickFilters = parseFilterParams
+const frames = [
+  'aspect-[4/3]',
+  'aspect-[4/5]',
+  'aspect-square',
+  'aspect-[4/3]',
+  'aspect-[5/6]',
+  'aspect-[3/2]',
+]
 
 export async function generateMetadata({
   searchParams,
 }: {
   searchParams: SearchParams
 }): Promise<Metadata> {
-  const f = pickFilters(await searchParams)
-  return {
-    title: 'Projects',
-    robots: isNoindexFilter(f) ? { index: false, follow: true } : undefined,
-  }
+  const f = parseFilterParams(await searchParams)
+  const page = await getPageBySlug('pages', 'work')
+  const base = await pageMetadata({
+    seo: page?.seo,
+    fallbackTitle: page?.title ?? ui.projects,
+    path: '/work',
+  })
+  return { ...base, robots: isNoindexFilter(f) ? { index: false, follow: true } : base.robots }
 }
 
 export default async function WorkPage({ searchParams }: { searchParams: SearchParams }) {
-  const raw = await searchParams
-  const f = pickFilters(raw)
+  const f = parseFilterParams(await searchParams)
   const page = parsePage(f.page)
   const payload = await cms()
+  const published = { 'workflow.status': { equals: 'published' } } as const
 
-  const [result, sectors, types, services, allYears] = await Promise.all([
+  const [intro, result, sectors, types, services, allYears] = await Promise.all([
+    getPageBySlug('pages', 'work'),
     payload.find({
       collection: 'projects',
       where: projectWhere(f),
       limit: PAGE_SIZE,
       page,
-      sort: '-year',
+      sort: 'createdAt',
       depth: 2,
       overrideAccess: false,
     }),
     payload.find({
       collection: 'sectors',
-      where: { 'workflow.status': { equals: 'published' } },
+      where: published,
+      sort: 'createdAt',
       limit: 50,
       depth: 0,
       overrideAccess: false,
@@ -56,14 +71,15 @@ export default async function WorkPage({ searchParams }: { searchParams: SearchP
     payload.find({ collection: 'property-types', limit: 100, depth: 0, overrideAccess: true }),
     payload.find({
       collection: 'services',
-      where: { 'workflow.status': { equals: 'published' } },
+      where: published,
+      sort: 'createdAt',
       limit: 100,
       depth: 0,
       overrideAccess: false,
     }),
     payload.find({
       collection: 'projects',
-      where: { 'workflow.status': { equals: 'published' } },
+      where: published,
       limit: 500,
       depth: 0,
       select: { year: true },
@@ -77,25 +93,25 @@ export default async function WorkPage({ searchParams }: { searchParams: SearchP
   const filters = [
     {
       name: 'sector',
-      label: 'Sector',
+      label: ui.filter.sector,
       options: sectors.docs.map((s) => ({ value: s.slug, label: s.title })),
     },
     {
       name: 'propertyType',
-      label: 'Property type',
+      label: ui.filter.propertyType,
       options: types.docs.map((t) => ({ value: t.slug, label: t.title })),
     },
     {
       name: 'service',
-      label: 'Service',
+      label: ui.filter.service,
       options: services.docs.map((s) => ({ value: s.slug, label: s.title })),
     },
     {
       name: 'year',
-      label: 'Year',
+      label: ui.filter.year,
       options: years.map((y) => ({ value: String(y), label: String(y) })),
     },
-  ].filter((f) => f.options.length > 0)
+  ].filter((x) => x.options.length > 0)
 
   const qs = (p: number) => {
     const params = new URLSearchParams()
@@ -106,49 +122,59 @@ export default async function WorkPage({ searchParams }: { searchParams: SearchP
   }
 
   return (
-    <section className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
-      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Projects' }]} />
-      <h1 className="font-display text-ink mt-6 text-4xl">Projects</h1>
-      <div className="mt-6">
-        <FilterBar
-          filters={filters}
-          current={{
-            sector: f.sector,
-            propertyType: f.propertyType,
-            service: f.service,
-            year: f.year,
-          }}
-        />
-      </div>
-      {result.docs.length === 0 ? (
-        <p className="text-taupe mt-10">No projects match these filters.</p>
-      ) : (
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {result.docs.map((p) => (
-            <ProjectCard
-              key={p.id}
-              href={`/work/${p.slug}`}
-              title={p.publicTitle ?? p.title}
-              areaLabel={p.areaLabel}
-              year={p.year}
-              hero={p.hero}
-              viewTransitionName={`project-${p.slug}`}
-            />
-          ))}
+    <>
+      {intro && <BlockRenderer layout={intro.layout} />}
+      <FilterBar
+        filters={filters}
+        current={{
+          sector: f.sector,
+          propertyType: f.propertyType,
+          service: f.service,
+          year: f.year,
+        }}
+        basePath="/work"
+      />
+      <section className={`${sectionPad} bg-ivory`}>
+        <div className={container}>
+          {!intro?.layout?.length && (
+            <h1 className="display mb-6 text-[clamp(2.5rem,5vw,4rem)]">{ui.projects}</h1>
+          )}
+          {result.docs.length === 0 ? (
+            <p className="opacity-70">{ui.noProjects}</p>
+          ) : (
+            <div className="masonry">
+              {result.docs.map((p, i) => (
+                <ProjectCard
+                  key={p.id}
+                  className="reveal"
+                  href={`/work/${p.slug}`}
+                  title={p.publicTitle ?? p.title}
+                  meta={[
+                    typeof p.sector === 'object' ? p.sector?.title : null,
+                    p.areaLabel,
+                    p.year,
+                  ]}
+                  hero={p.hero}
+                  frame={frames[i % frames.length]}
+                  viewTransitionName={`project-${p.slug}`}
+                />
+              ))}
+            </div>
+          )}
+          <nav aria-label={ui.pagination.label} className="mt-6 flex gap-4">
+            {result.hasPrevPage && (
+              <Link href={qs(page - 1)} className="eyebrow border-b border-current pb-0.5">
+                {ui.pagination.previous}
+              </Link>
+            )}
+            {result.hasNextPage && (
+              <Link href={qs(page + 1)} className="eyebrow border-b border-current pb-0.5">
+                {ui.pagination.next}
+              </Link>
+            )}
+          </nav>
         </div>
-      )}
-      <nav aria-label="Pagination" className="mt-10 flex gap-6">
-        {result.hasPrevPage && (
-          <Link href={qs(page - 1)} className="underline">
-            Previous
-          </Link>
-        )}
-        {result.hasNextPage && (
-          <Link href={qs(page + 1)} className="underline">
-            Next
-          </Link>
-        )}
-      </nav>
-    </section>
+      </section>
+    </>
   )
 }

@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { ui } from '@/messages/en'
 import { Breadcrumbs, Prose, TeamCard } from '@/components/Structure'
 import { getPageBySlug } from '@/lib/cms'
 
@@ -37,24 +38,24 @@ export default async function TeamMemberPage({ params }: { params: Promise<{ slu
     consentGiven: true,
   })
   return (
-    <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+    <article className="mx-auto max-w-[1440px] px-2 py-5 md:px-3">
       <JsonLd data={ld} />
       <Breadcrumbs
         items={[
-          { label: 'Home', href: '/' },
-          { label: 'Studio', href: '/studio' },
-          { label: 'Team', href: '/studio/team' },
+          { label: ui.home, href: '/' },
+          { label: ui.studio, href: '/studio' },
+          { label: ui.team, href: '/studio/team' },
           { label: member.name },
         ]}
       />
-      <div className="mt-6">
+      <div className="mt-3">
         <TeamCard name={member.name} role={member.role} photo={member.photo} consentGiven />
       </div>
       <Prose>
         <p>{member.bio}</p>
       </Prose>
       {(member.credentials ?? []).length > 0 && (
-        <ul className="text-ink mt-6 list-disc ps-6">
+        <ul className="text-ink mt-3 list-disc ps-3">
           {(member.credentials ?? []).map((c, i) => (
             <li key={i}>{c.item}</li>
           ))}
