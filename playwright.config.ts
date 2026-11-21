@@ -7,6 +7,7 @@ export default defineConfig({
   testDir: 'apps/web/tests',
   testMatch: ['**/e2e/**/*.spec.ts', '**/a11y/**/*.spec.ts'],
   fullyParallel: true,
+  globalSetup: './apps/web/tests/global-setup.ts',
   reporter: [['list']],
   use: { baseURL, trace: 'retain-on-failure' },
   projects: [
