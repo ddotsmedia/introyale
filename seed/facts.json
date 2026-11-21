@@ -1,0 +1,68 @@
+{
+  "_note": "All facts unverified. Render nothing until status=verified (SPEC §5.2 facts; D13). Source: live-site claims, not verified.",
+  "facts": [
+    {
+      "key": "address",
+      "value": null,
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC §1.2 / live site"
+    },
+    {
+      "key": "phone",
+      "value": "+971 52 77 54 585",
+      "displayText": null,
+      "status": "unverified",
+      "source": "live site tel link"
+    },
+    {
+      "key": "email",
+      "value": "info@introyale.com",
+      "displayText": null,
+      "status": "unverified",
+      "source": "live site mailto link"
+    },
+    {
+      "key": "years_in_business",
+      "value": "10+",
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC C9 (home claim)"
+    },
+    {
+      "key": "projects_completed",
+      "value": "1050+",
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC C9 (home claim)"
+    },
+    {
+      "key": "team_size",
+      "value": "50+",
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC C9 (home claim)"
+    },
+    {
+      "key": "awards_count",
+      "value": "10+",
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC C9 (home claim)"
+    },
+    {
+      "key": "trade_licence_no",
+      "value": null,
+      "displayText": null,
+      "status": "unverified",
+      "source": "[CONFIRM]"
+    },
+    {
+      "key": "whatsapp_number",
+      "value": "+971 52 77 54 585",
+      "displayText": null,
+      "status": "unverified",
+      "source": "SPEC A4 [CONFIRM]"
+    }
+  ]
+}

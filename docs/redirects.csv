@@ -1,0 +1,12 @@
+from,to,type,notes
+/index.php,/,301,SPEC §4
+/aboutus.php,/studio,301,SPEC §4
+/ourclients.php,/studio#clients,301,SPEC §4
+/contactus.php,/contact,301,SPEC §4
+/hospitality-leisure.php,/hospitality-leisure,301,SPEC §4
+/hospitality-portfolio.php,/work?sector=hospitality-leisure,301,SPEC §4
+/commercial.php,/commercial,301,SPEC §4
+/commercial-portfolio.php,/work?sector=commercial,301,SPEC §4
+/residential.php,/residential,301,SPEC §4
+/residencial.php,/residential,301,SPEC §4; live site returns 404 but homepage links it
+/residential-portfolio.php,/work?sector=residential,301,SPEC §4
