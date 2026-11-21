@@ -31,8 +31,15 @@ export const workflowGuard: CollectionBeforeChangeHook = ({ data, originalDoc, r
 }
 
 /** Runs publish gates before any transition to `published` (SPEC §5.2, D13). */
-export const publishGuard: CollectionBeforeChangeHook = async ({ data, req, collection }) => {
+export const publishGuard: CollectionBeforeChangeHook = async ({
+  data,
+  req,
+  collection,
+  originalDoc,
+}) => {
+  // On update, `data` carries no id; the id comes from the stored document (M-LOCAL fix: services could never publish).
   const doc = data as WorkflowData
+  const docId = (data as Doc).id ?? (originalDoc as Doc | undefined)?.id
   if (doc.workflow?.status !== 'published') return data
 
   const mediaIds = new Set<string>()
@@ -58,11 +65,11 @@ export const publishGuard: CollectionBeforeChangeHook = async ({ data, req, coll
   }
 
   let proofCount = 0
-  if (collection.slug === 'services' && doc.id) {
+  if (collection.slug === 'services' && docId) {
     const found = await req.payload.count({
       collection: 'projects',
       where: {
-        and: [{ services: { contains: doc.id } }, { 'workflow.status': { equals: 'published' } }],
+        and: [{ services: { contains: docId } }, { 'workflow.status': { equals: 'published' } }],
       },
       overrideAccess: true,
       req,

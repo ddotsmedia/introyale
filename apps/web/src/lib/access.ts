@@ -2,6 +2,7 @@ import type { Access, PayloadRequest } from 'payload'
 import { can, requiresMfa, type Action, type Role } from './roles'
 import { MFA_COOKIE, readCookie, verifyMfaToken } from './mfa'
 import { readSecret } from './secrets'
+import { mfaEnforced } from './envPolicy'
 
 type AuthUser = { id: number | string; role?: Role } | null | undefined
 
@@ -10,6 +11,7 @@ export function mfaSatisfied(req: PayloadRequest): boolean {
   const u = req.user as AuthUser
   if (!u) return false
   if (!requiresMfa(u.role)) return true
+  if (!mfaEnforced()) return true // local preview only; see envPolicy.ts
   return verifyMfaToken(
     readCookie(req.headers.get('cookie'), MFA_COOKIE),
     String(u.id),

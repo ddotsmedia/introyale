@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Usage: scripts/gen-secrets.sh <dev|staging|production> [--rotate]
+# Usage: scripts/gen-secrets.sh <dev|local|staging|production> [--rotate]
 # Writes secrets/<env>/*.txt with no trailing newline (Postgres reads password files raw). Never prints values.
 set -euo pipefail
 env_name="${1:?env required}"
 rotate="${2:-}"
-case "$env_name" in dev|staging|production) ;; *) echo "bad env" >&2; exit 2 ;; esac
+case "$env_name" in dev|local|staging|production) ;; *) echo "bad env" >&2; exit 2 ;; esac
 dir="secrets/$env_name"
 mkdir -p "$dir" && chmod 700 "$dir"
 gen() {

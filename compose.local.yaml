@@ -1,0 +1,41 @@
+# Local preview (production build on localhost). Never deploy this overlay.
+# Usage: docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local up -d web worker db mailpit
+# Ports are bound to 127.0.0.1 only. The database is not published. MFA_ENFORCE=false is honoured only because ENV=local.
+services:
+  web:
+    image: introyale-web:local
+    ports: ['127.0.0.1:${WEB_PORT:-3100}:3000']
+    environment:
+      ENV: local
+      PUBLIC_URL: http://localhost:${WEB_PORT:-3100}
+      SITE_URL: http://localhost:${WEB_PORT:-3100}
+      ROBOTS_NOINDEX: 'true'
+      MFA_ENFORCE: 'false'
+      MEDIA_DIR: /media
+      FEATURE_AR: 'false'
+
+  migrate:
+    image: introyale-web:local
+    environment:
+      ENV: local
+
+  worker:
+    image: introyale-web:local
+    networks: [internal, egress]
+    environment:
+      ENV: local
+      PUBLIC_URL: http://localhost:${WEB_PORT:-3100}
+      ROBOTS_NOINDEX: 'true'
+      MAIL_FROM: no-reply@introyale.local
+      STAFF_EMAIL: staff@introyale.local
+      SMTP_HOST: mailpit
+      SMTP_PORT: '1025'
+      SMTP_REQUIRE_TLS: 'false'
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: unless-stopped
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    ports: ['127.0.0.1:${MAILPIT_PORT:-8100}:8025']
+    networks: [egress]
