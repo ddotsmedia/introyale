@@ -1,11 +1,21 @@
 'use client'
-
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
+import { ui } from '@/messages/en'
 import type { NavItem } from './Header'
 
-/** Mobile navigation: focus is trapped while open; Esc closes and returns focus to the trigger. */
-export function MobileNav({ items }: { items: NavItem[] }) {
+/** Full-screen mobile menu. Focus is trapped while open; Esc closes it and returns focus to the trigger. */
+export function MobileNav({
+  items,
+  cta,
+  phone,
+  whatsappHref,
+}: {
+  items: NavItem[]
+  cta: { label: string; href: string } | null
+  phone: string | null
+  whatsappHref: string | null
+}) {
   const [open, setOpen] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
@@ -13,10 +23,11 @@ export function MobileNav({ items }: { items: NavItem[] }) {
   useEffect(() => {
     if (!open) return
     const panel = panelRef.current
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
     const focusables = () =>
       Array.from(panel?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? [])
     focusables()[0]?.focus()
-
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setOpen(false)
@@ -38,12 +49,17 @@ export function MobileNav({ items }: { items: NavItem[] }) {
     }
     document.addEventListener('keydown', onKey)
     return () => {
+      document.body.style.overflow = previous
       document.removeEventListener('keydown', onKey)
     }
   }, [open])
 
+  const close = () => {
+    setOpen(false)
+  }
+
   return (
-    <div className="md:hidden">
+    <div className="lg:hidden">
       <button
         ref={triggerRef}
         type="button"
@@ -52,9 +68,9 @@ export function MobileNav({ items }: { items: NavItem[] }) {
         onClick={() => {
           setOpen((v) => !v)
         }}
-        className="text-ink px-2 py-1"
+        className="min-h-5.5 px-1 text-sm font-semibold uppercase tracking-[0.14em]"
       >
-        Menu
+        {ui.menu}
       </button>
       {open && (
         <div
@@ -62,33 +78,46 @@ export function MobileNav({ items }: { items: NavItem[] }) {
           ref={panelRef}
           role="dialog"
           aria-modal="true"
-          aria-label="Site menu"
-          className="bg-ivory fixed inset-0 z-50 p-6"
+          aria-label={ui.menu}
+          className="bg-night text-ivory on-dark fixed inset-0 z-50 flex flex-col overflow-y-auto px-3 py-2.5"
         >
-          <button
-            type="button"
-            onClick={() => {
-              setOpen(false)
-            }}
-            className="text-ink mb-6 px-2 py-1"
-          >
-            Close
-          </button>
-          <ul className="flex flex-col gap-4">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={close}
+              className="min-h-5.5 px-1 text-sm font-semibold uppercase tracking-[0.14em]"
+            >
+              {ui.close}
+            </button>
+          </div>
+          <ul className="mt-3 flex flex-col gap-0.5">
             {items.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  onClick={() => {
-                    setOpen(false)
-                  }}
-                  className="font-display text-2xl"
+                  onClick={close}
+                  className="font-display block py-1 text-[2rem] leading-tight tracking-tight"
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
           </ul>
+          <div className="mt-auto flex flex-col gap-1.5 pt-5">
+            {cta && (
+              <Link
+                href={cta.href}
+                onClick={close}
+                className="bg-bronze-deep inline-flex min-h-6 items-center justify-center px-3 text-sm font-semibold uppercase tracking-[0.14em] text-white"
+              >
+                {cta.label}
+              </Link>
+            )}
+            <div className="text-ivory/80 flex flex-wrap gap-x-3 gap-y-1 text-base">
+              {phone && <a href={`tel:${phone.replace(/[^\d+]/g, '')}`}>{phone}</a>}
+              {whatsappHref && <a href={whatsappHref}>{ui.whatsapp}</a>}
+            </div>
+          </div>
         </div>
       )}
     </div>

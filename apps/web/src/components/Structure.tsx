@@ -7,14 +7,14 @@ export function Accordion({ items }: { items: { question: string; answer: string
   return (
     <div className="divide-travertine divide-y border-y border-travertine">
       {items.map((item) => (
-        <details key={item.question} className="group py-3">
-          <summary className="font-display text-ink flex min-h-11 cursor-pointer list-none items-center justify-between text-lg">
+        <details key={item.question} className="group py-1.5">
+          <summary className="font-display text-ink flex min-h-5.5 cursor-pointer list-none items-center justify-between text-lg">
             {item.question}
             <span aria-hidden="true" className="group-open:rotate-45 transition-transform">
               +
             </span>
           </summary>
-          <p className="text-ink/90 pt-2">{item.answer}</p>
+          <p className="text-ink/90 pt-1">{item.answer}</p>
         </details>
       ))}
     </div>
@@ -25,14 +25,14 @@ export function Accordion({ items }: { items: { question: string; answer: string
 export function Stepper({ steps, current }: { steps: string[]; current: number }) {
   return (
     <nav aria-label="Progress">
-      <ol className="flex gap-4 text-sm">
+      <ol className="flex gap-2 text-sm">
         {steps.map((label, i) => (
           <li
             key={label}
             aria-current={i === current ? 'step' : undefined}
             className={i === current ? 'text-ink font-semibold' : 'text-taupe'}
           >
-            <span className="me-1">{i + 1}.</span>
+            <span className="me-0.5">{i + 1}.</span>
             {label}
           </li>
         ))}
@@ -53,13 +53,13 @@ export function CtaBand({
   label: string
 }) {
   return (
-    <section className="bg-sand px-4 py-12 md:px-6">
+    <section className="bg-sand px-2 py-6 md:px-3">
       <div className="mx-auto max-w-[1440px]">
         <h2 className="font-display text-ink text-3xl">{heading}</h2>
-        {text && <p className="text-ink mt-2 max-w-prose">{text}</p>}
+        {text && <p className="text-ink mt-1 max-w-prose">{text}</p>}
         <Link
           href={href}
-          className="bg-ink text-ivory mt-6 inline-flex min-h-11 items-center px-6 py-3"
+          className="bg-ink text-ivory mt-3 inline-flex min-h-5.5 items-center px-3 py-1.5"
         >
           {label}
         </Link>
@@ -80,7 +80,7 @@ export function Testimonial({
   return (
     <figure className="max-w-prose">
       <blockquote className="font-display text-ink text-2xl">“{quote}”</blockquote>
-      <figcaption className="text-taupe mt-4 text-sm">
+      <figcaption className="text-taupe mt-2 text-sm">
         {name}
         {role ? `, ${role}` : ''}
       </figcaption>
@@ -102,8 +102,8 @@ export function TeamCard({
 }) {
   if (!consentGiven) return null
   return (
-    <article className="flex gap-4">
-      <div className="bg-sand h-24 w-24 shrink-0 overflow-hidden">
+    <article className="flex gap-2">
+      <div className="bg-sand h-12 w-12 shrink-0 overflow-hidden">
         <Picture media={photo} sizes="96px" className="h-full w-full object-cover" />
       </div>
       <div>
@@ -116,14 +116,14 @@ export function TeamCard({
 
 export function ProcessTimeline({ steps }: { steps: { title: string; text?: string | null }[] }) {
   return (
-    <ol className="border-bronze relative border-s-2 ps-6">
+    <ol className="border-bronze relative border-s-2 ps-3">
       {steps.map((s, i) => (
-        <li key={s.title} className="mb-6">
+        <li key={s.title} className="mb-3">
           <h3 className="font-display text-ink text-lg">
-            <span className="text-taupe me-2 text-sm">{i + 1}</span>
+            <span className="text-taupe me-1 text-sm">{i + 1}</span>
             {s.title}
           </h3>
-          {s.text && <p className="text-ink/90 mt-1">{s.text}</p>}
+          {s.text && <p className="text-ink/90 mt-0.5">{s.text}</p>}
         </li>
       ))}
     </ol>
@@ -133,11 +133,11 @@ export function ProcessTimeline({ steps }: { steps: { title: string; text?: stri
 export function Breadcrumbs({ items }: { items: { label: string; href?: string }[] }) {
   return (
     <nav aria-label="Breadcrumb" className="text-taupe text-sm">
-      <ol className="flex flex-wrap gap-2">
+      <ol className="flex flex-wrap gap-1">
         {items.map((item, i) => {
           const last = i === items.length - 1
           return (
-            <li key={`${item.label}-${String(i)}`} className="flex gap-2">
+            <li key={`${item.label}-${String(i)}`} className="flex gap-1">
               {item.href && !last ? (
                 <Link href={item.href} className="underline">
                   {item.label}
@@ -156,7 +156,7 @@ export function Breadcrumbs({ items }: { items: { label: string; href?: string }
 
 export function Prose({ children }: { children: ReactNode }) {
   return (
-    <div className="[&_h2]:font-display [&_h2]:text-ink [&_h2]:mt-8 [&_h2]:text-2xl [&_p]:mt-4 [&_p]:max-w-prose">
+    <div className="[&_h2]:font-display [&_h2]:text-ink [&_h2]:mt-4 [&_h2]:text-2xl [&_p]:mt-2 [&_p]:max-w-prose">
       {children}
     </div>
   )

@@ -150,3 +150,268 @@ html[dir='rtl'] body,
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* ===== Crafted Calm v2: rich, image-led (NEXT-PROMPT part B) ===== */
+@theme {
+  --color-night: #16130f;
+  --color-bronze-light: #c9a37a;
+}
+
+body {
+  font-size: 1.0625rem;
+}
+@media (min-width: 960px) {
+  body {
+    font-size: 1.125rem;
+  }
+}
+main {
+  padding-top: 4.5rem;
+}
+/* Grid children may shrink below their content width, so wide images never stretch a layout. */
+main .grid > * {
+  min-width: 0;
+}
+body:has([data-hero]) main {
+  padding-top: 0;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-bronze-deep);
+}
+.on-dark .eyebrow,
+.hero .eyebrow {
+  color: var(--color-bronze-light);
+}
+.display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+}
+
+/* Header: transparent over a hero, solid after scrolling */
+.site-header {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 40;
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-ivory) 94%, transparent);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 0 var(--color-travertine);
+  transition:
+    background-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
+}
+.site-header .logo-white {
+  display: none;
+}
+body:has([data-hero]) .site-header[data-top='true'] {
+  color: #fff;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+body:has([data-hero]) .site-header[data-top='true'] .logo-white {
+  display: block;
+}
+body:has([data-hero]) .site-header[data-top='true'] .logo-gold {
+  display: none;
+}
+.site-header .nav-link {
+  position: relative;
+}
+.site-header .nav-link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.site-header .nav-link:hover::after,
+.site-header .nav-link[aria-current='page']::after {
+  transform: scaleX(1);
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  background: var(--color-night);
+}
+.hero--full {
+  min-height: 100svh;
+}
+.hero--compact {
+  min-height: 44svh;
+}
+.hero--banner {
+  min-height: 62svh;
+}
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    to top,
+    rgb(14 11 8 / calc(var(--shade, 0.5) + 0.25)) 0%,
+    rgb(14 11 8 / var(--shade, 0.5)) 45%,
+    rgb(14 11 8 / calc(var(--shade, 0.5) * 0.7)) 100%
+  );
+}
+
+/* Scroll reveal: pure CSS, only where supported and motion is allowed */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 4% entry 38%;
+    }
+    @keyframes reveal-in {
+      from {
+        opacity: 0;
+        transform: translateY(28px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+}
+
+/* Image hover zoom */
+.zoom img {
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.zoom:hover img,
+.zoom:focus-visible img {
+  transform: scale(1.05);
+}
+@media (prefers-reduced-motion: reduce) {
+  .zoom img {
+    transition: none;
+  }
+  .zoom:hover img {
+    transform: none;
+  }
+}
+
+/* Masonry */
+.masonry {
+  column-count: 1;
+  column-gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .masonry {
+    column-count: 2;
+  }
+}
+@media (min-width: 1100px) {
+  .masonry {
+    column-count: 3;
+  }
+}
+.masonry > * {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+}
+
+/* Client logo wall: grayscale until hover */
+.logo-tile img {
+  filter: grayscale(1);
+  opacity: 0.75;
+  transition:
+    filter 0.4s ease,
+    opacity 0.4s ease;
+}
+.logo-tile:hover img {
+  filter: none;
+  opacity: 1;
+}
+
+/* Services list with hover image preview (CSS only) */
+.svc-panel > * {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.svc-panel > :first-child {
+  opacity: 1;
+}
+.svc:has(li:hover) .svc-panel > :first-child,
+.svc:has(li:focus-within) .svc-panel > :first-child {
+  opacity: 0;
+}
+.svc:has(li:nth-child(1):is(:hover, :focus-within)) .svc-panel > :nth-child(1) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(2):is(:hover, :focus-within)) .svc-panel > :nth-child(2) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(3):is(:hover, :focus-within)) .svc-panel > :nth-child(3) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(4):is(:hover, :focus-within)) .svc-panel > :nth-child(4) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(5):is(:hover, :focus-within)) .svc-panel > :nth-child(5) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(6):is(:hover, :focus-within)) .svc-panel > :nth-child(6) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(7):is(:hover, :focus-within)) .svc-panel > :nth-child(7) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(8):is(:hover, :focus-within)) .svc-panel > :nth-child(8) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(9):is(:hover, :focus-within)) .svc-panel > :nth-child(9) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(10):is(:hover, :focus-within)) .svc-panel > :nth-child(10) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(11):is(:hover, :focus-within)) .svc-panel > :nth-child(11) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(12):is(:hover, :focus-within)) .svc-panel > :nth-child(12) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(13):is(:hover, :focus-within)) .svc-panel > :nth-child(13) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(14):is(:hover, :focus-within)) .svc-panel > :nth-child(14) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(15):is(:hover, :focus-within)) .svc-panel > :nth-child(15) {
+  opacity: 1;
+}
+.svc:has(li:nth-child(16):is(:hover, :focus-within)) .svc-panel > :nth-child(16) {
+  opacity: 1;
+}

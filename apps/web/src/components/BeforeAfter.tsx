@@ -30,7 +30,7 @@ export function BeforeAfter({
           <Picture media={after} sizes="100vw" className="h-full w-full object-cover" />
         </div>
       </div>
-      <label htmlFor={id} className="mt-2 block text-sm">
+      <label htmlFor={id} className="mt-1 block text-sm">
         Reveal before and after
       </label>
       <input
@@ -44,7 +44,7 @@ export function BeforeAfter({
         }}
         className="w-full"
       />
-      {caption && <figcaption className="text-taupe mt-2 text-sm">{caption}</figcaption>}
+      {caption && <figcaption className="text-taupe mt-1 text-sm">{caption}</figcaption>}
     </figure>
   )
 }
