@@ -17,3 +17,8 @@ export const LEGACY_REDIRECTS: Record<string, RedirectRule> = {
   '/residencial.php': { to: '/residential', type: 301 },
   '/residential-portfolio.php': { to: '/work?sector=residential', type: 301 },
 }
+
+/** Redirect targets: site-relative paths or https URLs only (no javascript:, no protocol-relative). */
+export function isSafeRedirectTarget(to: string): boolean {
+  return /^(\/(?!\/)|https:\/\/)/.test(to)
+}

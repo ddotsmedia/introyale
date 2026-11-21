@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { altchaPasses, elapsedEnough, honeypotTripped } from '@/lib/bot'
 import { createEnquiry } from '@/lib/enquiries'
-import { clientIp, hmacKey, RATE_LIMITED_MESSAGE, signingKey } from '@/lib/guard'
+import { altchaUnused, clientIp, hmacKey, RATE_LIMITED_MESSAGE, signingKey } from '@/lib/guard'
 import { EMAIL_LIMIT, IP_LIMIT, hitRateLimit, scopeKey } from '@/lib/rateLimit'
 import { consultationSchema, fieldErrors, type FieldErrors } from '@/lib/validation/enquiry'
 
@@ -21,7 +21,10 @@ export async function submitConsultation(
   if (honeypotTripped(formData.get('website'))) return { ok: false, message: GENERIC }
   if (!elapsedEnough(formData.get('startedAt'), signingKey()))
     return { ok: false, message: 'Please take a moment and try again.' }
-  if (!(await altchaPasses(formData.get('altcha'), hmacKey())))
+  if (
+    !(await altchaPasses(formData.get('altcha'), hmacKey())) ||
+    !(await altchaUnused(formData.get('altcha')))
+  )
     return { ok: false, message: 'Verification failed. Please try again.' }
 
   const ip = await clientIp()

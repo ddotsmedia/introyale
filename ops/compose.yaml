@@ -13,8 +13,7 @@ services:
     environment:
       POSTGRES_DB: glitchtip
       POSTGRES_USER: glitchtip
-      POSTGRES_PASSWORD_FILE: /run/secrets/glitchtip_db_password
-    secrets: [glitchtip_db_password]
+      POSTGRES_PASSWORD: ${GLITCHTIP_DB_PASSWORD}
     volumes: [glitchtip-db:/var/lib/postgresql/data]
     networks: [ops]
     healthcheck:
@@ -29,25 +28,40 @@ services:
     networks: [ops]
 
   glitchtip:
-    image: glitchtip/glitchtip:v4
+    image: glitchtip/glitchtip:v5.0
     restart: unless-stopped
     logging: *logging
     depends_on:
       glitchtip-db: { condition: service_healthy }
     ports: ['127.0.0.1:8000:8000']
     environment:
-      DATABASE_URL: postgres://glitchtip@glitchtip-db:5432/glitchtip
+      DATABASE_URL: postgres://glitchtip:${GLITCHTIP_DB_PASSWORD}@glitchtip-db:5432/glitchtip
       REDIS_URL: redis://glitchtip-redis:6379/0
       GLITCHTIP_DOMAIN: http://127.0.0.1:8000
       DEFAULT_FROM_EMAIL: alerts@introyale.invalid
-      SECRET_KEY_FILE: /run/secrets/glitchtip_secret_key
-    secrets: [glitchtip_secret_key, glitchtip_db_password]
+      SECRET_KEY: ${GLITCHTIP_SECRET_KEY}
+      USE_ASYNC_SERVER: "true"
+    networks: [ops]
+
+  glitchtip-worker:
+    image: glitchtip/glitchtip:v5.0
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      glitchtip-db: { condition: service_healthy }
+    command: ["./bin/run-celery-with-beat.sh"]
+    environment:
+      DATABASE_URL: postgres://glitchtip:${GLITCHTIP_DB_PASSWORD}@glitchtip-db:5432/glitchtip
+      REDIS_URL: redis://glitchtip-redis:6379/0
+      GLITCHTIP_DOMAIN: http://127.0.0.1:8000
+      SECRET_KEY: ${GLITCHTIP_SECRET_KEY}
     networks: [ops]
 
   loki:
     image: grafana/loki:3.4.2
     restart: unless-stopped
     logging: *logging
+    ports: ['127.0.0.1:3110:3100']
     command: ['-config.file=/etc/loki/config.yaml']
     volumes:
       - ./loki/config.yaml:/etc/loki/config.yaml:ro
@@ -87,8 +101,6 @@ services:
     networks: [ops]
 
 secrets:
-  glitchtip_db_password: { file: ./secrets/glitchtip_db_password.txt }
-  glitchtip_secret_key: { file: ./secrets/glitchtip_secret_key.txt }
   grafana_admin_password: { file: ./secrets/grafana_admin_password.txt }
 
 volumes:

@@ -47,3 +47,25 @@ describe('isNoindexFilter', () => {
     expect(isNoindexFilter({ sector: 'commercial', service: 'interiors' })).toBe(true)
   })
 })
+
+describe('parseFilterParams (M10.5)', () => {
+  it('keeps well-formed slugs and digits', async () => {
+    const { parseFilterParams } = await import('../../src/lib/projectFilters')
+    expect(parseFilterParams({ sector: 'residential', year: '2025', page: '2' })).toMatchObject({
+      sector: 'residential',
+      year: '2025',
+      page: '2',
+    })
+  })
+  it('drops anything that is not a slug or digits', async () => {
+    const { parseFilterParams } = await import('../../src/lib/projectFilters')
+    const p = parseFilterParams({ sector: '"><script>', year: '20x5', page: '-1' })
+    expect(p).toEqual({
+      sector: undefined,
+      propertyType: undefined,
+      service: undefined,
+      year: undefined,
+      page: undefined,
+    })
+  })
+})

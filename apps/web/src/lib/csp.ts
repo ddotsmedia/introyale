@@ -12,7 +12,8 @@ export function buildCsp(
   return [
     `default-src 'self'`,
     `script-src ${scriptSrc.join(' ')}`,
-    // Styles: Next and the Payload admin inject inline styles; scripts stay nonce-only.
+    // Styles: React style props and the Payload admin use inline style attributes. Browsers still apply
+    // style-src to those (verified), so unsafe-inline stays for styles. Scripts remain nonce-only.
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob:`,
     `font-src 'self'`,

@@ -33,3 +33,28 @@ export function isNoindexFilter(f: ProjectFilterParams): boolean {
   if (active.length === 0) return false
   return !(active.length === 1 && active[0] === 'sector')
 }
+
+/** Parses explorer query parameters. Slugs and digits only; anything else is dropped (M10.5). */
+export function parseFilterParams(
+  raw: Record<string, string | string[] | undefined>,
+): ProjectFilterParams {
+  const one = (k: string): string | undefined => {
+    const v = raw[k]
+    return typeof v === 'string' && v.length < 100 ? v : undefined
+  }
+  const slug = (k: string) => {
+    const v = one(k)
+    return v && /^[a-z0-9-]{1,80}$/.test(v) ? v : undefined
+  }
+  const digits = (k: string) => {
+    const v = one(k)
+    return v && /^\d{1,6}$/.test(v) ? v : undefined
+  }
+  return {
+    sector: slug('sector'),
+    propertyType: slug('propertyType'),
+    service: slug('service'),
+    year: digits('year'),
+    page: digits('page'),
+  }
+}

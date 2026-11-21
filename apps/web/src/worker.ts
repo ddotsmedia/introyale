@@ -1,6 +1,13 @@
+import * as Sentry from '@sentry/nextjs'
 import config from '@payload-config'
+import { readSecret } from './lib/secrets'
+import { scrubEvent } from './lib/sentryScrub'
 import { createServer } from 'node:http'
 import { getPayload } from 'payload'
+
+// Error tracking for jobs (SPEC §2.9). No DSN means no reporting.
+const dsn = readSecret('SENTRY_DSN')
+if (dsn) Sentry.init({ dsn, tracesSampleRate: 0.1, beforeSend: (e) => scrubEvent(e) })
 
 const TICK_MS = 5_000
 const STALE_MS = 60_000

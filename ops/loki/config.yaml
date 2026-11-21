@@ -22,3 +22,12 @@ schema_config:
         period: 24h
 limits_config:
   retention_period: 720h
+ingester:
+  lifecycler:
+    ring:
+      kvstore:
+        store: inmemory
+      replication_factor: 1
+    final_sleep: 0s
+analytics:
+  reporting_enabled: false

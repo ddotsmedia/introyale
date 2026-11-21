@@ -16,7 +16,13 @@ export const Users: CollectionConfig = {
   },
   access: {
     create: allow('users.manage'),
-    read: ({ req }) => !!req.user,
+    // Staff see the full list only with MFA satisfied; everyone else sees only their own record.
+    read: ({ req }) => {
+      const u = req.user
+      if (!u) return false
+      if (u.role === 'administrator' && mfaSatisfied(req)) return true
+      return { id: { equals: u.id } }
+    },
     // Administrators manage any user; everyone else may update only their own record.
     update: ({ req }) => {
       const u = req.user

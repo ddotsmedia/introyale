@@ -1,3 +1,4 @@
+import { isSafeRedirectTarget } from '../lib/legacyRedirects'
 import { invalidateRedirects } from '../lib/redirects'
 import type { CollectionConfig } from 'payload'
 import { ValidationError, Forbidden } from 'payload'
@@ -129,6 +130,13 @@ export const Redirects: CollectionConfig = {
     beforeChange: [
       ({ data, req }) => {
         const d = data as { from?: string; to?: string; type?: string }
+        // Targets must be site-relative paths or https URLs (no javascript: or protocol-relative jumps).
+        if (d.to && !isSafeRedirectTarget(d.to)) {
+          throw new ValidationError({
+            errors: [{ path: 'to', message: 'Use a path starting with / or an https URL' }],
+            req,
+          })
+        }
         if (d.from && d.to && d.from === d.to) {
           throw new ValidationError({
             errors: [{ path: 'to', message: 'Redirect cannot point to itself' }],

@@ -7,28 +7,16 @@ import { cms } from '@/lib/cms'
 import {
   PAGE_SIZE,
   isNoindexFilter,
+  parseFilterParams,
   parsePage,
   projectWhere,
-  type ProjectFilterParams,
 } from '@/lib/projectFilters'
 
 export const dynamic = 'force-dynamic'
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>
 
-function pickFilters(raw: Record<string, string | string[] | undefined>): ProjectFilterParams {
-  const one = (k: string) => {
-    const v = raw[k]
-    return typeof v === 'string' && v.length < 100 ? v : undefined
-  }
-  return {
-    sector: one('sector'),
-    propertyType: one('propertyType'),
-    service: one('service'),
-    year: one('year'),
-    page: one('page'),
-  }
-}
+const pickFilters = parseFilterParams
 
 export async function generateMetadata({
   searchParams,

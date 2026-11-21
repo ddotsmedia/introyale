@@ -1,5 +1,8 @@
 import type { Metadata } from 'next'
 
+export const SITE_DESCRIPTION =
+  'Introyale Interiors is an interior design studio. Browse our projects and start a conversation.'
+
 export const SITE_URL = (process.env.PUBLIC_URL ?? 'http://localhost:3000').replace(/\/$/, '')
 
 export type SeoFields =
@@ -24,13 +27,16 @@ export function pageMetadata(p: {
   image?: string | null
 }): Metadata {
   const canonical = p.seo?.canonicalOverride || `${SITE_URL}${p.path}`
-  const description = p.seo?.metaDescription || p.fallbackDescription || undefined
+  const description = p.seo?.metaDescription || p.fallbackDescription || SITE_DESCRIPTION
   const title = p.seo?.metaTitle || p.fallbackTitle
   return {
     title,
     description,
     alternates: { canonical },
-    robots: p.seo?.noindex ? { index: false, follow: true } : undefined,
+    // Staging (ROBOTS_NOINDEX=true) and CMS noindex both win. Omitted otherwise so the layout default applies.
+    ...(p.seo?.noindex || process.env.ROBOTS_NOINDEX === 'true'
+      ? { robots: { index: false, follow: false } }
+      : {}),
     openGraph: {
       title,
       description,

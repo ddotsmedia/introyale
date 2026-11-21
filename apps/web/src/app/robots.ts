@@ -1,6 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/seo'
 
+// Read the environment per request, not at build time.
+export const dynamic = 'force-dynamic'
+
 /** Staging is fully disallowed (ROBOTS_NOINDEX=true, SPEC §2.3). Production allows crawling and lists the sitemap. */
 export default function robots(): MetadataRoute.Robots {
   if (process.env.ROBOTS_NOINDEX === 'true') {

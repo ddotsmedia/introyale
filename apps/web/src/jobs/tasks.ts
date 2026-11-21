@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs'
 import type { Payload, TaskConfig } from 'payload'
 import { ALERT_EMAIL, FROM, STAFF_INBOX, mailer, shell } from '../lib/mail'
 
@@ -47,6 +48,11 @@ async function alertOnFinalFailure(
   enquiryId: number,
 ): Promise<void> {
   payload.logger.error({ msg: 'lead delivery failed after retries', task, enquiryId })
+  // Error event without personal data: the task name and enquiry id only (SPEC §2.9).
+  Sentry.captureException(new Error(`lead delivery failed: ${task}`), {
+    tags: { task },
+    extra: { enquiryId },
+  })
   if (!ALERT_EMAIL) return
   try {
     await mailer().sendMail({
@@ -69,7 +75,8 @@ export const deliverStaffEmail: TaskConfig<'deliverStaffEmail'> = {
   retries: RETRY,
   inputSchema: [{ name: 'enquiryId', type: 'number', required: true }],
   outputSchema: [{ name: 'sent', type: 'checkbox' }],
-  onFail: async ({ input, req }) => {
+  onFail: async ({ input, req, taskStatus }) => {
+    if ((taskStatus?.totalTried ?? 0) < RETRY.attempts) return // Payload calls onFail on every failed attempt
     await alertOnFinalFailure(req.payload, 'deliverStaffEmail', (input as Input).enquiryId)
   },
   handler: async ({ input, req }) => {
@@ -97,7 +104,8 @@ export const sendConfirmation: TaskConfig<'sendConfirmation'> = {
   retries: RETRY,
   inputSchema: [{ name: 'enquiryId', type: 'number', required: true }],
   outputSchema: [{ name: 'sent', type: 'checkbox' }],
-  onFail: async ({ input, req }) => {
+  onFail: async ({ input, req, taskStatus }) => {
+    if ((taskStatus?.totalTried ?? 0) < RETRY.attempts) return // Payload calls onFail on every failed attempt
     await alertOnFinalFailure(req.payload, 'sendConfirmation', (input as Input).enquiryId)
   },
   handler: async ({ input, req }) => {

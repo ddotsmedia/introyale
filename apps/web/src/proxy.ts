@@ -40,5 +40,6 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/|admin).*)'],
+  // Admin is covered too: the nonce CSP applies to Payload pages. API routes return data, not documents.
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|api/).*)'],
 }

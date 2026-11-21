@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import '../../styles/globals.css'
 import { fraunces, inter, plexArabic } from '../../lib/fonts'
+import { SITE_DESCRIPTION } from '../../lib/seo'
 
 export const metadata: Metadata = {
   title: { default: 'Introyale Interiors', template: '%s · Introyale Interiors' },
+  description: SITE_DESCRIPTION,
   // Staging is fully noindex (SPEC §2.3): robots.txt, X-Robots-Tag and this meta all agree.
   robots: process.env.ROBOTS_NOINDEX === 'true' ? { index: false, follow: false } : undefined,
 }

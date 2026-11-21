@@ -13,7 +13,7 @@ export function StickyActionBar({
   const items = [
     callHref ? { label: 'Call', href: callHref } : null,
     whatsappHref ? { label: 'WhatsApp', href: whatsappHref } : null,
-    { label: 'Start', href: startHref },
+    { label: 'Start a project', href: startHref },
   ].filter((i): i is { label: string; href: string } => i !== null)
 
   return (
