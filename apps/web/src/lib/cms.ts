@@ -13,7 +13,7 @@ export function cms(): Promise<Payload> {
 const published = { 'workflow.status': { equals: 'published' } } as const
 
 export async function getPageBySlug<
-  T extends 'pages' | 'sectors' | 'services' | 'team-members' | 'projects',
+  T extends 'pages' | 'sectors' | 'services' | 'team-members' | 'projects' | 'journal-posts',
 >(collection: T, slug: string): Promise<DataFromCollectionSlug<T> | null> {
   const payload = await cms()
   const res = await payload.find({

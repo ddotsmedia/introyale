@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer'
 import { Header, type NavItem } from '@/components/Header'
 import { StickyActionBar } from '@/components/StickyActionBar'
 import { globalDoc, verifiedFact } from '@/lib/cms'
+import { publishedPostCount } from '@/lib/journal'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,16 +13,19 @@ function displayName(value: unknown): string {
 
 /** Public chrome: header, footer and mobile action bar. Everything shown comes from the CMS or verified facts. */
 export default async function ChromeLayout({ children }: { children: ReactNode }) {
-  const [nav, settings, footer, address, phone, email] = await Promise.all([
+  const [nav, settings, footer, address, phone, email, journalCount] = await Promise.all([
     globalDoc('navigation'),
     globalDoc('site-settings'),
     globalDoc('footer'),
     verifiedFact('address'),
     verifiedFact('phone'),
     verifiedFact('email'),
+    publishedPostCount(),
   ])
+  // Journal stays out of navigation until three articles are published (SPEC C15).
   const items: NavItem[] = (nav.items ?? [])
     .filter((i) => i.label && i.link)
+    .filter((i) => journalCount >= 3 || !i.link.startsWith('/journal'))
     .map((i) => ({ label: i.label, href: i.link }))
   // The global may be unsaved, so its name can be missing at runtime.
   const brand = displayName(settings.name)
