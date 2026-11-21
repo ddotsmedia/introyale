@@ -10,6 +10,29 @@ import { getPageBySlug } from '@/lib/cms'
 
 export const dynamic = 'force-dynamic'
 
+import type { Metadata } from 'next'
+import { JsonLd } from '@/components/JsonLd'
+import { pageMetadata, SITE_URL } from '@/lib/seo'
+import * as schema from '@/lib/schema'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const p = await getPageBySlug('projects', slug)
+  if (!p) return {}
+  const hero = typeof p.hero === 'object' ? p.hero : null
+  return pageMetadata({
+    seo: p.seo,
+    fallbackTitle: p.publicTitle ?? p.title,
+    fallbackDescription: p.outcome ?? null,
+    path: `/work/${slug}`,
+    image: hero?.url ? `${SITE_URL}${hero.url}` : null,
+  })
+}
+
 // Written chapters, in the order of SPEC §4 (brief → concept → materials → technical → delivery → result).
 const CHAPTERS = [
   ['brief', 'Brief'],
@@ -37,8 +60,14 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
   const gallery = (p.gallery ?? []).map((m) => ({ media: m }))
   const plans = p.plans ?? []
 
+  const ld = schema.breadcrumb([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Projects', url: `${SITE_URL}/work` },
+    { name: title, url: `${SITE_URL}/work/${slug}` },
+  ])
   return (
     <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+      <JsonLd data={ld} />
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },

@@ -5,6 +5,8 @@ import { fraunces, inter, plexArabic } from '../../lib/fonts'
 
 export const metadata: Metadata = {
   title: { default: 'Introyale Interiors', template: '%s · Introyale Interiors' },
+  // Staging is fully noindex (SPEC §2.3): robots.txt, X-Robots-Tag and this meta all agree.
+  robots: process.env.ROBOTS_NOINDEX === 'true' ? { index: false, follow: false } : undefined,
 }
 
 // Locale and direction come from the route (M5). English is the only live locale at launch (D15).

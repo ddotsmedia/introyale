@@ -5,6 +5,30 @@ import { getPageBySlug } from '@/lib/cms'
 
 export const dynamic = 'force-dynamic'
 
+import type { Metadata } from 'next'
+import { JsonLd } from '@/components/JsonLd'
+import { pageMetadata, SITE_URL } from '@/lib/seo'
+import * as schema from '@/lib/schema'
+
+const SECTOR_SLUGS = ['residential', 'commercial', 'hospitality-leisure']
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ sector: string }>
+}): Promise<Metadata> {
+  const { sector } = await params
+  if (!SECTOR_SLUGS.includes(sector)) return {}
+  const doc = await getPageBySlug('sectors', sector)
+  if (!doc) return {}
+  return pageMetadata({
+    seo: doc.seo,
+    fallbackTitle: doc.title,
+    fallbackDescription: doc.intro,
+    path: `/${sector}`,
+  })
+}
+
 /** Launch sectors only (D6). Any other single-segment path is a 404. */
 const SECTORS = ['residential', 'commercial', 'hospitality-leisure'] as const
 
@@ -15,8 +39,13 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
   if (!doc) notFound()
   const projects = (doc.featuredProjects ?? []).filter((p) => typeof p === 'object')
 
+  const ld = schema.breadcrumb([
+    { name: 'Home', url: SITE_URL },
+    { name: doc.title, url: `${SITE_URL}/${sector}` },
+  ])
   return (
     <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+      <JsonLd data={ld} />
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: doc.title }]} />
       <h1 className="font-display text-ink mt-6 text-4xl">{doc.title}</h1>
       {doc.intro && (

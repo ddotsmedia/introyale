@@ -1,3 +1,4 @@
+import { invalidateRedirects } from '../lib/redirects'
 import type { CollectionConfig } from 'payload'
 import { ValidationError, Forbidden } from 'payload'
 import { allow, enquiriesRead } from '../lib/access'
@@ -135,6 +136,17 @@ export const Redirects: CollectionConfig = {
           })
         }
         return data
+      },
+    ],
+    // Drop the in-process redirect cache so edits apply on the next request (lib/redirects.ts).
+    afterChange: [
+      () => {
+        invalidateRedirects()
+      },
+    ],
+    afterDelete: [
+      () => {
+        invalidateRedirects()
       },
     ],
   },

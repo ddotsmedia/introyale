@@ -3,9 +3,21 @@ import { CtaBand, Testimonial } from '@/components/Structure'
 import { FactStrip } from '@/components/FactStrip'
 import { Picture } from '@/components/Picture'
 import { ProjectCard } from '@/components/ProjectCard'
+import type { Metadata } from 'next'
 import { getPageBySlug, listPublished, verifiedFact } from '@/lib/cms'
+import { pageMetadata } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getPageBySlug('pages', 'home')
+  return pageMetadata({
+    seo: page?.seo,
+    fallbackTitle: page?.title ?? 'Introyale Interiors',
+    fallbackDescription: page?.intro ?? null,
+    path: '/',
+  })
+}
 
 export default async function Home() {
   const [page, projects, sectors, testimonials, years, projectsDone, team, awards] =

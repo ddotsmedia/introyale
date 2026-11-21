@@ -5,6 +5,27 @@ import { getPageBySlug } from '@/lib/cms'
 
 export const dynamic = 'force-dynamic'
 
+import type { Metadata } from 'next'
+import { JsonLd } from '@/components/JsonLd'
+import { pageMetadata, SITE_URL } from '@/lib/seo'
+import * as schema from '@/lib/schema'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const doc = await getPageBySlug('services', slug)
+  if (!doc) return {}
+  return pageMetadata({
+    seo: doc.seo,
+    fallbackTitle: doc.title,
+    fallbackDescription: doc.summary,
+    path: `/services/${slug}`,
+  })
+}
+
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const doc = await getPageBySlug('services', slug)
@@ -12,8 +33,29 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
   const faqs = (doc.faqs ?? []).filter((f) => typeof f === 'object')
   const proof = (doc.proofProjects ?? []).filter((p) => typeof p === 'object')
 
+  const ld = [
+    schema.service({
+      name: doc.title,
+      description: doc.summary ?? null,
+      url: `${SITE_URL}/services/${slug}`,
+      providerName: 'Introyale Interiors',
+    }),
+    schema.breadcrumb([
+      { name: 'Home', url: SITE_URL },
+      { name: 'Services', url: `${SITE_URL}/services` },
+      { name: doc.title, url: `${SITE_URL}/services/${slug}` },
+    ]),
+    schema.faqPage(
+      faqs.map((f) => ({
+        question: f.question,
+        answer: f.answer,
+        eligible: f.eligibleForSchema === true,
+      })),
+    ),
+  ]
   return (
     <article className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
+      <JsonLd data={ld} />
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },

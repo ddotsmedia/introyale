@@ -4,6 +4,9 @@ import { Header, type NavItem } from '@/components/Header'
 import { StickyActionBar } from '@/components/StickyActionBar'
 import { globalDoc, verifiedFact } from '@/lib/cms'
 import { publishedPostCount } from '@/lib/journal'
+import { JsonLd } from '@/components/JsonLd'
+import { organization, website, localBusiness } from '@/lib/schema'
+import { SITE_URL } from '@/lib/seo'
 
 export const dynamic = 'force-dynamic'
 
@@ -31,8 +34,16 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
   const brand = displayName(settings.name)
   const digits = phone ? phone.replace(/[^\d]/g, '') : null
 
+  // Site-wide structured data. LocalBusiness is emitted only with verified address and phone (SPEC §5.2).
+  const ld = [
+    organization({ name: brand, url: SITE_URL, email, telephone: phone }),
+    website({ name: brand, url: SITE_URL }),
+    localBusiness({ name: brand, url: SITE_URL, telephone: phone, address }),
+  ]
+
   return (
     <>
+      <JsonLd data={ld} />
       <Header brand={brand} nav={items} />
       <main id="main" className="pb-16 md:pb-0">
         {children}
