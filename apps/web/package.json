@@ -17,7 +17,8 @@
     "generate:importmap": "payload generate:importmap",
     "migrate": "payload migrate",
     "build:worker": "esbuild src/worker.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/worker.js",
-    "build:migrate": "esbuild src/migrate.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/migrate.js"
+    "build:migrate": "esbuild src/migrate.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/migrate.js",
+    "build:seed-live": "esbuild scripts/seed-live-content.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-live-content.js"
   },
   "dependencies": {
     "@fontsource/fraunces": "5.3.0",

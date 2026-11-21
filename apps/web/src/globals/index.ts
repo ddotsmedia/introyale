@@ -1,5 +1,7 @@
 import type { GlobalConfig } from 'payload'
 import { allow } from '../lib/access'
+import { seoField } from '../fields/common'
+import { layoutField } from '../blocks'
 
 const readAll = () => true
 const manage = allow('globals.manage')
@@ -17,7 +19,11 @@ export const SiteSettings: GlobalConfig = {
   fields: [
     { name: 'name', type: 'text', localized: true, required: true },
     { name: 'logo', type: 'upload', relationTo: 'media' },
+    { name: 'footerLogo', type: 'upload', relationTo: 'media' },
     { name: 'defaultOgImage', type: 'upload', relationTo: 'media' },
+    { name: 'tagline', type: 'text', localized: true },
+    { name: 'ctaLabel', type: 'text', localized: true },
+    { name: 'ctaLink', type: 'text' },
   ],
 }
 
@@ -47,6 +53,21 @@ export const Footer: GlobalConfig = {
   fields: [
     { name: 'copy', type: 'textarea', localized: true },
     {
+      name: 'columns',
+      type: 'array',
+      fields: [
+        { name: 'title', type: 'text', localized: true },
+        {
+          name: 'links',
+          type: 'array',
+          fields: [
+            { name: 'label', type: 'text', localized: true },
+            { name: 'link', type: 'text' },
+          ],
+        },
+      ],
+    },
+    {
       name: 'links',
       type: 'array',
       fields: [
@@ -65,6 +86,7 @@ export const ContactInfo: GlobalConfig = {
     factRef('phoneFactKey'),
     factRef('whatsappFactKey'),
     factRef('emailFactKey'),
+    factRef('salesEmailFactKey'),
     { name: 'hours', type: 'text', localized: true },
     {
       name: 'geo',
@@ -170,8 +192,16 @@ export const Integrations: GlobalConfig = {
   ],
 }
 
+/** Home page: reorderable, hideable blocks (NEXT-PROMPT part C). */
+export const HomePage: GlobalConfig = {
+  slug: 'home-page',
+  access: { read: readAll, update: manage },
+  fields: [layoutField, seoField],
+}
+
 export const globals: GlobalConfig[] = [
   SiteSettings,
+  HomePage,
   Navigation,
   Footer,
   ContactInfo,

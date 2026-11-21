@@ -71,7 +71,9 @@ export default async function WorkPage({ searchParams }: { searchParams: SearchP
     }),
   ])
 
-  const years = [...new Set(allYears.docs.map((p) => p.year))].sort((a, b) => b - a)
+  const years = [
+    ...new Set(allYears.docs.flatMap((p) => (typeof p.year === 'number' ? [p.year] : []))),
+  ].sort((a, b) => b - a)
   const filters = [
     {
       name: 'sector',

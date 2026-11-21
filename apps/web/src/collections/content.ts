@@ -2,6 +2,7 @@ import type { CollectionConfig, CollectionSlug, Field } from 'payload'
 import { allow, publicReadPublished } from '../lib/access'
 import { seoField, slugField, workflowField } from '../fields/common'
 import { auditAfterChange, auditAfterDelete, publishGuard, workflowGuard } from '../hooks/workflow'
+import { layoutField } from '../blocks'
 
 const versions = { drafts: { autosave: true, schedulePublish: true }, maxPerDoc: 50 } as const
 
@@ -38,6 +39,7 @@ export const Sectors: CollectionConfig = {
     rel('hero', 'media'),
     rel('featuredProjects', 'projects', true),
     rel('faqs', 'faqs', true),
+    layoutField,
     seoField,
     workflowField,
   ],
@@ -86,6 +88,9 @@ export const Services: CollectionConfig = {
     },
     rel('faqs', 'faqs', true),
     rel('proofProjects', 'projects', true),
+    rel('sector', 'sectors'),
+    rel('image', 'media'),
+    layoutField,
     {
       name: 'confirmed',
       type: 'checkbox',
@@ -122,10 +127,15 @@ export const Projects: CollectionConfig = {
     {
       name: 'areaLabel',
       type: 'text',
-      required: true,
-      admin: { description: 'District only, never an exact address.' },
+      admin: { description: 'District only, never an exact address. Leave empty when unknown.' },
     },
-    { name: 'year', type: 'number', required: true },
+    { name: 'year', type: 'number', admin: { description: 'Leave empty when unknown.' } },
+    {
+      name: 'adminNote',
+      type: 'textarea',
+      access: { read: ({ req }) => !!req.user },
+      admin: { description: 'Internal note. Never shown on the site.' },
+    },
     { name: 'approxAreaSqm', type: 'number' },
     rel('services', 'services', true),
     {
@@ -226,6 +236,7 @@ export const Pages: CollectionConfig = {
     { name: 'intro', type: 'textarea', localized: true },
     rel('hero', 'media'),
     { name: 'body', type: 'textarea', localized: true },
+    layoutField,
     seoField,
     workflowField,
   ],

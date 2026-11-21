@@ -83,7 +83,14 @@ export const Clients: CollectionConfig = {
     delete: allow('content.write'),
   },
   fields: [
-    { name: 'name', type: 'text', required: true },
+    {
+      name: 'name',
+      type: 'text',
+      required: true,
+      access: { read: ({ req }) => !!req.user },
+      admin: { description: 'Internal. Logos render without names.' },
+    },
+    { name: 'order', type: 'number', defaultValue: 0 },
     { name: 'logo', type: 'upload', relationTo: 'media' },
     { name: 'sector', type: 'relationship', relationTo: 'sectors' },
     // Logos render only when permission is recorded (D13).

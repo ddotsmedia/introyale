@@ -38,7 +38,7 @@ export function publishGateErrors(collection: string, doc: Doc, ctx: GateContext
   const errs: GateError[] = []
   switch (collection) {
     case 'projects': {
-      checkRequired(doc, ['title', 'slug', 'sector', 'areaLabel', 'year', 'hero'], errs)
+      checkRequired(doc, ['title', 'slug', 'sector', 'hero'], errs)
       if (doc.hero) {
         const info = ctx.media(doc.hero)
         if (!info || info.usageApproved !== true)

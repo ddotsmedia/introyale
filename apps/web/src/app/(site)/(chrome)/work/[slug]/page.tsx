@@ -88,8 +88,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
       <div className="mt-6">
         <FactStrip
           items={[
-            { label: 'Location', value: p.areaLabel },
-            { label: 'Year', value: String(p.year) },
+            { label: 'Location', value: p.areaLabel ?? null },
+            { label: 'Year', value: p.year ? String(p.year) : null },
             { label: 'Area', value: p.approxAreaSqm ? `${String(p.approxAreaSqm)} m²` : null },
           ]}
         />

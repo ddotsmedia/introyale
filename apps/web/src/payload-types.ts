@@ -125,6 +125,7 @@ export interface Config {
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ar') | ('en' | 'ar')[];
   globals: {
     'site-settings': SiteSetting;
+    'home-page': HomePage;
     navigation: Navigation;
     footer: Footer;
     'contact-info': ContactInfo;
@@ -136,6 +137,7 @@ export interface Config {
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
@@ -364,10 +366,17 @@ export interface Project {
   sector?: (number | null) | Sector;
   propertyType?: (number | null) | PropertyType;
   /**
-   * District only, never an exact address.
+   * District only, never an exact address. Leave empty when unknown.
    */
-  areaLabel: string;
-  year: number;
+  areaLabel?: string | null;
+  /**
+   * Leave empty when unknown.
+   */
+  year?: number | null;
+  /**
+   * Internal note. Never shown on the site.
+   */
+  adminNote?: string | null;
   approxAreaSqm?: number | null;
   services?: (number | Service)[] | null;
   stage?: ('concept' | 'design' | 'delivery' | 'completed') | null;
@@ -447,6 +456,261 @@ export interface Sector {
   hero?: (number | null) | Media;
   featuredProjects?: (number | Project)[] | null;
   faqs?: (number | Faq)[] | null;
+  /**
+   * Add, reorder, edit or hide sections. Changes appear on the site after publishing
+   */
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            headline: string;
+            subhead?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * Darkness of the image overlay, 0–80
+             */
+            overlay?: number | null;
+            size?: ('full' | 'banner') | null;
+            primaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Each number comes from a verified fact in the Facts Register
+             */
+            stats?:
+              | {
+                  /**
+                   * Facts Register key
+                   */
+                  factKey: string;
+                  label?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'introStats';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Pick projects. Leave empty to show the latest published ones
+             */
+            projects?: (number | Project)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featuredWork';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published sector
+             */
+            sectors?: (number | Sector)[] | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectorTiles';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published service
+             */
+            services?: (number | Service)[] | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'servicesList';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            steps?:
+              | {
+                  title: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            tone?: ('dark' | 'light') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'processSteps';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every client with logo permission
+             */
+            clients?: (number | Client)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'clientWall';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            image?: (number | null) | Media;
+            button?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            image?: (number | null) | Media;
+            imageSide?: ('right' | 'left') | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageText';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            columns?: ('1' | '2') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textSection';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            showHours?: boolean | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactInfo';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            form?: ('contact' | 'consultation') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'enquiryForm';
+          }
+      )[]
+    | null;
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -481,18 +745,6 @@ export interface Faq {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "property-types".
- */
-export interface PropertyType {
-  id: number;
-  title: string;
-  slug: string;
-  sector?: (number | null) | Sector;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
@@ -521,6 +773,263 @@ export interface Service {
     | null;
   faqs?: (number | Faq)[] | null;
   proofProjects?: (number | Project)[] | null;
+  sector?: (number | null) | Sector;
+  image?: (number | null) | Media;
+  /**
+   * Add, reorder, edit or hide sections. Changes appear on the site after publishing
+   */
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            headline: string;
+            subhead?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * Darkness of the image overlay, 0–80
+             */
+            overlay?: number | null;
+            size?: ('full' | 'banner') | null;
+            primaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Each number comes from a verified fact in the Facts Register
+             */
+            stats?:
+              | {
+                  /**
+                   * Facts Register key
+                   */
+                  factKey: string;
+                  label?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'introStats';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Pick projects. Leave empty to show the latest published ones
+             */
+            projects?: (number | Project)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featuredWork';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published sector
+             */
+            sectors?: (number | Sector)[] | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectorTiles';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published service
+             */
+            services?: (number | Service)[] | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'servicesList';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            steps?:
+              | {
+                  title: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            tone?: ('dark' | 'light') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'processSteps';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every client with logo permission
+             */
+            clients?: (number | Client)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'clientWall';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            image?: (number | null) | Media;
+            button?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            image?: (number | null) | Media;
+            imageSide?: ('right' | 'left') | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageText';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            columns?: ('1' | '2') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textSection';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            showHours?: boolean | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactInfo';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            form?: ('contact' | 'consultation') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'enquiryForm';
+          }
+      )[]
+    | null;
   /**
    * Publish only when confirmed (D6).
    */
@@ -543,6 +1052,35 @@ export interface Service {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  /**
+   * Internal. Logos render without names.
+   */
+  name: string;
+  order?: number | null;
+  logo?: (number | null) | Media;
+  sector?: (number | null) | Sector;
+  logoPermission?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "property-types".
+ */
+export interface PropertyType {
+  id: number;
+  title: string;
+  slug: string;
+  sector?: (number | null) | Sector;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -611,19 +1149,6 @@ export interface TeamMember {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "clients".
- */
-export interface Client {
-  id: number;
-  name: string;
-  logo?: (number | null) | Media;
-  sector?: (number | null) | Sector;
-  logoPermission?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -718,6 +1243,261 @@ export interface Page {
   intro?: string | null;
   hero?: (number | null) | Media;
   body?: string | null;
+  /**
+   * Add, reorder, edit or hide sections. Changes appear on the site after publishing
+   */
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            headline: string;
+            subhead?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * Darkness of the image overlay, 0–80
+             */
+            overlay?: number | null;
+            size?: ('full' | 'banner') | null;
+            primaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Each number comes from a verified fact in the Facts Register
+             */
+            stats?:
+              | {
+                  /**
+                   * Facts Register key
+                   */
+                  factKey: string;
+                  label?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'introStats';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Pick projects. Leave empty to show the latest published ones
+             */
+            projects?: (number | Project)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featuredWork';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published sector
+             */
+            sectors?: (number | Sector)[] | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectorTiles';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published service
+             */
+            services?: (number | Service)[] | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'servicesList';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            steps?:
+              | {
+                  title: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            tone?: ('dark' | 'light') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'processSteps';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every client with logo permission
+             */
+            clients?: (number | Client)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'clientWall';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            image?: (number | null) | Media;
+            button?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            image?: (number | null) | Media;
+            imageSide?: ('right' | 'left') | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageText';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            columns?: ('1' | '2') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textSection';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            showHours?: boolean | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactInfo';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            form?: ('contact' | 'consultation') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'enquiryForm';
+          }
+      )[]
+    | null;
   seo?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -1285,6 +2065,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   propertyType?: T;
   areaLabel?: T;
   year?: T;
+  adminNote?: T;
   approxAreaSqm?: T;
   services?: T;
   stage?: T;
@@ -1387,6 +2168,207 @@ export interface ServicesSelect<T extends boolean = true> {
       };
   faqs?: T;
   proofProjects?: T;
+  sector?: T;
+  image?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              headline?: T;
+              subhead?: T;
+              image?: T;
+              overlay?: T;
+              size?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        introStats?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              stats?:
+                | T
+                | {
+                    factKey?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featuredWork?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              projects?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sectorTiles?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              sectors?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        servicesList?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              services?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        processSteps?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              tone?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        clientWall?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              clients?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              image?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageText?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imageSide?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textSection?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              columns?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactInfo?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              showHours?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        enquiryForm?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              form?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   confirmed?: T;
   seo?:
     | T
@@ -1422,6 +2404,205 @@ export interface SectorsSelect<T extends boolean = true> {
   hero?: T;
   featuredProjects?: T;
   faqs?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              headline?: T;
+              subhead?: T;
+              image?: T;
+              overlay?: T;
+              size?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        introStats?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              stats?:
+                | T
+                | {
+                    factKey?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featuredWork?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              projects?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sectorTiles?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              sectors?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        servicesList?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              services?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        processSteps?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              tone?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        clientWall?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              clients?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              image?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageText?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imageSide?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textSection?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              columns?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactInfo?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              showHours?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        enquiryForm?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              form?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   seo?:
     | T
     | {
@@ -1538,6 +2719,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
  */
 export interface ClientsSelect<T extends boolean = true> {
   name?: T;
+  order?: T;
   logo?: T;
   sector?: T;
   logoPermission?: T;
@@ -1635,6 +2817,205 @@ export interface PagesSelect<T extends boolean = true> {
   intro?: T;
   hero?: T;
   body?: T;
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              headline?: T;
+              subhead?: T;
+              image?: T;
+              overlay?: T;
+              size?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        introStats?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              stats?:
+                | T
+                | {
+                    factKey?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featuredWork?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              projects?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sectorTiles?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              sectors?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        servicesList?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              services?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        processSteps?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              tone?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        clientWall?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              clients?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              image?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageText?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imageSide?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textSection?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              columns?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactInfo?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              showHours?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        enquiryForm?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              form?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   seo?:
     | T
     | {
@@ -1838,7 +3219,282 @@ export interface SiteSetting {
   id: number;
   name: string;
   logo?: (number | null) | Media;
+  footerLogo?: (number | null) | Media;
   defaultOgImage?: (number | null) | Media;
+  tagline?: string | null;
+  ctaLabel?: string | null;
+  ctaLink?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  /**
+   * Add, reorder, edit or hide sections. Changes appear on the site after publishing
+   */
+  layout?:
+    | (
+        | {
+            eyebrow?: string | null;
+            headline: string;
+            subhead?: string | null;
+            image?: (number | null) | Media;
+            /**
+             * Darkness of the image overlay, 0–80
+             */
+            overlay?: number | null;
+            size?: ('full' | 'banner') | null;
+            primaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            secondaryCta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'hero';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Each number comes from a verified fact in the Facts Register
+             */
+            stats?:
+              | {
+                  /**
+                   * Facts Register key
+                   */
+                  factKey: string;
+                  label?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'introStats';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Pick projects. Leave empty to show the latest published ones
+             */
+            projects?: (number | Project)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'featuredWork';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published sector
+             */
+            sectors?: (number | Sector)[] | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sectorTiles';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every published service
+             */
+            services?: (number | Service)[] | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'servicesList';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            steps?:
+              | {
+                  title: string;
+                  body?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            tone?: ('dark' | 'light') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'processSteps';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            intro?: string | null;
+            /**
+             * Leave empty to show every client with logo permission
+             */
+            clients?: (number | Client)[] | null;
+            limit?: number | null;
+            viewAll?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'clientWall';
+          }
+        | {
+            heading: string;
+            text?: string | null;
+            image?: (number | null) | Media;
+            button?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBand';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            image?: (number | null) | Media;
+            imageSide?: ('right' | 'left') | null;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imageText';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            body?: string | null;
+            columns?: ('1' | '2') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'textSection';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            showHours?: boolean | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contactInfo';
+          }
+        | {
+            heading?: string | null;
+            intro?: string | null;
+            form?: ('contact' | 'consultation') | null;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'enquiryForm';
+          }
+      )[]
+    | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    ogImage?: (number | null) | Media;
+    canonicalOverride?: string | null;
+    noindex?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1869,6 +3525,19 @@ export interface Navigation {
 export interface Footer {
   id: number;
   copy?: string | null;
+  columns?:
+    | {
+        title?: string | null;
+        links?:
+          | {
+              label?: string | null;
+              link?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
   links?:
     | {
         label?: string | null;
@@ -1901,6 +3570,10 @@ export interface ContactInfo {
    * Facts Register key
    */
   emailFactKey?: string | null;
+  /**
+   * Facts Register key
+   */
+  salesEmailFactKey?: string | null;
   hours?: string | null;
   geo?: {
     latitude?: number | null;
@@ -2011,7 +3684,228 @@ export interface Integration {
 export interface SiteSettingsSelect<T extends boolean = true> {
   name?: T;
   logo?: T;
+  footerLogo?: T;
   defaultOgImage?: T;
+  tagline?: T;
+  ctaLabel?: T;
+  ctaLink?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        hero?:
+          | T
+          | {
+              eyebrow?: T;
+              headline?: T;
+              subhead?: T;
+              image?: T;
+              overlay?: T;
+              size?: T;
+              primaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              secondaryCta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        introStats?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              stats?:
+                | T
+                | {
+                    factKey?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        featuredWork?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              projects?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sectorTiles?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              sectors?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        servicesList?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              services?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        processSteps?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              steps?:
+                | T
+                | {
+                    title?: T;
+                    body?: T;
+                    id?: T;
+                  };
+              tone?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        clientWall?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              intro?: T;
+              clients?: T;
+              limit?: T;
+              viewAll?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBand?:
+          | T
+          | {
+              heading?: T;
+              text?: T;
+              image?: T;
+              button?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imageText?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              image?: T;
+              imageSide?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        textSection?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              body?: T;
+              columns?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contactInfo?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              showHours?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        enquiryForm?:
+          | T
+          | {
+              heading?: T;
+              intro?: T;
+              form?: T;
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+        canonicalOverride?: T;
+        noindex?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2039,6 +3933,19 @@ export interface NavigationSelect<T extends boolean = true> {
  */
 export interface FooterSelect<T extends boolean = true> {
   copy?: T;
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              label?: T;
+              link?: T;
+              id?: T;
+            };
+        id?: T;
+      };
   links?:
     | T
     | {
@@ -2059,6 +3966,7 @@ export interface ContactInfoSelect<T extends boolean = true> {
   phoneFactKey?: T;
   whatsappFactKey?: T;
   emailFactKey?: T;
+  salesEmailFactKey?: T;
   hours?: T;
   geo?:
     | T
