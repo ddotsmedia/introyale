@@ -178,3 +178,18 @@ export const AuditLog: CollectionConfig = {
     { name: 'at', type: 'date', required: true },
   ],
 }
+
+/** Fixed-window counters for rate limiting (lib/rateLimit.ts). Written with a raw atomic upsert. */
+export const RateLimits: CollectionConfig = {
+  slug: 'rate-limits',
+  access: {
+    create: () => false,
+    read: () => false,
+    update: () => false,
+    delete: () => false,
+  },
+  fields: [
+    { name: 'key', type: 'text', required: true, unique: true, index: true },
+    { name: 'count', type: 'number', required: true, defaultValue: 0 },
+  ],
+}

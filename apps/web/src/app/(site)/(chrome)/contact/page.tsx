@@ -1,10 +1,13 @@
 import Link from 'next/link'
 import { Breadcrumbs } from '@/components/Structure'
+import { ContactForm } from '@/components/forms/ContactForm'
 import { verifiedFact } from '@/lib/cms'
+import { signStartedAt } from '@/lib/bot'
+import { signingKey } from '@/lib/guard'
 
 export const dynamic = 'force-dynamic'
 
-/** NAP block. Each line renders only when its fact is verified (D13). Form arrives in M8. */
+/** NAP block: each line renders only when its fact is verified (D13). Plus the general form (M8). */
 export default async function ContactPage() {
   const [address, phone, email, whatsapp] = await Promise.all([
     verifiedFact('address'),
@@ -13,6 +16,7 @@ export default async function ContactPage() {
     verifiedFact('whatsapp'),
   ])
   const digits = whatsapp ? whatsapp.replace(/[^\d]/g, '') : null
+  const startToken = signStartedAt(Date.now(), signingKey())
   return (
     <section className="mx-auto max-w-[1440px] px-4 py-10 md:px-6">
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
@@ -43,6 +47,7 @@ export default async function ContactPage() {
           </p>
         )}
       </address>
+      <ContactForm startToken={startToken} />
     </section>
   )
 }

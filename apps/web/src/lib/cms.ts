@@ -75,7 +75,7 @@ export async function verifiedFact(key: string): Promise<string | null> {
 }
 
 export async function globalDoc<
-  T extends 'navigation' | 'contact-info' | 'footer' | 'site-settings',
+  T extends 'navigation' | 'contact-info' | 'footer' | 'site-settings' | 'consultation-settings',
 >(slug: T) {
   const payload = await cms()
   return payload.findGlobal({ slug, depth: 1, overrideAccess: false })

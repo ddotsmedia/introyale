@@ -13,7 +13,7 @@ gen() {
     chmod 600 "$dir/$1.txt"
   fi
 }
-for n in payload_secret db_password umami_db_password umami_app_secret backup_db_password restic_password; do gen "$n"; done
+for n in payload_secret db_password umami_db_password umami_app_secret backup_db_password restic_password altcha_hmac_key; do gen "$n"; done
 for n in smtp_password backup_sftp_key; do [ -e "$dir/$n.txt" ] || { : > "$dir/$n.txt"; chmod 600 "$dir/$n.txt"; }; done
 printf 'postgres://introyale_app:%s@db:5432/introyale' "$(cat "$dir/db_password.txt")" > "$dir/database_url.txt"
 chmod 600 "$dir/database_url.txt"

@@ -85,6 +85,7 @@ export interface Config {
     enquiries: Enquiry;
     redirects: Redirect;
     'audit-log': AuditLog;
+    'rate-limits': RateLimit;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -111,6 +112,7 @@ export interface Config {
     enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
+    'rate-limits': RateLimitsSelect<false> | RateLimitsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -150,6 +152,10 @@ export interface Config {
   user: User;
   jobs: {
     tasks: {
+      deliverStaffEmail: TaskDeliverStaffEmail;
+      sendConfirmation: TaskSendConfirmation;
+      deliverCrm: TaskDeliverCrm;
+      purgeEnquiries: TaskPurgeEnquiries;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -835,6 +841,17 @@ export interface AuditLog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rate-limits".
+ */
+export interface RateLimit {
+  id: number;
+  key: string;
+  count: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -902,7 +919,8 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug:
+          'inline' | 'deliverStaffEmail' | 'sendConfirmation' | 'deliverCrm' | 'purgeEnquiries' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -935,7 +953,8 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?:
+    ('inline' | 'deliverStaffEmail' | 'sendConfirmation' | 'deliverCrm' | 'purgeEnquiries' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1020,6 +1039,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'audit-log';
         value: number | AuditLog;
+      } | null)
+    | ({
+        relationTo: 'rate-limits';
+        value: number | RateLimit;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1728,6 +1751,16 @@ export interface AuditLogSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rate-limits_select".
+ */
+export interface RateLimitsSelect<T extends boolean = true> {
+  key?: T;
+  count?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -2134,6 +2167,52 @@ export interface CollectionsWidget {
     [k: string]: unknown;
   };
   width: 'full';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDeliverStaffEmail".
+ */
+export interface TaskDeliverStaffEmail {
+  input: {
+    enquiryId: number;
+  };
+  output: {
+    sent?: boolean | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskSendConfirmation".
+ */
+export interface TaskSendConfirmation {
+  input: {
+    enquiryId: number;
+  };
+  output: {
+    sent?: boolean | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDeliverCrm".
+ */
+export interface TaskDeliverCrm {
+  input: {
+    enquiryId: number;
+  };
+  output: {
+    delivered?: boolean | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskPurgeEnquiries".
+ */
+export interface TaskPurgeEnquiries {
+  input?: unknown;
+  output: {
+    purged?: number | null;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

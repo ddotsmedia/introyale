@@ -9,7 +9,8 @@ import { Media } from './collections/Media'
 import { Sectors, PropertyTypes, Services, Projects, Faqs, Pages } from './collections/content'
 import { TeamMembers, Testimonials, Clients, Awards } from './collections/people'
 import { JournalPosts, JournalCategories } from './collections/journal'
-import { Facts, Enquiries, Redirects, AuditLog } from './collections/system'
+import { Facts, Enquiries, Redirects, AuditLog, RateLimits } from './collections/system'
+import { jobTasks } from './jobs/tasks'
 import { globals } from './globals'
 import { readSecret } from './lib/secrets'
 import { migrations } from './migrations'
@@ -40,7 +41,9 @@ export default buildConfig({
     Enquiries,
     Redirects,
     AuditLog,
+    RateLimits,
   ],
+  jobs: { tasks: jobTasks },
   globals,
   editor: lexicalEditor(),
   secret: readSecret('PAYLOAD_SECRET'),

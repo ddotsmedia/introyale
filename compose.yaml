@@ -14,6 +14,7 @@ x-app-env: &app-env
   APP_VERSION: ${IMAGE_TAG:-dev}
   PAYLOAD_SECRET_FILE: /run/secrets/payload_secret
   DATABASE_URL_FILE: /run/secrets/database_url
+  ALTCHA_HMAC_KEY_FILE: /run/secrets/altcha_hmac_key
   FEATURE_AR: ${FEATURE_AR:-false}
   FEATURE_CRM: ${FEATURE_CRM:-false}
   FEATURE_CLOUDFLARE: ${FEATURE_CLOUDFLARE:-false}
@@ -43,7 +44,7 @@ services:
     tmpfs: ['/tmp']
     mem_limit: 1g
     environment: *app-env
-    secrets: [payload_secret, database_url]
+    secrets: [payload_secret, database_url, altcha_hmac_key]
     networks: [internal, edge]
     volumes:
       - ${MEDIA_DIR:-./media/dev}:/media
@@ -64,7 +65,7 @@ services:
     tmpfs: ['/tmp']
     mem_limit: 512m
     environment: *app-env
-    secrets: [payload_secret, database_url, smtp_password]
+    secrets: [payload_secret, database_url, smtp_password, altcha_hmac_key]
     networks: [internal, egress]
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3001/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
@@ -144,6 +145,7 @@ services:
 
 secrets:
   payload_secret: { file: "${SECRETS_DIR:-./secrets/dev}/payload_secret.txt" }
+  altcha_hmac_key: { file: "${SECRETS_DIR:-./secrets/dev}/altcha_hmac_key.txt" }
   database_url: { file: "${SECRETS_DIR:-./secrets/dev}/database_url.txt" }
   db_password: { file: "${SECRETS_DIR:-./secrets/dev}/db_password.txt" }
   umami_db_password: { file: "${SECRETS_DIR:-./secrets/dev}/umami_db_password.txt" }
