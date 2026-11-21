@@ -27,6 +27,7 @@ RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack 
 # Next standalone server (traced node_modules included).
 COPY --from=build --chown=10001:10001 /repo/apps/web/.next/standalone/ /app/server/
 COPY --from=build --chown=10001:10001 /repo/apps/web/.next/static/ /app/server/apps/web/.next/static/
+COPY --from=build --chown=10001:10001 /repo/apps/web/public/ /app/server/apps/web/public/
 # Worker, migrate and payload CLI runtime deps.
 COPY --from=build --chown=10001:10001 /repo/apps/web/dist/ /app/cli/dist/
 COPY --from=build --chown=10001:10001 /out/node_modules /app/cli/node_modules

@@ -1,5 +1,66 @@
 @import 'tailwindcss';
 
+/* font-display: optional avoids a late swap (LCP/CLS): a preloaded face is used if ready, else the metric-matched fallback. */
+/* Self-hosted fonts (D14). Fraunces 400 and Inter 400 are preloaded in the root layout; fallbacks are metric-matched to avoid layout shift. */
+@font-face {
+  font-family: Fraunces;
+  src: url(/fonts/fraunces-400.v1.woff2) format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: Fraunces;
+  src: url(/fonts/fraunces-600.v1.woff2) format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Times New Roman');
+  ascent-override: 84.71%;
+  descent-override: 22.09%;
+  line-gap-override: 0%;
+  size-adjust: 115.45%;
+}
+@font-face {
+  font-family: Inter;
+  src: url(/fonts/inter-400.v1.woff2) format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: Inter;
+  src: url(/fonts/inter-600.v1.woff2) format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local(Arial);
+  ascent-override: 89.79%;
+  descent-override: 22.36%;
+  line-gap-override: 0%;
+  size-adjust: 107.89%;
+}
+@font-face {
+  font-family: 'Plex Arabic';
+  src: url(/fonts/plex-arabic-400.v1.woff2) format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: optional;
+}
+@font-face {
+  font-family: 'Plex Arabic';
+  src: url(/fonts/plex-arabic-500.v1.woff2) format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: optional;
+}
+
 /* Design tokens: "Crafted Calm" (Blueprint §5, CLAUDE.md M4). Change values here only. */
 @theme {
   --color-ink: #1f1d1a;
@@ -28,9 +89,9 @@
 
   --container-grid: 1440px;
 
-  --font-display: var(--font-fraunces), Georgia, serif;
-  --font-ui: var(--font-inter), system-ui, sans-serif;
-  --font-arabic: var(--font-plex-arabic), 'Noto Naskh Arabic', sans-serif;
+  --font-display: Fraunces, 'Fraunces Fallback', Georgia, serif;
+  --font-ui: Inter, 'Inter Fallback', system-ui, sans-serif;
+  --font-arabic: 'Plex Arabic', 'Noto Naskh Arabic', sans-serif;
 }
 
 :root {

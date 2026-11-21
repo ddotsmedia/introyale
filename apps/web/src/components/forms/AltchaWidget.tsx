@@ -1,6 +1,5 @@
 'use client'
 
-import 'altcha'
 import { useEffect, useRef } from 'react'
 
 /**
@@ -10,13 +9,20 @@ import { useEffect, useRef } from 'react'
 export function AltchaWidget() {
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const el = document.createElement('altcha-widget')
-    el.setAttribute('challenge', '/api/altcha/challenge')
-    el.setAttribute('name', 'altcha')
-    el.setAttribute('auto', 'onload')
-    box.current?.appendChild(el)
+    let el: HTMLElement | null = null
+    let cancelled = false
+    // The widget library loads after mount, so it stays out of the initial bundle.
+    void import('altcha').then(() => {
+      if (cancelled) return
+      el = document.createElement('altcha-widget')
+      el.setAttribute('challenge', '/api/altcha/challenge')
+      el.setAttribute('name', 'altcha')
+      el.setAttribute('auto', 'onload')
+      box.current?.appendChild(el)
+    })
     return () => {
-      el.remove()
+      cancelled = true
+      el?.remove()
     }
   }, [])
   return <div ref={box} />

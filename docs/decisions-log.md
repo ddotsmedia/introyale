@@ -61,3 +61,14 @@
 | 2026-11-21 | M10.5     | docker kill is a manual stop; unless-stopped does not restart it. Crash restart is configured, not exercised                                                                                         | Docker semantics                                                                |
 | 2026-11-21 | M10.5     | GlitchTip keys are UUIDs; the Sentry SDK here rejects them as invalid DSNs, so in-app errors are not delivered. Manual envelopes are ingested                                                        | Open ✗                                                                          |
 | 2026-11-21 | M10.5     | ZAP baseline: 0 high. Accepted medium: CSP style-src unsafe-inline (inline style props, Payload admin); anti-CSRF token absence (Next server actions use Origin checks)                              | Documented residual risk                                                        |
+
+- 2026-11-21 D22: staging domain changed to introyale.online (owner instruction); introyale.com untouched until M14.
+- 2026-11-21 D3/D4/D22/D23: new site is production on introyale.online, staging on staging.introyale.online; introyale.com never touched (owner instruction). Use SITE_URL=https://introyale.online for canonicals, sitemap, OG, JSON-LD, email links.
+  | 2026-11-21 | M10.6 | Fonts moved from next/font to public/fonts (preloaded Fraunces 400 and Inter 400, font-display optional, metric-matched fallbacks). Dropped unused Plex weight preload | LCP |
+  | 2026-11-21 | M10.6 | Admin Payload Critical-CH and Accept-CH headers removed from site responses; a Critical-CH hint caused Chrome to re-request every first navigation (307 to self) | LCP |
+  | 2026-11-21 | M10.6 | ALTCHA library loaded after mount (dynamic import). Home, /work, case study and service now 137–139 KB gz; /start and /contact 139–140 KB | JS budget met |
+  | 2026-11-21 | M10.6 | Lighthouse mobile medians (3 runs): perf 96–97, a11y 98–100, BP 96, SEO 100, CLS 0. LCP 2.63–2.79 s on all five pages. Observed LCP is about 0.2 s; the simulator's render delay is what keeps it above 2.5 s. Not resolved | Open ✗ |
+  | 2026-11-21 | M10.6 | Hero image (AVIF/WebP at ≤1080w) and /media cache headers not verified: dev media files are missing on disk, so hero returns 404 locally | Open |
+  | 2026-11-21 | M10.6 | Home remains force-dynamic (CMS data). Static rendering not applied | Open |
+  | 2026-11-21 | M10.6 | Promtail: docker_sd_configs via read-only docker.sock; docker pipeline stage unwraps json-file; labels container, compose_project, env, service, level. Verified with real introyale-dev-web-1 logs in Loki | Done |
+  | 2026-11-21 | M10.6 | Dev-mode marker row (payload_migrations batch -1) blocked worker and server start with a data-loss prompt; removed from local dev DB only | Local |

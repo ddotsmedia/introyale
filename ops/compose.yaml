@@ -76,6 +76,8 @@ services:
     volumes:
       - ./promtail/config.yaml:/etc/promtail/config.yaml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      # Read-only API access for container discovery (names and labels). No write access.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks: [ops]
 
   grafana:

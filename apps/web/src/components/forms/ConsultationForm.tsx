@@ -1,6 +1,5 @@
 'use client'
 
-import 'altcha'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { AltchaWidget } from './AltchaWidget'
 import {

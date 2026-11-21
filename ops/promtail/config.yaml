@@ -5,7 +5,8 @@ positions:
 clients:
   - url: http://loki:3100/loki/api/v1/push
 scrape_configs:
-  # Docker container logs, JSON from the json-file driver. Only introyale* containers are shipped.
+  # Docker container logs. Only introyale* containers are shipped (keep rule below).
+  # Container names follow compose: introyale-<env>-<service>-<n>, e.g. introyale-dev-web-1.
   - job_name: docker
     docker_sd_configs:
       - host: unix:///var/run/docker.sock
@@ -14,12 +15,26 @@ scrape_configs:
       - source_labels: ['__meta_docker_container_name']
         regex: '/?(introyale-.*)'
         action: keep
-        target_label: container
       - source_labels: ['__meta_docker_container_name']
-        regex: '/?introyale-(.*)-\d+'
+        regex: '/?(introyale-.*)'
+        target_label: container
+        replacement: '$1'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/?introyale-([a-z]+)-(.+)-\d+'
+        target_label: env
+        replacement: '$1'
+      - source_labels: ['__meta_docker_container_name']
+        regex: '/?introyale-([a-z]+)-(.+)-\d+'
         target_label: service
+        replacement: '$2'
+      - source_labels: ['__meta_docker_container_label_com_docker_compose_project']
+        target_label: compose_project
     pipeline_stages:
+      # Unwrap the json-file envelope ({"log": "...", "stream": "..."}) before parsing the app's JSON line.
+      - docker: {}
       - json:
           expressions:
             level: level
             msg: msg
+      - labels:
+          level:

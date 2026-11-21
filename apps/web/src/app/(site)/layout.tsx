@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import '../../styles/globals.css'
-import { fraunces, inter, plexArabic } from '../../lib/fonts'
 import { SITE_DESCRIPTION } from '../../lib/seo'
 
 export const metadata: Metadata = {
@@ -14,11 +13,24 @@ export const metadata: Metadata = {
 // Locale and direction come from the route (M5). English is the only live locale at launch (D15).
 export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <html
-      lang="en"
-      dir="ltr"
-      className={`${fraunces.variable} ${inter.variable} ${plexArabic.variable}`}
-    >
+    <html lang="en" dir="ltr">
+      <head>
+        {/* Only the two faces the first paint needs. Fonts must be preloaded with crossorigin. */}
+        <link
+          rel="preload"
+          href="/fonts/fraunces-400.v1.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/inter-400.v1.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>{children}</body>
     </html>
   )

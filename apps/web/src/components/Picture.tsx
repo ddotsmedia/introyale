@@ -1,3 +1,5 @@
+import { preload } from 'react-dom'
+
 export type MediaVariant = { url?: string | null; width?: number | null } | null | undefined
 
 export type MediaLike = {
@@ -45,6 +47,17 @@ export function Picture({
   if (!m?.url || !m.alt) return null
   const avif = srcSetFor(m.sizes, 'a')
   const webp = srcSetFor(m.sizes, 'w')
+  // The above-the-fold image is preloaded (only the page that marks it priority emits this).
+  if (priority) {
+    const set = avif || webp
+    preload(m.url, {
+      as: 'image',
+      imageSrcSet: set || undefined,
+      imageSizes: set ? sizes : undefined,
+      fetchPriority: 'high',
+      type: avif ? 'image/avif' : webp ? 'image/webp' : undefined,
+    })
+  }
   return (
     <picture>
       {avif && <source type="image/avif" srcSet={avif} sizes={sizes} />}
