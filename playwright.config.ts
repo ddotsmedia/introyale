@@ -1,13 +1,24 @@
 import { defineConfig, devices } from '@playwright/test'
 
+// 3000 may be held by another local project; tests use 3200.
+const baseURL = process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3200'
+
 export default defineConfig({
-  testDir: 'apps/web/tests/e2e',
+  testDir: 'apps/web/tests',
+  testMatch: ['**/e2e/**/*.spec.ts', '**/a11y/**/*.spec.ts'],
   fullyParallel: true,
   reporter: [['list']],
-  use: { baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:3000', trace: 'retain-on-failure' },
+  use: { baseURL, trace: 'retain-on-failure' },
   projects: [
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
   ],
-  passWithNoTests: true,
+  webServer: process.env.E2E_BASE_URL
+    ? undefined
+    : {
+        command: 'pnpm -C apps/web exec next dev --port 3200',
+        url: baseURL,
+        reuseExistingServer: true,
+        timeout: 180_000,
+      },
 })

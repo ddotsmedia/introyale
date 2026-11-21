@@ -1,0 +1,91 @@
+@import 'tailwindcss';
+
+/* Design tokens: "Crafted Calm" (Blueprint §5, CLAUDE.md M4). Change values here only. */
+@theme {
+  --color-ink: #1f1d1a;
+  --color-ivory: #fbf9f6;
+  --color-sand: #efe8dd;
+  --color-travertine: #d9d2c7;
+  --color-taupe: #6b655c;
+  --color-bronze: #9a7349;
+  --color-bronze-deep: #7a5a36;
+  --color-success: #2f6b4f;
+  --color-error: #a23b2a;
+
+  /* 8px spacing scale: p-1 = 8px, p-2 = 16px … */
+  --spacing: 0.5rem;
+
+  /* Breakpoints 360 / 640 / 960 / 1280 / 1600 */
+  --breakpoint-xs: 360px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 960px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1600px;
+
+  /* Radius 0–2px only */
+  --radius-sm: 2px;
+  --radius-none: 0px;
+
+  --container-grid: 1440px;
+
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-ui: var(--font-inter), system-ui, sans-serif;
+  --font-arabic: var(--font-plex-arabic), 'Noto Naskh Arabic', sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --color-canvas: var(--color-ivory);
+  --color-text: var(--color-ink);
+  --color-muted: var(--color-taupe);
+  --color-accent: var(--color-bronze-deep);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  line-height: 1.6;
+  margin: 0;
+}
+
+html[dir='rtl'] body,
+[dir='rtl'] {
+  font-family: var(--font-arabic), var(--font-ui);
+}
+
+/* Visible focus for every interactive element (WCAG 2.2 AA). */
+:focus-visible {
+  outline: 2px solid var(--color-bronze-deep);
+  outline-offset: 2px;
+}
+
+/* Reduced motion: disable CSS transitions and View Transitions (CLAUDE.md M4). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
