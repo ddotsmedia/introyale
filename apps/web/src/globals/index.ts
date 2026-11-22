@@ -179,6 +179,37 @@ export const ConsultationSettings: GlobalConfig = {
     },
     { name: 'slaText', type: 'text', localized: true },
     {
+      name: 'crm',
+      type: 'group',
+      admin: { description: 'Targets and pipeline weights used by the admin dashboard' },
+      fields: [
+        {
+          name: 'monthlyLeadGoal',
+          type: 'number',
+          min: 0,
+          admin: { description: 'Enquiries per month' },
+        },
+        {
+          name: 'slaHours',
+          type: 'number',
+          min: 1,
+          defaultValue: 4,
+          admin: { description: 'First response target, business hours' },
+        },
+        {
+          name: 'probNew',
+          type: 'number',
+          min: 0,
+          max: 100,
+          defaultValue: 10,
+          admin: { description: 'Win probability %' },
+        },
+        { name: 'probContacted', type: 'number', min: 0, max: 100, defaultValue: 25 },
+        { name: 'probSiteVisit', type: 'number', min: 0, max: 100, defaultValue: 50 },
+        { name: 'probProposal', type: 'number', min: 0, max: 100, defaultValue: 70 },
+      ],
+    },
+    {
       name: 'consentText',
       type: 'textarea',
       localized: true,

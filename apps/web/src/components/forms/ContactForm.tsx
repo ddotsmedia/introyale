@@ -1,7 +1,8 @@
 'use client'
 
 import { ui } from '@/messages/en'
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { track } from '@/lib/track'
 import { submitContact, type ContactState } from '@/app/(site)/(chrome)/start/actions/contact'
 import { AltchaWidget } from './AltchaWidget'
 
@@ -14,6 +15,9 @@ export function ContactForm({
   consentText?: string | null
 }) {
   const [state, action, pending] = useActionState<ContactState, FormData>(submitContact, null)
+  useEffect(() => {
+    if (state?.ok) track('contact_submit')
+  }, [state])
   const errors = state && !state.ok ? (state.errors ?? {}) : {}
   return (
     <form action={action} className="mt-4 max-w-prose space-y-3" noValidate>

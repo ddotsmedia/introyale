@@ -177,6 +177,7 @@ export function Gallery({ items }: { items: GalleryItem[] }) {
                 thumbs.current[i] = el
               }}
               className="zoom block w-full overflow-hidden"
+              data-track="gallery_open"
               aria-label={`${ui.gallery.open} ${String(i + 1)} ${ui.gallery.of} ${String(items.length)}`}
               onClick={() => {
                 open(i)

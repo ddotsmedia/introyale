@@ -173,6 +173,8 @@ export interface Config {
       leadDigest: TaskLeadDigest;
       unassignedAlert: TaskUnassignedAlert;
       publishScheduled: TaskPublishScheduled;
+      analyticsNightly: TaskAnalyticsNightly;
+      analyticsWeeklyReport: TaskAnalyticsWeeklyReport;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -207,6 +209,18 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name: string;
+  /**
+   * Saved dashboard widget order and visibility (per user)
+   */
+  dashboardLayout?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   role: 'administrator' | 'content_editor' | 'project_editor' | 'marketing_reviewer' | 'publisher';
   /**
    * MFA state. Secrets are encrypted and never readable through the API.
@@ -1766,6 +1780,35 @@ export interface Enquiry {
     | number
     | boolean
     | null;
+  /**
+   * First and last touch, pages viewed before submit (first-party analytics, same-day visitor)
+   */
+  attribution?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Automatic lead score 0-100
+   */
+  score?: number | null;
+  scoreReasons?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * First response to the enquirer (SLA clock stops)
+   */
+  firstContactAt?: string | null;
   assignedTo?: (number | null) | User;
   status?: ('new' | 'contacted' | 'site_visit' | 'proposal_sent' | 'won' | 'lost') | null;
   lostReason?: string | null;
@@ -1999,6 +2042,8 @@ export interface PayloadJob {
           | 'leadDigest'
           | 'unassignedAlert'
           | 'publishScheduled'
+          | 'analyticsNightly'
+          | 'analyticsWeeklyReport'
           | 'schedulePublish';
         taskID: string;
         input?:
@@ -2042,6 +2087,8 @@ export interface PayloadJob {
         | 'leadDigest'
         | 'unassignedAlert'
         | 'publishScheduled'
+        | 'analyticsNightly'
+        | 'analyticsWeeklyReport'
         | 'schedulePublish'
       )
     | null;
@@ -2202,6 +2249,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  dashboardLayout?: T;
   role?: T;
   totp?:
     | T
@@ -3523,6 +3571,10 @@ export interface EnquiriesSelect<T extends boolean = true> {
       };
   sourcePage?: T;
   utm?: T;
+  attribution?: T;
+  score?: T;
+  scoreReasons?: T;
+  firstContactAt?: T;
   assignedTo?: T;
   status?: T;
   lostReason?: T;
@@ -4263,6 +4315,26 @@ export interface ConsultationSetting {
     | null;
   slaText?: string | null;
   /**
+   * Targets and pipeline weights used by the admin dashboard
+   */
+  crm?: {
+    /**
+     * Enquiries per month
+     */
+    monthlyLeadGoal?: number | null;
+    /**
+     * First response target, business hours
+     */
+    slaHours?: number | null;
+    /**
+     * Win probability %
+     */
+    probNew?: number | null;
+    probContacted?: number | null;
+    probSiteVisit?: number | null;
+    probProposal?: number | null;
+  };
+  /**
    * Label for the consent checkbox on the contact and consultation forms
    */
   consentText?: string | null;
@@ -4750,6 +4822,16 @@ export interface ConsultationSettingsSelect<T extends boolean = true> {
         id?: T;
       };
   slaText?: T;
+  crm?:
+    | T
+    | {
+        monthlyLeadGoal?: T;
+        slaHours?: T;
+        probNew?: T;
+        probContacted?: T;
+        probSiteVisit?: T;
+        probProposal?: T;
+      };
   consentText?: T;
   routingRules?:
     | T
@@ -4882,6 +4964,27 @@ export interface TaskPublishScheduled {
   input?: unknown;
   output: {
     published?: number | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskAnalyticsNightly".
+ */
+export interface TaskAnalyticsNightly {
+  input?: unknown;
+  output: {
+    events?: number | null;
+    aggregates?: number | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskAnalyticsWeeklyReport".
+ */
+export interface TaskAnalyticsWeeklyReport {
+  input?: unknown;
+  output: {
+    sent?: number | null;
   };
 }
 /**

@@ -115,6 +115,27 @@ export const Enquiries: CollectionConfig = {
     },
     { name: 'sourcePage', type: 'text' },
     { name: 'utm', type: 'json' },
+    {
+      name: 'attribution',
+      type: 'json',
+      admin: {
+        readOnly: true,
+        description:
+          'First and last touch, pages viewed before submit (first-party analytics, same-day visitor)',
+      },
+    },
+    {
+      name: 'score',
+      type: 'number',
+      index: true,
+      admin: { readOnly: true, description: 'Automatic lead score 0-100' },
+    },
+    { name: 'scoreReasons', type: 'json', admin: { readOnly: true } },
+    {
+      name: 'firstContactAt',
+      type: 'date',
+      admin: { readOnly: true, description: 'First response to the enquirer (SLA clock stops)' },
+    },
     { name: 'assignedTo', type: 'relationship', relationTo: 'users' },
     // CRM (admin v2). Changed only through server actions in admin/actions.ts, which audit every change.
     {

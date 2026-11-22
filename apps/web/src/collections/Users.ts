@@ -54,6 +54,18 @@ export const Users: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', required: true },
     {
+      name: 'dashboardLayout',
+      type: 'json',
+      admin: {
+        hidden: true,
+        description: 'Saved dashboard widget order and visibility (per user)',
+      },
+      access: {
+        read: ({ req, id }) => req.user?.id === id || req.user?.role === 'administrator',
+        update: () => false,
+      },
+    },
+    {
       name: 'role',
       type: 'select',
       required: true,

@@ -2,20 +2,23 @@
 
 import { useEffect } from 'react'
 
-/** Sends Core Web Vitals (name and value only) to /api/vitals. The library loads after the page is idle, off the critical path. */
+/** Sends Core Web Vitals (name, value, path) to the first-party collector. The library loads after the page is idle. */
 export function WebVitals() {
   useEffect(() => {
+    const nav = navigator as Navigator & { globalPrivacyControl?: boolean }
+    if (nav.doNotTrack === '1' || nav.globalPrivacyControl || nav.webdriver) return
     const load = () => {
       void import('web-vitals').then(({ onCLS, onFCP, onINP, onLCP, onTTFB }) => {
         const send = (m: { name: string; value: number }) => {
-          const body = JSON.stringify({ name: m.name, value: m.value })
-          if (!navigator.sendBeacon('/api/vitals', body)) {
-            void fetch('/api/vitals', {
-              method: 'POST',
-              body,
-              keepalive: true,
-              headers: { 'content-type': 'application/json' },
-            })
+          const body = JSON.stringify({
+            t: 'vt',
+            p: location.pathname,
+            n: m.name,
+            v: Math.round(m.value * 1000) / 1000,
+            sw: innerWidth,
+          })
+          if (!navigator.sendBeacon('/api/a/collect', new Blob([body], { type: 'text/plain' }))) {
+            void fetch('/api/a/collect', { method: 'POST', body, keepalive: true })
           }
         }
         onCLS(send)

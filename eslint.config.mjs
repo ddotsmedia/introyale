@@ -3,7 +3,7 @@ import prettier from 'eslint-config-prettier'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['**/.next/**', '**/node_modules/**', '**/payload-types.ts', '**/importMap.js', '**/dist/**', 'apps/web/src/migrations/**', 'playwright-report/**', 'data/**', 'test-results/**', '**/*.config.mjs'] },
+  { ignores: ['**/.next/**', '**/node_modules/**', '**/payload-types.ts', '**/importMap.js', '**/dist/**', 'apps/web/src/migrations/**', 'playwright-report/**', 'data/**', '.local/**', '.lighthouseci/**', 'apps/web/public/a.js', 'test-results/**', '**/*.config.mjs'] },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
   {

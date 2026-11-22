@@ -2,6 +2,8 @@ import * as Sentry from '@sentry/nextjs'
 import type { Payload, TaskConfig } from 'payload'
 import { ALERT_EMAIL, FROM, STAFF_INBOX, mailer, shell } from '../lib/mail'
 import { notify } from '../lib/audit'
+import { nightly } from '../lib/analytics/store'
+import { runWeeklyReport } from '../lib/analytics/report'
 import { runDigest, runScheduledPublish, runUnassignedAlert, type Send } from '../lib/crmJobs'
 
 // Lead delivery tasks (SPEC M8). Retries: 3 attempts with exponential backoff. After the final
@@ -226,6 +228,25 @@ export const publishScheduled: TaskConfig<'publishScheduled'> = {
   handler: async ({ req }) => ({ output: await runScheduledPublish(req.payload) }),
 }
 
+export const analyticsNightly: TaskConfig<'analyticsNightly'> = {
+  slug: 'analyticsNightly',
+  label: 'Analytics: aggregate and purge (raw 90 days, aggregates 25 months)',
+  inputSchema: [],
+  outputSchema: [
+    { name: 'events', type: 'number' },
+    { name: 'aggregates', type: 'number' },
+  ],
+  handler: async ({ req }) => ({ output: await nightly(req.payload) }),
+}
+
+export const analyticsWeeklyReport: TaskConfig<'analyticsWeeklyReport'> = {
+  slug: 'analyticsWeeklyReport',
+  label: 'Weekly analytics email to administrators (Mondays 08:00 Dubai)',
+  inputSchema: [],
+  outputSchema: [{ name: 'sent', type: 'number' }],
+  handler: async ({ req }) => ({ output: await runWeeklyReport(req.payload, send) }),
+}
+
 export const jobTasks = [
   deliverStaffEmail,
   sendConfirmation,
@@ -234,4 +255,6 @@ export const jobTasks = [
   leadDigest,
   unassignedAlert,
   publishScheduled,
+  analyticsNightly,
+  analyticsWeeklyReport,
 ]

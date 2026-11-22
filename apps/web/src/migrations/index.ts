@@ -9,6 +9,8 @@ import * as migration_20261121_201245_m10_7_consent from './20261121_201245_m10_
 import * as migration_20261122_005545_m11_admin_v2 from './20261122_005545_m11_admin_v2'
 import * as migration_20261122_013400_m11_seo_keyword from './20261122_013400_m11_seo_keyword'
 import * as migration_20261122_095533_m12_motion from './20261122_095533_m12_motion'
+import * as migration_20261122_191429_m16_analytics_crm from './20261122_191429_m16_analytics_crm'
+import * as migration_20261122_191500_m16_analytics_tables from './20261122_191500_m16_analytics_tables'
 
 export const migrations = [
   {
@@ -65,5 +67,15 @@ export const migrations = [
     up: migration_20261122_095533_m12_motion.up,
     down: migration_20261122_095533_m12_motion.down,
     name: '20261122_095533_m12_motion',
+  },
+  {
+    up: migration_20261122_191429_m16_analytics_crm.up,
+    down: migration_20261122_191429_m16_analytics_crm.down,
+    name: '20261122_191429_m16_analytics_crm',
+  },
+  {
+    up: migration_20261122_191500_m16_analytics_tables.up,
+    down: migration_20261122_191500_m16_analytics_tables.down,
+    name: '20261122_191500_m16_analytics_tables',
   },
 ]

@@ -54,6 +54,25 @@ setInterval(() => {
   })
 }, DAY_MS)
 
+// Analytics (admin v3): aggregate + purge once a day shortly after midnight Dubai; weekly report on Mondays.
+let lastNightly = ''
+let lastWeekly = ''
+setInterval(() => {
+  const p = dubaiParts(new Date())
+  const queue = (task: 'analyticsNightly' | 'analyticsWeeklyReport') =>
+    payload.jobs.queue({ task, input: {} }).catch(() => {
+      payload.logger.error({ msg: 'could not queue job', task })
+    })
+  if (lastNightly !== p.date && p.h >= 0 && p.min >= 10) {
+    lastNightly = p.date
+    void queue('analyticsNightly')
+  }
+  if (process.env.FEATURE_EMAIL !== 'false' && lastWeekly !== p.date && p.h >= 8) {
+    lastWeekly = p.date // the task itself only sends on Mondays, once per week
+    void queue('analyticsWeeklyReport')
+  }
+}, 60_000)
+
 // CRM schedules (admin v2). The digest task is idempotent per Dubai day (audit-log check), so checking every minute is safe.
 let lastDigest = ''
 let lastUnassigned = 0

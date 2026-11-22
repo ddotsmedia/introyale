@@ -24,11 +24,17 @@ export function Button({
   const external = /^https?:\/\//.test(cta.href)
   const classes = `${base} ${tones[tone]} ${className}`
   return external ? (
-    <a href={cta.href} className={classes} data-magnetic rel="noopener noreferrer">
+    <a
+      href={cta.href}
+      className={classes}
+      data-magnetic
+      data-track="cta_click"
+      rel="noopener noreferrer"
+    >
       {cta.label}
     </a>
   ) : (
-    <Link href={cta.href} className={classes} data-magnetic>
+    <Link href={cta.href} className={classes} data-magnetic data-track="cta_click">
       {cta.label}
     </Link>
   )

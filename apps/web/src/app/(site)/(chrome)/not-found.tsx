@@ -10,6 +10,7 @@ export default async function NotFound() {
   await logNotFound((await headers()).get('x-pathname'))
   return (
     <>
+      <meta name="ir:status" content="404" />
       <PageHeader title={ui.notFound.title} intro={ui.notFound.body} />
       <div className={`${sectionPad} bg-ivory`}>
         <div className={container}>

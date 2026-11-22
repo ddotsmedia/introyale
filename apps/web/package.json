@@ -7,8 +7,10 @@
     "node": ">=22.13 <23"
   },
   "scripts": {
+    "predev": "pnpm build:tracker",
     "dev": "next dev --port 3000",
-    "build": "next build",
+    "build": "pnpm build:tracker && next build",
+    "build:tracker": "esbuild src/tracker/a.ts --bundle --minify --target=es2020 --format=iife --outfile=public/a.js",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

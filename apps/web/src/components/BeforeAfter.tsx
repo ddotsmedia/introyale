@@ -69,6 +69,7 @@ export function BeforeAfter({
       </label>
       <input
         id={id}
+        data-track="before_after"
         type="range"
         min={0}
         max={100}

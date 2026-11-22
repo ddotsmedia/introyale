@@ -3,6 +3,7 @@
 import { ui } from '@/messages/en'
 import { useActionState, useEffect, useRef, useState } from 'react'
 import { AltchaWidget } from './AltchaWidget'
+import { track } from '@/lib/track'
 import {
   submitConsultation,
   type ActionState,
@@ -77,6 +78,15 @@ export function ConsultationForm({
     }
     // Mount only: restore once, then keep the user's values.
   }, [defaultSector])
+
+  // Funnel events: the step the visitor has reached, and the submission.
+  useEffect(() => {
+    track('step_reached', step + 1)
+  }, [step])
+  useEffect(() => {
+    if (state?.ok) track('consult_submit')
+    else if (state) track('form_error')
+  }, [state])
 
   // React clears uncontrolled fields after each action. After a validation error, put them back.
   useEffect(() => {

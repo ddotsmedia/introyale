@@ -4,6 +4,7 @@ import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { StickyActionBar } from '@/components/StickyActionBar'
 import { WebVitals } from '@/components/WebVitals'
+import { Analytics } from '@/components/Analytics'
 import { organization, website, localBusiness } from '@/lib/schema'
 import { SITE_URL } from '@/lib/seo'
 import { cms } from '@/lib/cms'
@@ -66,6 +67,7 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
       <JsonLd data={ld} />
       <MotionLoader />
       <WebVitals />
+      <Analytics />
       {c.banner ? (
         <div
           role="status"
