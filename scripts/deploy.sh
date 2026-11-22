@@ -8,10 +8,12 @@ base="$(env_base "$env")"; last="$base/.last_good_tag"
 [ -n "${GH_OWNER:-}" ] || GH_OWNER="$(. "$base/.env.compose" && echo "${GH_OWNER:-}")"   # per-host value
 export IMAGE_TAG="$tag" GH_OWNER="${GH_OWNER:?GH_OWNER}" WEB_IMAGE="ghcr.io/${GH_OWNER}/introyale-web:${tag}"
 if [ "${DRY_RUN:-0}" = 1 ]; then
+  check_disk "${MIN_FREE_GB:-5}"
   preflight "$env" "$(docker image ls -q --filter "reference=ghcr.io/${GH_OWNER}/introyale-web" | head -1)"
   dc "$env" config -q && dc "$env" ps -a >/dev/null && echo "dry-run ok: $env $tag (no changes made)"
   exit 0
 fi
+check_disk "${MIN_FREE_GB:-5}"
 dc "$env" pull migrate web worker backup
 preflight "$env" "$WEB_IMAGE"
 # Pre-deploy dump (pg_dump + restic) must succeed before anything changes.
@@ -24,6 +26,7 @@ dc "$env" up -d --no-deps web worker
 [ -f "$last" ] || export SMOKE_HEALTH_ONLY=1
 if wait_healthy "introyale-${env}-web-1" 120 && "$(dirname "$0")/smoke.sh" "${SMOKE_BASE:-http://127.0.0.1:${WEB_PORT}}"; then
   mkdir -p "$base" && echo "$tag" > "$last"; echo "deployed $env $tag"
+  prune_old_images "$GH_OWNER" "$tag" "$(cat "$last")" || true
 else
   echo "deploy FAILED, rolling back" >&2
   if [ -f "$last" ]; then "$(dirname "$0")/rollback.sh" "$env" "$(cat "$last")"; fi

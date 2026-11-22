@@ -1,6 +1,6 @@
 # Shared helpers. Every compose call is scoped to -p introyale-<env> (CLAUDE.md safety).
 # INTROYALE_BASE is the parent of the per-env dirs (default /opt/introyale). The Snap build of Docker cannot
-# bind-mount /opt, so the staging VPS sets it to /home/introyale-deploy/introyale (decisions-log).
+# bind-mount /opt, so the VPS sets it to /home/introyale-deploy/introyale (decisions-log).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 env_base() { local b="${INTROYALE_BASE:-/opt/introyale}/$1"; [ -d "$b" ] || b="$ROOT/.local/$1"; echo "$b"; }
@@ -39,4 +39,27 @@ preflight() {
   done
   dc "$env" config -q || return 1
   echo "preflight ok"
+}
+# stale_tags <keep-tag>...: reads image tags on stdin, prints those NOT in the keep list (never the running or last-good tag).
+stale_tags() {
+  local t k keep
+  while IFS= read -r t || [ -n "$t" ]; do
+    [ -n "$t" ] && [ "$t" != "<none>" ] || continue
+    keep=0; for k in "$@"; do [ -n "$k" ] && [ "$t" = "$k" ] && keep=1; done
+    [ "$keep" = 1 ] || echo "$t"
+  done
+}
+# prune_old_images <owner> <running-tag> <last-good-tag>: removes superseded introyale image tags by exact ref. No prune, no -f: images in use stay.
+prune_old_images() {
+  local owner="$1" run="$2" good="$3" repo t
+  for repo in introyale-web introyale-cli introyale-backup; do
+    docker image ls --format '{{.Tag}}' "ghcr.io/${owner}/${repo}" | stale_tags "$run" "$good" | while IFS= read -r t; do
+      docker rmi "ghcr.io/${owner}/${repo}:${t}" >/dev/null 2>&1 && echo "removed ${repo}:${t}" || echo "kept ${repo}:${t} (in use)"
+    done
+  done
+}
+# check_disk <min-GB> [path]: abort a deploy before pulling if free space is too low.
+check_disk() {
+  local min="$1" free; free="$(df -BG --output=avail "${2:-/}" | tail -1 | tr -dc '0-9')"
+  [ "${free:-0}" -ge "$min" ] || { echo "deploy aborted: only ${free}G free on ${2:-/}, need ${min}G" >&2; return 1; }
 }
