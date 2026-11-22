@@ -15,7 +15,7 @@ export type HeaderProps = {
   cta?: { label: string; href: string } | null
   phone?: string | null
   whatsappHref?: string | null
-  menuImages?: { href: string; media: MediaInput }[]
+  menuImages?: { href: string; src: string | null }[]
 }
 
 const Icon = ({ d }: { d: string }) => (

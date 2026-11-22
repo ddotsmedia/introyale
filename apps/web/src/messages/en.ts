@@ -71,6 +71,7 @@ export const ui = {
     previous: 'Previous',
     next: 'Next',
     close: 'Close',
+    fullscreen: 'Full screen',
   },
   notFound: {
     title: 'Page not found',

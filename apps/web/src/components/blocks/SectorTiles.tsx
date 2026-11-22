@@ -31,14 +31,14 @@ export async function SectorTiles({ block }: { block: BlockOf<'sectorTiles'> }) 
           heading={block.heading}
           intro={block.intro}
         />
-        <ul className="mt-7 grid gap-2.5 md:grid-cols-3 md:gap-3">
+        <ul className="sector-row mt-7 grid gap-2.5 md:grid-cols-3 md:gap-3">
           {sectors.map((s) => (
-            <li key={s.id} className="reveal">
+            <li key={s.id} className="sector reveal">
               <Link
                 href={`/${s.slug}`}
                 className="zoom group relative block overflow-hidden bg-night"
               >
-                <div className="aspect-[3/4] w-full">
+                <div className="parallax aspect-[3/4] w-full">
                   <Picture
                     media={s.hero}
                     sizes="(min-width: 960px) 33vw, 100vw"
@@ -48,6 +48,9 @@ export async function SectorTiles({ block }: { block: BlockOf<'sectorTiles'> }) 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-3.5 text-white md:p-4.5">
                   <h3 className="display text-[clamp(2rem,3vw,2.75rem)]">{s.title}</h3>
+                  {s.intro && (
+                    <p className="sector__desc mt-2 text-base text-white/85">{s.intro}</p>
+                  )}
                   <p className="eyebrow !text-bronze-light mt-2">{ui.explore}</p>
                 </div>
               </Link>

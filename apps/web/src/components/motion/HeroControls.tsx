@@ -18,6 +18,28 @@ export function HeroControls({ count, seconds }: { count: number; seconds: numbe
     })
   }, [index])
 
+  // Extra slides do not download until the page has finished loading, so they never compete with the LCP image.
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    let t = 0
+    const warm = () => {
+      t = window.setTimeout(() => {
+        ref.current
+          ?.closest('.hero')
+          ?.querySelectorAll('.hero__slide')
+          .forEach((s) => {
+            s.setAttribute('data-warm', 'true')
+          })
+      }, 1500)
+    }
+    if (document.readyState === 'complete') warm()
+    else window.addEventListener('load', warm, { once: true })
+    return () => {
+      window.removeEventListener('load', warm)
+      window.clearTimeout(t)
+    }
+  }, [])
+
   useEffect(() => {
     if (!playing || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const id = window.setInterval(

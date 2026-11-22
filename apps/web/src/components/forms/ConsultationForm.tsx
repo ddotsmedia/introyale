@@ -135,6 +135,9 @@ export function ConsultationForm({
           </li>
         ))}
       </ol>
+      <div className="step-progress" aria-hidden="true">
+        <span style={{ '--p': (step + 1) / STEPS.length } as React.CSSProperties} />
+      </div>
 
       {state && !state.ok && (state.message || errorList.length > 0) && (
         <div role="alert" className="border-error text-error border p-2">
@@ -149,7 +152,7 @@ export function ConsultationForm({
         </div>
       )}
 
-      <fieldset hidden={step !== 0} className="space-y-3">
+      <fieldset data-step-panel hidden={step !== 0} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Your project</legend>
         <Select
           name="sector"
@@ -174,7 +177,7 @@ export function ConsultationForm({
         </fieldset>
       </fieldset>
 
-      <fieldset hidden={step !== 1} className="space-y-3">
+      <fieldset data-step-panel hidden={step !== 1} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Space and timing</legend>
         <Select
           name="stage"
@@ -196,7 +199,7 @@ export function ConsultationForm({
         <Text name="plansLink" label="Link to plans (optional, https)" error={errors.plansLink} />
       </fieldset>
 
-      <fieldset hidden={step !== 2} className="space-y-3">
+      <fieldset data-step-panel hidden={step !== 2} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Contact details</legend>
         <Text name="name" label="Name" error={errors.name} autoComplete="name" required />
         <Text
@@ -224,7 +227,7 @@ export function ConsultationForm({
         <Text name="preferredTime" label="Preferred time (optional)" error={errors.preferredTime} />
       </fieldset>
 
-      <fieldset hidden={step !== 3} className="space-y-3">
+      <fieldset data-step-panel hidden={step !== 3} className="space-y-3">
         <legend className="font-display text-ink text-2xl">Review and send</legend>
         <p className="text-ink/90">{ui.form.review}</p>
         <label className="flex items-start gap-1.5 text-sm">

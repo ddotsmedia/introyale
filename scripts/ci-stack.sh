@@ -17,13 +17,17 @@ case "${1:?up|down}" in
     printf 'WEB_PORT=%s\nMAILPIT_PORT=%s\nSECRETS_DIR=%s/secrets\nMEDIA_DIR=%s/media\nDB_DIR=%s/db\nBACKUP_DIR=%s/backups\n' "${CI_WEB_PORT:-3100}" "${CI_MAILPIT_PORT:-8100}" "$T" "$T" "$T" "$T" > "$T/.env"
     docker build -q -f docker/web.Dockerfile -t introyale-web:local .
     dcx up -d --wait web worker db mailpit
-    pnpm -C apps/web build:seed-live; pnpm -C apps/web build:seed-test; pnpm -C apps/web build:admin-user
-    seed() { dcx run --rm --no-deps -e PLACEHOLDER_IMAGES=1 -v "$PWD/apps/web/dist:/app/cli/seed:ro" web node "/app/cli/seed/$1.js" >/dev/null; }
+    pnpm -C apps/web build:seed-live; pnpm -C apps/web build:seed-test; pnpm -C apps/web build:seed-motion; pnpm -C apps/web build:admin-user
+    seed() { dcx run --rm --no-deps -e PLACEHOLDER_IMAGES=1 -e SEED_ADMIN_EMAIL=admin@introyale.local -v "$PWD/apps/web/dist:/app/cli/seed:ro" web node "/app/cli/seed/$1.js" >/dev/null; }
     seed seed-live-content
     seed seed-test-leads
+    seed seed-motion
     # Fresh administrator (no MFA yet) for the MFA regression test; the password comes from the caller's environment.
     if [ -n "${E2E_ADMIN_PW:-}" ]; then
-      dcx run --rm --no-deps -e ADMIN_PW="$E2E_ADMIN_PW" -v "$PWD/apps/web/dist:/app/cli/seed:ro" web node /app/cli/seed/admin-user.js create e2e-admin@introyale.local >/dev/null
+      # One user per test file: concurrent logins of one account race on its session list.
+      for u in e2e-admin e2e-api e2e-motion; do
+        dcx run --rm --no-deps -e ADMIN_PW="$E2E_ADMIN_PW" -v "$PWD/apps/web/dist:/app/cli/seed:ro" web node /app/cli/seed/admin-user.js create "$u@introyale.local" >/dev/null
+      done
     fi
     ;;
   down) dcx down -v --remove-orphans || true ;;

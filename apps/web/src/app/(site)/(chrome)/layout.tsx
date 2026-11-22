@@ -9,6 +9,7 @@ import { SITE_URL } from '@/lib/seo'
 import { cms } from '@/lib/cms'
 import { getMotion } from '@/lib/motion'
 import { siteChrome } from '@/lib/site'
+import { mediaSrc } from '@/components/Picture'
 import { MotionLoader } from '@/components/motion/MotionLoader'
 
 export const dynamic = 'force-dynamic'
@@ -36,7 +37,8 @@ async function menuImages(nav: { href: string }[]) {
   const first = work.docs[0]?.hero
   return nav.map((n) => ({
     href: n.href,
-    media: bySlug.get(n.href) ?? (n.href === '/work' ? first : null),
+    // Plain URLs only: passing whole media objects to the client menu would bloat every page's HTML.
+    src: mediaSrc(bySlug.get(n.href) ?? (n.href === '/work' ? first : null), 768),
   }))
 }
 

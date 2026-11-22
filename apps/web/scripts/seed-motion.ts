@@ -31,7 +31,12 @@ const mediaDir = process.env.MEDIA_DIR ?? 'media'
 let lqip = 0
 const all = await payload.find({ collection: 'media', limit: 1000, depth: 0, ...system })
 for (const m of all.docs) {
-  if (m.lqip || !m.filename || !m.mimeType?.startsWith('image/')) continue
+  if (
+    (m.lqip && process.env.REGEN_LQIP !== '1') ||
+    !m.filename ||
+    !m.mimeType?.startsWith('image/')
+  )
+    continue
   const file = path.join(mediaDir, m.filename)
   if (!fs.existsSync(file)) continue
   try {
@@ -70,5 +75,58 @@ if (!settings.heroSlides?.length) {
     slides = ids.length
   }
 }
+// 3. Home sections for the new effects (only filled in where nothing was chosen yet; admin edits are kept)
+const STATEMENT =
+  'Introyale Interiors is committed to providing authentic interior design solutions for residential, commercial, hotel and leisure projects. It is our objective to deliver a truly ingenious space that exceeds our clients expectations.'
+const homeNow = await payload.findGlobal({ slug: 'home-page', depth: 0, ...system })
+type Block = Record<string, unknown> & { blockType: string }
+const layout = [...((homeNow.layout ?? []) as unknown as Block[])]
+let changed = false
+// First run only (or FORCE_HOME=1): choose the new display styles. Later admin choices are never touched.
+const first = !layout.some((b) => b.blockType === 'statement') || process.env.FORCE_HOME === '1'
+if (!layout.some((b) => b.blockType === 'statement')) {
+  const at = Math.min(1, layout.length)
+  layout.splice(at, 0, {
+    blockType: 'statement',
+    eyebrow: 'Introyale Interiors',
+    statement: STATEMENT,
+  })
+  changed = true
+}
+for (const b of layout) {
+  if (first && b.blockType === 'featuredWork' && (!b.display || b.display === 'grid')) {
+    b.display = 'horizontal'
+    changed = true
+  }
+  if (first && b.blockType === 'clientWall' && (!b.display || b.display === 'grid')) {
+    b.display = 'marquee'
+    changed = true
+  }
+}
+const withBA = (
+  await payload.find({
+    collection: 'projects',
+    where: { 'workflow.status': { equals: 'published' } },
+    limit: 50,
+    depth: 0,
+    ...system,
+  })
+).docs.some((p) => (p.beforeAfter ?? []).length > 0)
+if (withBA && !layout.some((b) => b.blockType === 'beforeAfterSpotlight')) {
+  const at = Math.max(
+    0,
+    layout.findIndex((b) => b.blockType === 'servicesList'),
+  )
+  layout.splice(at, 0, { blockType: 'beforeAfterSpotlight', eyebrow: 'Before and after' })
+  changed = true
+}
+if (changed) {
+  await payload.updateGlobal({
+    slug: 'home-page',
+    data: { layout: layout as never },
+    ...write,
+  })
+}
+console.log(`home sections updated: ${String(changed)}`)
 console.log(`placeholders: ${String(lqip)}, hero slides added: ${String(slides)}`)
 process.exit(0)

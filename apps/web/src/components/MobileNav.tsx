@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { ui } from '@/messages/en'
 import type { NavItem } from './Header'
-import { Picture, type MediaInput } from './Picture'
 
 /** Full-screen mobile menu. Focus is trapped while open; Esc closes it and returns focus to the trigger. */
 export function MobileNav({
@@ -17,7 +16,7 @@ export function MobileNav({
   cta: { label: string; href: string } | null
   phone: string | null
   whatsappHref: string | null
-  images?: { href: string; media: MediaInput }[]
+  images?: { href: string; src: string | null }[]
 }) {
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState<string | null>(null)
@@ -97,10 +96,16 @@ export function MobileNav({
           {/* Background image crossfade: the hovered or focused link decides which image shows (CMS sector heroes). */}
           <div className="menu-bg" aria-hidden="true">
             {images
-              .filter((i) => i.media)
+              .filter((i) => i.src)
               .map((i) => (
                 <div key={i.href} data-on={active === i.href}>
-                  <Picture media={i.media} sizes="100vw" className="h-full w-full object-cover" />
+                  {/* Decorative background: a plain image, loaded only when the menu is open. */}
+                  <img
+                    src={i.src ?? ''}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               ))}
           </div>

@@ -25,6 +25,10 @@ export default async function ThankYou({
       )}
       <section className={`${sectionPad} bg-ivory`}>
         <div className={container}>
+          <svg className="check-draw mb-3" viewBox="0 0 52 52" aria-hidden="true" focusable="false">
+            <circle cx="26" cy="26" r="23" pathLength="1" />
+            <path d="M15 27l8 8 15-17" pathLength="1" />
+          </svg>
           {ref && (
             <p className="font-display text-3xl tracking-tight">
               <span className="eyebrow me-2">{ui.thanks.reference}</span>

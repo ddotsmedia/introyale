@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { ui } from '@/messages/en'
 import { Picture, type MediaInput } from './Picture'
 
 /** Image-led project card: the title sits on the image, with a slow hover zoom. Meta parts render only when known. */
@@ -26,12 +27,16 @@ export function ProjectCard({
   const metaText = (meta ?? []).filter((m) => m !== null && m !== undefined && m !== '').join(' · ')
   return (
     <article className={className}>
-      <Link href={href} className="zoom group relative block overflow-hidden bg-sand">
-        <div className={`${frame} w-full overflow-hidden`}>
+      <Link
+        href={href}
+        data-cursor={ui.view}
+        className="zoom group card-fx relative block overflow-hidden bg-sand"
+      >
+        <div className={`${frame} img-reveal w-full overflow-hidden`} data-vt-image>
           <Picture media={hero} sizes={sizes} className="h-full w-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-2.5 text-white md:p-3.5">
+        <div className="card-text absolute inset-x-0 bottom-0 p-2.5 text-white md:p-3.5">
           {metaText && <p className="eyebrow !text-bronze-light">{metaText}</p>}
           <h3
             className="font-display mt-1 text-2xl leading-tight tracking-tight md:text-3xl"

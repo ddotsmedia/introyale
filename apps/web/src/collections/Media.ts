@@ -4,13 +4,13 @@ import { actionAllowed, allow } from '../lib/access'
 
 const MB = 1024 * 1024
 
-/** Tiny blurred preview (a data URI of about 300 bytes) and the dominant colour, for blur-up image loading. */
+/** Tiny blurred preview (a 10px data URI, about 250 bytes) and the dominant colour, for blur-up image loading. */
 export async function placeholderFor(
   input: Buffer | string,
 ): Promise<{ lqip: string; dominant: string }> {
   const img = sharp(input).rotate()
   const [tiny, stats] = await Promise.all([
-    img.clone().resize(20, 20, { fit: 'inside' }).jpeg({ quality: 40 }).toBuffer(),
+    img.clone().resize(10, 10, { fit: 'inside' }).jpeg({ quality: 35 }).toBuffer(),
     img.clone().resize(1, 1, { fit: 'cover' }).raw().toBuffer(),
   ])
   const hex = [...stats.subarray(0, 3)].map((v) => v.toString(16).padStart(2, '0')).join('')

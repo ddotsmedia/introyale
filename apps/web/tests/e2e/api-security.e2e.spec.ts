@@ -113,7 +113,7 @@ test('drafts and unverified facts are invisible to anonymous clients', async ({
   test.skip(!pw, 'needs E2E_ADMIN_PW to create the draft records')
   const admin = await pwRequest.newContext({ baseURL: String(info.project.use.baseURL) })
   const login = await admin.post('/api/users/login', {
-    data: { email: process.env.E2E_ADMIN_EMAIL ?? 'e2e-admin@introyale.local', password: pw },
+    data: { email: process.env.E2E_API_EMAIL ?? 'e2e-api@introyale.local', password: pw },
   })
   expect(login.ok()).toBe(true)
   const tag = `e2e-secret-${String(Date.now())}`

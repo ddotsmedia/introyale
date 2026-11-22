@@ -17,6 +17,27 @@ async function signIn(page: Page): Promise<void> {
   await page.locator('input[name="password"]').fill(password)
   await page.locator('button[type="submit"]').click()
 }
+/** Fills a fresh code, submits, and retries once if the code fell on a 30-second boundary. */
+async function submitCode(
+  page: Page,
+  scope: Page | ReturnType<Page['getByTestId']>,
+  input: string,
+  button: string,
+  api: string,
+  secret: string,
+  extra?: () => Promise<void>,
+): Promise<void> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await extra?.()
+    await scope.locator(input).fill(generateSync({ secret }))
+    const [res] = await Promise.all([
+      page.waitForResponse((r) => r.url().includes(api)),
+      scope.getByRole('button', { name: button }).click(),
+    ])
+    if (res.ok()) return
+    await page.waitForTimeout(1500)
+  }
+}
 const dashboard = (page: Page) => page.getByRole('heading', { name: 'Dashboard' })
 
 test('2FA is optional, opt-in works, and once on the code is required', async ({
@@ -35,12 +56,13 @@ test('2FA is optional, opt-in works, and once on the code is required', async ({
   // 2. Opt in on the account page.
   await page.goto('/admin/account')
   const panel = page.getByTestId('mfa-account')
-  await expect(page.getByRole('heading', { name: 'Two-factor authentication' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Two-factor authentication' })).toBeVisible({
+    timeout: 20_000,
+  })
   await panel.getByRole('button', { name: 'Set up authenticator app' }).click()
   const key = (await panel.locator('section[aria-labelledby="scan"] code').innerText()).trim()
   expect(key.length).toBeGreaterThan(10)
-  await panel.locator('#c1').fill(generateSync({ secret: key }))
-  await panel.getByRole('button', { name: 'Confirm' }).click()
+  await submitCode(page, panel, '#c1', 'Confirm', '/api/mfa/confirm', key)
   await expect(panel.getByRole('heading', { name: 'Recovery codes' })).toBeVisible()
   await expect(
     panel.getByRole('heading', { name: 'Two-factor authentication is on' }),
@@ -62,9 +84,17 @@ test('2FA is optional, opt-in works, and once on the code is required', async ({
   // 4. Opt out with the current password and a code, then sign in without a code again.
   await page.goto('/admin/account')
   const off = page.getByTestId('mfa-account')
-  await off.locator('#pw').fill(password)
-  await off.locator('#c3').fill(generateSync({ secret: key }))
-  await off.getByRole('button', { name: 'Turn off two-factor authentication' }).click()
+  await submitCode(
+    page,
+    off,
+    '#c3',
+    'Turn off two-factor authentication',
+    '/api/mfa/disable',
+    key,
+    async () => {
+      await off.locator('#pw').fill(password)
+    },
+  )
   await expect(off.getByText('Two-factor authentication is now off.')).toBeVisible()
   await signIn(page)
   await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 30_000 })

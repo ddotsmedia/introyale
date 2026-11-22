@@ -27,8 +27,13 @@
 }
 /* Extra slides stay hidden unless the slideshow runs. The first image is always visible (LCP). */
 .hero__slide[data-active='false'] {
+  display: none;
   opacity: 0;
   visibility: hidden;
+}
+/* Warmed up after load: rendered (so the image downloads) but not visible yet. */
+.hero__slide[data-active='false'][data-warm='true'] {
+  display: block;
 }
 .hero__slide img {
   transform-origin: 50% 50%;

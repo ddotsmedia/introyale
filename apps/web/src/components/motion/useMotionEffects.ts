@@ -140,9 +140,18 @@ export function useMotionEffects(
         m.style.setProperty('--my', `${String(Math.max(-7, Math.min(7, dy)))}px`)
       }
     }
+    // Scrolling moves content under a still pointer: drop the bubble and floating image until it moves again.
+    const onScroll = () => {
+      bubbleOn = false
+      floatOn = false
+      bubble.classList.remove('on')
+      float.classList.remove('on')
+    }
     document.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => {
       document.removeEventListener('pointermove', onMove)
+      window.removeEventListener('scroll', onScroll)
       cancelAnimationFrame(raf)
       bubble.remove()
       float.remove()

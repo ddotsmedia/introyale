@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { cms } from '@/lib/cms'
-import { Picture } from '../Picture'
+import { mediaSrc, Picture } from '../Picture'
 import { container, SectionHeading, sectionPad, type BlockOf } from './shared'
 import type { Service } from '@/payload-types'
 
@@ -35,7 +35,11 @@ export async function ServicesList({ block }: { block: BlockOf<'servicesList'> }
         <div className="svc mt-7 grid gap-6 md:grid-cols-12 md:gap-8">
           <ol className="md:col-span-7">
             {services.map((s, i) => (
-              <li key={s.id} className="border-ink/15 border-t first:border-t-0 md:first:border-t">
+              <li
+                key={s.id}
+                data-float-src={mediaSrc(s.image, 480) ?? undefined}
+                className="border-ink/15 border-t first:border-t-0 md:first:border-t"
+              >
                 <Link
                   href={`/services/${s.slug}`}
                   className="group grid grid-cols-[3rem_1fr] items-baseline gap-2 py-3 transition-colors hover:text-bronze-deep md:py-3.5"
@@ -50,6 +54,17 @@ export async function ServicesList({ block }: { block: BlockOf<'servicesList'> }
                         {s.summary}
                       </span>
                     )}
+                    {/* Phones: an inline thumbnail instead of the hover preview. */}
+                    <span
+                      className="mt-2 block h-14 w-24 overflow-hidden md:hidden"
+                      aria-hidden="true"
+                    >
+                      <Picture
+                        media={s.image}
+                        sizes="96px"
+                        className="h-full w-full object-cover"
+                      />
+                    </span>
                   </span>
                 </Link>
               </li>

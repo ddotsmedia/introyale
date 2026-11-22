@@ -1,3 +1,4 @@
+import { BeforeAfterSpotlight } from './BeforeAfterSpotlight'
 import { ClientWall } from './ClientWall'
 import { ContactInfo } from './ContactInfo'
 import { CtaBand } from './CtaBand'
@@ -9,6 +10,7 @@ import { IntroStats } from './IntroStats'
 import { ProcessSteps } from './ProcessSteps'
 import { SectorTiles } from './SectorTiles'
 import { ServicesList } from './ServicesList'
+import { Statement } from './Statement'
 import { TextSection } from './TextSection'
 import type { Layout } from './shared'
 
@@ -40,6 +42,10 @@ export function BlockRenderer({
             return <ProcessSteps key={key} block={block} />
           case 'clientWall':
             return <ClientWall key={key} block={block} />
+          case 'statement':
+            return <Statement key={key} block={block} />
+          case 'beforeAfterSpotlight':
+            return <BeforeAfterSpotlight key={key} block={block} />
           case 'ctaBand':
             return <CtaBand key={key} block={block} />
           case 'imageText':

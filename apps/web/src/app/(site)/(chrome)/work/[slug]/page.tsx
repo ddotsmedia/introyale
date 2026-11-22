@@ -5,6 +5,7 @@ import { CtaBand } from '@/components/blocks/CtaBand'
 import { Hero } from '@/components/blocks/Hero'
 import { container, paragraphs, sectionPad } from '@/components/blocks/shared'
 import { FactStrip } from '@/components/FactStrip'
+import { Picture } from '@/components/Picture'
 import { Gallery } from '@/components/Gallery'
 import { JsonLd } from '@/components/JsonLd'
 import { PlanHotspots } from '@/components/PlanHotspots'
@@ -60,6 +61,8 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
   const team = (p.team ?? []).filter((t) => typeof t === 'object')
   const testimonial = typeof p.testimonial === 'object' ? p.testimonial : null
   const gallery = (p.gallery ?? []).map((m) => ({ media: m }))
+  // Desktop: the first gallery image stays pinned beside the text chapters while they scroll.
+  const chapterMedia = typeof gallery[0]?.media === 'object' ? gallery[0].media : null
   const plans = p.plans ?? []
   const cta = await closingCta()
 
@@ -91,6 +94,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
   return (
     <article>
       <JsonLd data={ld} />
+      <div className="read-progress" aria-hidden="true" />
       <Hero
         transitionHero
         block={{
@@ -128,21 +132,34 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
 
       {CHAPTERS.some((k) => p[k]) && (
         <section className={`${sectionPad} bg-ivory`}>
-          <div className={`${container} max-w-4xl space-y-7`}>
-            {CHAPTERS.map((key) => {
-              const text = p[key]
-              if (!text) return null
-              return (
-                <div key={key} className="reveal">
-                  <h2 className="eyebrow">{ui.case.chapters[key]}</h2>
-                  {paragraphs(text).map((para) => (
-                    <p key={para} className="mt-2 text-pretty text-lg opacity-85 md:text-xl">
-                      {para}
-                    </p>
-                  ))}
-                </div>
-              )
-            })}
+          <div
+            className={`${container} ${chapterMedia ? 'grid gap-8 md:grid-cols-12 md:gap-12' : 'max-w-4xl'}`}
+          >
+            {chapterMedia && (
+              <div className="chapters__media img-reveal md:col-span-5">
+                <Picture
+                  media={chapterMedia}
+                  sizes="(min-width: 960px) 40vw, 100vw"
+                  className="h-auto w-full"
+                />
+              </div>
+            )}
+            <div className={`space-y-7 ${chapterMedia ? 'md:col-span-7' : ''}`}>
+              {CHAPTERS.map((key) => {
+                const text = p[key]
+                if (!text) return null
+                return (
+                  <div key={key} className="reveal">
+                    <h2 className="eyebrow">{ui.case.chapters[key]}</h2>
+                    {paragraphs(text).map((para) => (
+                      <p key={para} className="mt-2 text-pretty text-lg opacity-85 md:text-xl">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </section>
       )}
