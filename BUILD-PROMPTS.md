@@ -116,7 +116,7 @@ M11 FIRST VPS DEPLOY (production only, no staging) (Sonnet) — follow CLAUDE.md
 1. Read-only: df -h, free -m, nproc, docker ps --format, ss -ltn, ls /etc/nginx/sites-enabled, certbot certificates. Record "before" health of all other sites (curl -sI each server_name). If D1 gate fails → STOP and report.
 2. Pick ports per D19; write to docs/RUNBOOK.md.
 3. Create /opt/introyale/staging/{media,db,backups,secrets} (chmod 700 secrets); generate secrets with openssl rand into files (never echo).
-4. Install Nginx vhost from template for staging.introyale.com, htpasswd, `nginx -t && systemctl reload nginx`; certbot --nginx -d staging.introyale.com (only after DNS A record for staging exists; if not, use self-signed + note in report).
+4. (Dropped: no staging vhost; production only.)
 5. .github/workflows/deploy.yml: on push main → build/scan/push images (:sha, :staging) → SSH (deploy user, known_hosts pinned) → scripts/deploy.sh staging <sha>. Production job: workflow_dispatch + environment "production" protection.
 6. Deploy, run smoke + Playwright against staging, screenshot key pages. Record "after" health of other sites; must equal "before".
 7. Start ops stack ddots-ops if not running (separate project, own ports localhost-only).
