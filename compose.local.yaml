@@ -10,7 +10,7 @@ services:
       PUBLIC_URL: http://localhost:${WEB_PORT:-3100}
       SITE_URL: http://localhost:${WEB_PORT:-3100}
       ROBOTS_NOINDEX: 'true'
-      MFA_ENFORCE: 'false'
+      MFA_ENFORCE: ${MFA_ENFORCE:-false}
       MEDIA_DIR: /media
       FEATURE_AR: 'false'
       MAIL_FROM: no-reply@introyale.local

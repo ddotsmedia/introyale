@@ -59,6 +59,7 @@ export const Users: CollectionConfig = {
       required: true,
       defaultValue: 'content_editor',
       options: ROLES.map((r) => ({ label: r, value: r })),
+      saveToJWT: true, // the MFA gate in proxy.ts reads the role from the token
       access: { update: ({ req }) => req.user?.role === 'administrator' },
     },
     {

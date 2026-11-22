@@ -58,7 +58,11 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec playwright install --with-deps chromium
       - name: compose test stack (db + migrate + web + mailpit, seeded)
-        run: scripts/ci-stack.sh up
+        run: |
+          export E2E_ADMIN_PW="$(openssl rand -hex 16)"
+          echo "::add-mask::$E2E_ADMIN_PW"
+          echo "E2E_ADMIN_PW=$E2E_ADMIN_PW" >> "$GITHUB_ENV"
+          scripts/ci-stack.sh up
       - name: playwright + axe against the stack
         run: pnpm exec playwright test
         env:

@@ -6,12 +6,24 @@ import { mfaEnforced } from './envPolicy'
 
 type AuthUser = { id: number | string; role?: Role } | null | undefined
 
+/**
+ * A Payload local-API call made by our own server code with `user` passed in and no request credentials (no cookie, no
+ * Authorization header). Admin views and server actions verify MFA against the real request first (access.admin and
+ * session()), so their follow-up data queries are trusted. Any request that carries credentials is checked strictly.
+ */
+function isServerLocalCall(req: PayloadRequest): boolean {
+  const h = req.headers as Headers | undefined
+  const hasCredentials = !!(h?.get('cookie') || h?.get('authorization'))
+  return (req as { payloadAPI?: string }).payloadAPI === 'local' && !hasCredentials
+}
+
 /** True when the role needs no MFA, or a valid signed MFA cookie is present (D10). */
 export function mfaSatisfied(req: PayloadRequest): boolean {
   const u = req.user as AuthUser
   if (!u) return false
   if (!requiresMfa(u.role)) return true
   if (!mfaEnforced()) return true // local preview only; see envPolicy.ts
+  if (isServerLocalCall(req)) return true
   return verifyMfaToken(
     readCookie(req.headers.get('cookie'), MFA_COOKIE),
     String(u.id),
