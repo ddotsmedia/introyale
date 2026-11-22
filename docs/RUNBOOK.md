@@ -15,6 +15,7 @@ Dev DB uses a host port on a non-internal network (Docker does not publish ports
 ## Deploy / rollback (VPS, M11+)
 
 - There is no staging environment (owner decision). CI deploys **production** on every push to main, after verify, image scan (Trivy), browser (Playwright + axe) and publish pass: `deploy-production` over SSH as `introyale-deploy`. By hand: `INTROYALE_BASE=<base> scripts/deploy.sh production <tag>`; `DRY_RUN=1` runs the preflight and config check only. Host dir owners: `media/` uid 10001, `backups/` uid 10002 (backup container). Every deploy first takes a pre-deploy backup (pg_dump + restic); if it fails, nothing changes.
+- Images: `introyale-web` (Next standalone only, ~470 MB) runs the site; `introyale-cli` (Payload runtime: migrate, worker, seed scripts) runs `migrate`/`worker`; `introyale-backup`. Deploy aborts before pulling if free disk < 5 GB (`MIN_FREE_GB`), and after a healthy deploy removes every other tag of these three images by exact ref (never prune, never -f; images in use are kept), leaving only the running tag (= `.last_good_tag`).
 - Failed health or smoke → automatic rollback to `<base>/<env>/.last_good_tag` (base = `/opt/introyale`; on the VPS `/home/introyale-deploy/introyale`, because Snap Docker cannot bind-mount `/opt`).
 - Manual: `GH_OWNER=<owner> scripts/rollback.sh <env> <tag>`.
 
@@ -49,21 +50,21 @@ Import the live site content (one-time; refuses unless `ENV=local`; skips record
 
 ```
 pnpm -C apps/web build:seed-live
-docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" -v "<abs path to .local-data/import>:/import:ro" web node /app/cli/seed/seed-live-content.js
+docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -e MEDIA_DIR=/media -v "<abs path to media>:/media" -v "<abs path to apps/web/dist>:/app/cli/seed:ro" -v "<abs path to .local-data/import>:/import:ro" worker node /app/cli/seed/seed-live-content.js
 ```
 
 Demo leads and role users for the admin (local only; prints the role users' passwords once):
 
 ```
 pnpm -C apps/web build:seed-test
-docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" web node /app/cli/seed/seed-test-leads.js
+docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -e MEDIA_DIR=/media -v "<abs path to media>:/media" -v "<abs path to apps/web/dist>:/app/cli/seed:ro" worker node /app/cli/seed/seed-test-leads.js
 ```
 
 Locked out or forgotten admin password (local only; clears the lockout, prints a new random password once, stores nothing):
 
 ```
 pnpm -C apps/web build:reset-admin-password
-docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" web node /app/cli/seed/reset-admin-password.js admin@introyale.local
+docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -e MEDIA_DIR=/media -v "<abs path to media>:/media" -v "<abs path to apps/web/dist>:/app/cli/seed:ro" worker node /app/cli/seed/reset-admin-password.js admin@introyale.local
 ```
 
 Stop: `docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local stop`
@@ -75,7 +76,7 @@ Facts are marked verified with source introyale.com on the owner's instruction. 
 
 ## Production (introyale.online)
 
-- Host Nginx (`/etc/nginx/sites-available/introyale-online`, repo copies `docker/nginx/introyale-online.conf` and `introyale-staging-redirect.conf`) → `127.0.0.1:3140`. HSTS on, indexable (no basic auth, `ROBOTS_NOINDEX=false`). `www.introyale.online` and `staging.introyale.online` return 301 to `https://introyale.online`. Certificates: certbot webroot (`certbot certonly --webroot -w /var/www/html -d introyale.online -d www.introyale.online`; staging name has its own certificate).
+- Host Nginx (`/etc/nginx/sites-available/introyale-online`, repo copies `docker/nginx/introyale-online.conf` and the legacy `introyale-staging-redirect.conf`) → `127.0.0.1:3140`. HSTS on, indexable (no basic auth, `ROBOTS_NOINDEX=false`). `www.introyale.online` and `staging.introyale.online` return 301 to `https://introyale.online`. Certificates: certbot webroot (`certbot certonly --webroot -w /var/www/html -d introyale.online -d www.introyale.online`; staging name has its own certificate).
 - Per-host config: `<base>/production/.env.compose` (GH_OWNER, WEB_PORT, FEATURE_EMAIL). Secrets: `<base>/production/secrets/` (`scripts/gen-secrets.sh`). SMTP: add `secrets/smtp.env` (SMTP_HOST, SMTP_PORT, SMTP_USER, MAIL_FROM, STAFF_EMAIL) and the password in `smtp_password.txt`, then set `FEATURE_EMAIL=true`. Until then leads are stored and email jobs are paused.
 - The stack was promoted from the former staging stack on 2026-11-22: the data directories were moved (not copied) to `<base>/production` after a pg_dump and a media archive (kept in `<base>/production/backups/pre-production-*`).
 - Legal pages (Privacy, Terms, Cookies, Accessibility) are CMS pages with an admin-only review note. Create or restore them with `SEED_ADMIN_EMAIL=<admin> scripts/seed-legal.sh <tag>` (never overwrites edits; `RESEED_LEGAL=1` replaces them with the template text, only before the owner has edited them).

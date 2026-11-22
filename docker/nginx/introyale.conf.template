@@ -24,9 +24,6 @@ server {
     add_header Referrer-Policy strict-origin-when-cross-origin always;
     add_header Cross-Origin-Opener-Policy same-origin always;
 
-    # Staging only: basic auth + noindex (SPEC §2.3). Remove the two lines below for production.
-    # auth_basic "Introyale staging";
-    # auth_basic_user_file /etc/nginx/.htpasswd-introyale-${ENV};
     # add_header X-Robots-Tag "noindex, nofollow" always;
 
     location /media/ {

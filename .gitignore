@@ -19,3 +19,6 @@ secrets/
 .local-data/
 secrets/local/
 .env.local
+
+.lighthouseci/
+.local/

@@ -13,7 +13,7 @@ Every prompt applies CLAUDE.md (token rules, safety, model selection).
 ## PROMPT 1 — MASTER BUILD (M0–M13)
 
 ```
-Model: start Sonnet (M1–M3 infra/security), switch to Haiku for M4–M7/M9/M12–M13, Sonnet for M8, M10, M11. Announce each switch.
+Model: Haiku M0–M1, Sonnet M2–M3, Haiku M4–M7/M9/M12–M13, Sonnet M8, M10, M11 (matches SPEC §7). Announce each switch.
 TOKEN RULES: concise commands, minimal output, reuse existing patterns, no re-explaining, minimal diffs, inline comments only, report only at milestone end (files changed / tests / acceptance ✓✗).
 AUTONOMY: never ask questions. Resolve ambiguity with docs/DECISIONS.md → docs/SPEC.md → safest option; log choices in docs/decisions-log.md. Hard stops per CLAUDE.md only.
 
@@ -24,7 +24,7 @@ M0 DISCOVERY (Haiku)
 - docs/redirects.csv from crawl; must include SPEC §4 legacy map (index.php, aboutus.php, ourclients.php, contactus.php, hospitality-leisure.php, commercial.php, residential.php, residencial.php, *-portfolio.php).
 - Seed file seed/facts.json with every fact from SPEC Appendix/live site as status "unverified" (address, phone, email, 10+ years, 1050+ projects, 50+ team, 10+ awards).
 
-M1 REPO + TOOLING (Sonnet)
+M1 REPO + TOOLING (Haiku)
 - `pnpm dlx create-payload-app@latest` blank template, Postgres adapter, into apps/web; TypeScript strict; Next `output:'standalone'`, `images.unoptimized=true` (Payload generates variants).
 - Workspace: pnpm-workspace.yaml, root scripts: dev, build, lint, typecheck, test, test:e2e, test:a11y, lhci.
 - ESLint + Prettier, Vitest, Playwright (+ @axe-core/playwright), Lighthouse CI (lighthouserc.json budgets: perf≥0.9, a11y/seo/bp≥0.95, LCP<2500, CLS<0.1, total JS<150KB/page).
@@ -42,9 +42,9 @@ M2 DOCKER PLATFORM (Sonnet) — implement SPEC §2 exactly
   networks: internal (internal:true) + edge; egress network only for worker, backup.
   secrets: payload_secret, database_url, smtp_password, altcha_hmac_key, umami_app_secret, restic_password, backup_sftp_key, sentry_dsn — files from ./secrets/<env>/*.
 - compose.dev.yaml: bind src for hot reload, mailpit (8025), db port 5432 localhost only, seed on start.
-- compose.staging.yaml / compose.prod.yaml: image ghcr.io/${GH_OWNER}/introyale-web:${IMAGE_TAG}; web ports "127.0.0.1:${WEB_PORT}:3000"; media bind /opt/introyale/${ENV}/media; db bind /opt/introyale/${ENV}/db; backups bind /opt/introyale/${ENV}/backups.
+- compose.production.yaml: image ghcr.io/${GH_OWNER}/introyale-web:${IMAGE_TAG}; web ports "127.0.0.1:${WEB_PORT}:3000"; media bind /opt/introyale/${ENV}/media; db bind /opt/introyale/${ENV}/db; backups bind /opt/introyale/${ENV}/backups.
 - docker/backup.Dockerfile: alpine + postgresql16-client + restic + busybox crond; backup.sh: pg_dump -Fc → restic backup (dump + media) local repo + SFTP repo if set; forget --keep-daily 7 --keep-weekly 4 --keep-monthly 6; weekly restic check; writes /backups/last_success; healthcheck age < 26h. Cron 02:30 Asia/Dubai.
-- scripts/deploy.sh <env> <tag>: assert env∈{staging,production}; `docker compose -p introyale-$env -f compose.yaml -f compose.$env.yaml` only; production: run backup now first; pull → up migrate → up -d web worker → wait health 120s → scripts/smoke.sh → on failure auto-run rollback.sh with previous tag (stored in /opt/introyale/$env/.last_good_tag).
+- scripts/deploy.sh <env> <tag>: assert env=production; `docker compose -p introyale-$env -f compose.yaml -f compose.$env.yaml` only; production: run backup now first; pull → up migrate → up -d web worker → wait health 120s → scripts/smoke.sh → on failure auto-run rollback.sh with previous tag (stored in /opt/introyale/$env/.last_good_tag).
 - scripts/rollback.sh <env> <tag>, scripts/restore.sh <env> <snapshot> (restore into scratch db introyale_restore, verify counts, render /api/health against it, promote only with --promote), scripts/smoke.sh (home, /work, one case study, /start, /sitemap.xml, /api/health; assert 200 + key text).
 - docker/nginx/introyale.conf.template (Mode A): server_name, proxy_pass 127.0.0.1:${WEB_PORT}, location /media/ alias /opt/introyale/${ENV}/media/ with 1y immutable cache, limit_req zones for /api/enquiries and /admin, client_max_body_size 25m, staging basic auth + X-Robots-Tag noindex.
 - docker/caddy/Caddyfile (Mode B) equivalent.
@@ -112,7 +112,7 @@ M10 SECURITY + OBSERVABILITY (Sonnet)
 - ops/ (separate project ddots-ops): compose with glitchtip(+redis+postgres), loki, promtail (docker logs), grafana (provisioned dashboards: 5xx, health, job failures, backup age, disk), uptime-kuma. Not started by introyale stacks.
 - CI: Trivy image scan (fail HIGH/CRITICAL fixable), osv-scanner, gitleaks, ZAP baseline against CI stack.
 
-M11 STAGING ON VPS (Sonnet) — follow CLAUDE.md VPS safety
+M11 FIRST VPS DEPLOY (production only, no staging) (Sonnet) — follow CLAUDE.md VPS safety
 1. Read-only: df -h, free -m, nproc, docker ps --format, ss -ltn, ls /etc/nginx/sites-enabled, certbot certificates. Record "before" health of all other sites (curl -sI each server_name). If D1 gate fails → STOP and report.
 2. Pick ports per D19; write to docs/RUNBOOK.md.
 3. Create /opt/introyale/staging/{media,db,backups,secrets} (chmod 700 secrets); generate secrets with openssl rand into files (never echo).
