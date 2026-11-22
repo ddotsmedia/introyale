@@ -36,7 +36,7 @@ jobs:
       - name: build web image
         run: docker build -f docker/web.Dockerfile --target runtime -t introyale-web:ci .
       - name: trivy (fail on fixable HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.33.1
         with:
           image-ref: introyale-web:ci
           severity: HIGH,CRITICAL
