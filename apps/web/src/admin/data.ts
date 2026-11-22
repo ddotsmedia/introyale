@@ -81,7 +81,14 @@ export async function dashboardData(payload: Payload, user: U, req: Req) {
       limit: 2000,
       pagination: false,
       where: { createdAt: { greater_than: iso(now - 84 * DAY) } },
-      select: { createdAt: true, sector: true, sourcePage: true, utm: true, status: true },
+      select: {
+        createdAt: true,
+        sector: true,
+        sourcePage: true,
+        utm: true,
+        attribution: true,
+        status: true,
+      },
     })
     const weeks = Array.from({ length: 12 }, (_, i) => ({ label: `W${i + 1}`, value: 0 }))
     const sectors = new Map<string, number>()
@@ -92,6 +99,7 @@ export async function dashboardData(payload: Payload, user: U, req: Req) {
       sector?: string
       sourcePage?: string
       utm?: Record<string, string>
+      attribution?: { source?: string } | null
       status?: string
     }[]) {
       const age = Math.floor((now - new Date(e.createdAt).getTime()) / (7 * DAY))
@@ -99,7 +107,7 @@ export async function dashboardData(payload: Payload, user: U, req: Req) {
       if (w) w.value++
       const sec = e.sector || 'Unspecified'
       sectors.set(sec, (sectors.get(sec) ?? 0) + 1)
-      const src = e.utm?.source ? `utm: ${e.utm.source}` : e.sourcePage || 'direct'
+      const src = e.attribution?.source ?? e.utm?.source ?? (e.sourcePage || 'direct')
       sources.set(src, (sources.get(src) ?? 0) + 1)
       const st = e.status ?? 'new'
       funnel.set(st, (funnel.get(st) ?? 0) + 1)

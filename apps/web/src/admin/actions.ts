@@ -3,6 +3,8 @@ import { revalidatePath } from 'next/cache'
 import { mailer, FROM, shell } from '../lib/mail'
 import { notify, writeAudit } from '../lib/audit'
 import * as crm from '../lib/crm'
+import * as crmPlus from '../lib/crmPlus'
+import { resolveLayout } from './widgets'
 import { signPreview } from '../lib/previewToken'
 import { getRedirectMap, invalidateRedirects } from '../lib/redirects'
 import { readSecret } from '../lib/secrets'
@@ -435,4 +437,90 @@ export async function forceMfaReset(fd: FormData): Promise<void> {
     'Your two-factor authentication was turned off by an administrator. You can enable it again in your account.',
   )
   revalidatePath('/admin/security')
+}
+
+// ---------- dashboard layout (per user) ----------
+export async function saveDashboardLayout(fd: FormData): Promise<void> {
+  const { payload, user } = await session()
+  let raw: unknown = null
+  try {
+    raw = JSON.parse(str(fd.get('layout')))
+  } catch {
+    raw = null
+  }
+  // resolveLayout drops unknown and forbidden widget ids, so a crafted payload cannot add anything.
+  const layout = resolveLayout(raw, user.role)
+  await payload.update({
+    collection: 'users',
+    id: user.id,
+    data: { dashboardLayout: layout },
+    overrideAccess: true,
+  })
+  revalidatePath('/admin')
+}
+
+export async function resetDashboardLayout(): Promise<void> {
+  const { payload, user } = await session()
+  await payload.update({
+    collection: 'users',
+    id: user.id,
+    data: { dashboardLayout: null },
+    overrideAccess: true,
+  })
+  revalidatePath('/admin')
+}
+
+// ---------- CRM tasks, bulk actions, merge ----------
+export async function addLeadTask(fd: FormData): Promise<void> {
+  const { payload, user } = await session('enquiries.read')
+  const id = num(fd.get('id'))
+  const who = str(fd.get('assignee'))
+  await crmPlus.addTask(payload, user, id, {
+    title: str(fd.get('title')),
+    dueAt: str(fd.get('dueAt')) ? new Date(str(fd.get('dueAt'))).toISOString() : '',
+    kind: str(fd.get('kind')),
+    assigneeId: who ? Number(who) : null,
+  })
+  revalidatePath('/admin/lead')
+  revalidatePath('/admin/calendar')
+}
+
+export async function toggleLeadTask(fd: FormData): Promise<void> {
+  const { payload, user } = await session('enquiries.read')
+  await crmPlus.setTaskDone(payload, user, num(fd.get('taskId')), str(fd.get('done')) === '1')
+  revalidatePath('/admin/lead')
+  revalidatePath('/admin/calendar')
+}
+
+export async function removeLeadTask(fd: FormData): Promise<void> {
+  const { payload, user } = await session('enquiries.read')
+  await crmPlus.deleteTask(payload, user, num(fd.get('taskId')))
+  revalidatePath('/admin/lead')
+  revalidatePath('/admin/calendar')
+}
+
+export async function bulkLeadsAction(fd: FormData): Promise<void> {
+  const { payload, user } = await session('enquiries.read')
+  const ids = fd
+    .getAll('ids')
+    .map(Number)
+    .filter((n) => Number.isInteger(n) && n > 0)
+  const op = str(fd.get('op'))
+  if (!ids.length || !['assign', 'status', 'tag'].includes(op)) return
+  const a = str(fd.get('assignee'))
+  await crmPlus.bulkLeads(payload, user, ids, op as crmPlus.BulkOp, {
+    assignee: a ? Number(a) : null,
+    status: str(fd.get('status')),
+    lostReason: str(fd.get('lostReason')),
+    tag: str(fd.get('tag')),
+  })
+  revalidatePath('/admin/leads')
+  revalidatePath('/admin/leads-board')
+}
+
+export async function mergeLeadAction(fd: FormData): Promise<void> {
+  const { payload, user } = await session('enquiries.read')
+  await crmPlus.mergeLeads(payload, user, num(fd.get('id')), num(fd.get('duplicateId')))
+  revalidatePath('/admin/lead')
+  revalidatePath('/admin/leads')
 }

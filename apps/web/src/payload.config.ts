@@ -93,6 +93,7 @@ export default buildConfig({
         Icon: '/admin/components/Branding#Icon',
       },
       beforeLogin: ['/admin/components/Branding#BeforeLogin'],
+      providers: ['/admin/components/CommandPalette#CommandPalette'],
       beforeNavLinks: ['/admin/components/Branding#NavLinks'],
       actions: ['/admin/components/Branding#Bell'],
       views: {
@@ -100,6 +101,8 @@ export default buildConfig({
         leadsBoard: { Component: '/admin/views/LeadsBoard#LeadsBoard', path: '/leads-board' },
         leadsTable: { Component: '/admin/views/LeadsTable#LeadsTable', path: '/leads' },
         leadDetail: { Component: '/admin/views/LeadDetail#LeadDetail', path: '/lead' },
+        analytics: { Component: '/admin/views/Analytics#Analytics', path: '/analytics' },
+        calendar: { Component: '/admin/views/Calendar#Calendar', path: '/calendar' },
         workflow: { Component: '/admin/views/Workflow#Workflow', path: '/workflow' },
         contentHealth: {
           Component: '/admin/views/ContentHealth#ContentHealth',

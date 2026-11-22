@@ -99,3 +99,13 @@ export async function errorCount(): Promise<number | null> {
 }
 
 export const appVersion = () => process.env.APP_VERSION ?? process.env.IMAGE_TAG ?? 'local'
+
+/** Free and total space of the volume that holds the media directory (the data disk on the VPS). Null when unavailable. */
+export async function diskInfo(): Promise<{ free: number; total: number } | null> {
+  try {
+    const s = await fs.statfs(process.env.MEDIA_DIR ?? 'media')
+    return { free: s.bavail * s.bsize, total: s.blocks * s.bsize }
+  } catch {
+    return null
+  }
+}

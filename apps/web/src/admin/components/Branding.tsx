@@ -66,12 +66,19 @@ const GROUPS: {
   name: string
   links: { href: string; label: string; need?: Parameters<typeof can>[1] }[]
 }[] = [
-  { name: 'Dashboard', links: [{ href: '/admin', label: 'Dashboard' }] },
+  {
+    name: 'Dashboard',
+    links: [
+      { href: '/admin', label: 'Dashboard' },
+      { href: '/admin/analytics', label: 'Analytics', need: 'analytics.view' },
+    ],
+  },
   {
     name: 'Leads',
     links: [
       { href: '/admin/leads-board', label: 'Leads board', need: 'enquiries.read' },
       { href: '/admin/leads', label: 'Leads table', need: 'enquiries.read' },
+      { href: '/admin/calendar', label: 'Calendar & tasks', need: 'enquiries.read' },
     ],
   },
   {

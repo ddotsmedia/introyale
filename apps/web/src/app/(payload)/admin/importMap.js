@@ -1,5 +1,6 @@
 import { AccountMfa as AccountMfa_049a42cb26e2acba94d2b5886201bca0 } from '../../../components/admin/AccountMfa'
 import { SeoPanel as SeoPanel_1a7f7b6be93672b73cff83d36bcb4348 } from '../../../admin/components/SeoPanel'
+import { Insights as Insights_4909af360d85c033470597073aa898f4 } from '../../../admin/components/Insights'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -29,10 +30,13 @@ import { Logo as Logo_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/co
 import { Bell as Bell_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { BeforeLogin as BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { NavLinks as NavLinks_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { CommandPalette as CommandPalette_c5b5e50c99ff3a9c47ecb26a2da19524 } from '../../../admin/components/CommandPalette'
 import { Dashboard as Dashboard_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
 import { LeadsBoard as LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02 } from '../../../admin/views/LeadsBoard'
 import { LeadsTable as LeadsTable_c8f9c81cc0765d2b5628bba76211762a } from '../../../admin/views/LeadsTable'
 import { LeadDetail as LeadDetail_1a06c8bb0dcb0ed65d10b949d4606c3d } from '../../../admin/views/LeadDetail'
+import { Analytics as Analytics_db37eab22a2d86c2a612539a281a3cb8 } from '../../../admin/views/Analytics'
+import { Calendar as Calendar_c4d11c343729086d363cf91027615191 } from '../../../admin/views/Calendar'
 import { Workflow as Workflow_1528ff110dea53b8c12f104ef9a668f3 } from '../../../admin/views/Workflow'
 import { ContentHealth as ContentHealth_e7686ba5d69317a8ede58fc042edba69 } from '../../../admin/views/ContentHealth'
 import { MediaLibrary as MediaLibrary_5a8cf7e4f05fdf472ee03ff40f0ed454 } from '../../../admin/views/MediaLibrary'
@@ -46,6 +50,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 export const importMap = {
   "/components/admin/AccountMfa#AccountMfa": AccountMfa_049a42cb26e2acba94d2b5886201bca0,
   "/admin/components/SeoPanel#SeoPanel": SeoPanel_1a7f7b6be93672b73cff83d36bcb4348,
+  "/admin/components/Insights#Insights": Insights_4909af360d85c033470597073aa898f4,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -75,10 +80,13 @@ export const importMap = {
   "/admin/components/Branding#Bell": Bell_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#BeforeLogin": BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#NavLinks": NavLinks_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/CommandPalette#CommandPalette": CommandPalette_c5b5e50c99ff3a9c47ecb26a2da19524,
   "/admin/views/Dashboard#Dashboard": Dashboard_c7d7fc284b3b0552574b75a0421f4260,
   "/admin/views/LeadsBoard#LeadsBoard": LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02,
   "/admin/views/LeadsTable#LeadsTable": LeadsTable_c8f9c81cc0765d2b5628bba76211762a,
   "/admin/views/LeadDetail#LeadDetail": LeadDetail_1a06c8bb0dcb0ed65d10b949d4606c3d,
+  "/admin/views/Analytics#Analytics": Analytics_db37eab22a2d86c2a612539a281a3cb8,
+  "/admin/views/Calendar#Calendar": Calendar_c4d11c343729086d363cf91027615191,
   "/admin/views/Workflow#Workflow": Workflow_1528ff110dea53b8c12f104ef9a668f3,
   "/admin/views/ContentHealth#ContentHealth": ContentHealth_e7686ba5d69317a8ede58fc042edba69,
   "/admin/views/MediaLibrary#MediaLibrary": MediaLibrary_5a8cf7e4f05fdf472ee03ff40f0ed454,

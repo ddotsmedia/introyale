@@ -29,6 +29,14 @@ const EXPECTED: Record<string, { action: Action | null; allow: Role[] }> = {
   'Security.tsx': { action: 'users.manage', allow: ['administrator'] },
   'Audit.tsx': { action: 'users.manage', allow: ['administrator'] },
   'Dashboard.tsx': { action: null, allow: [...ROLES] },
+  'Analytics.tsx': {
+    action: 'analytics.view',
+    allow: ['administrator', 'marketing_reviewer', 'publisher'],
+  },
+  'Calendar.tsx': {
+    action: 'enquiries.read',
+    allow: ['administrator', 'marketing_reviewer', 'publisher'],
+  },
 }
 
 describe('admin views enforce role access on the server (SPEC §5.4)', () => {

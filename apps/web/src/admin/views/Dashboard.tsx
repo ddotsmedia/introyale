@@ -1,59 +1,79 @@
 import Link from 'next/link'
 import type { AdminViewServerProps } from 'payload'
-import { Shell } from '../Shell'
+import { resetDashboardLayout, saveDashboardLayout } from '../actions'
+import { LayoutEditor } from '../components/LayoutEditor'
 import { dashboardData } from '../data'
-import { Badge, Card, Donut, fmtDate, Funnel, HBars, Kpi, KpiGrid, LineChart, relTime } from '../ui'
-import { backupInfo, health } from '../system'
-import { umamiData } from '../umami'
+import { execStats, trafficStats } from '../dashStats'
+import { Shell } from '../Shell'
 import { tr } from '../labels'
+import { backupInfo, dbSize, diskInfo, health, mediaUsage, appVersion } from '../system'
+import { WIDGETS, resolveLayout, type Ctx, type D } from '../widgets'
+import { myTasksDue } from '../../lib/crmPlus'
 import { can } from '../../lib/roles'
-
-type Lead = { id: number; ref: string; name?: string; status?: string; followUpAt?: string }
-type Act = {
-  id: number
-  action: string
-  collection: string
-  at: string
-  actor?: { name?: string } | number | null
-}
-type Series = { label: string; value: number }[]
-type Win = { cur: number; trend: number | null }
-type D = {
-  leadsAllowed: boolean
-  d1: Win
-  d7: Win
-  d30: Win
-  unassigned: number
-  overdue: number
-  won: number
-  weeks: Series
-  funnel: Series
-  sectors: Series
-  sources: Series
-  due: Lead[]
-  latest: Lead[]
-  awaiting: number
-  published: Record<string, number>
-  unverified: number
-  confirm: number
-  activity: Act[]
-}
-
-const title = (s: string) => s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
 
 export async function Dashboard(props: AdminViewServerProps) {
   const lang = props.initPageResult.req.i18n.language
   return (
     <Shell bare view={props} title={tr(lang, 'dashboard')} sub={tr(lang, 'dashboardSub')}>
       {async ({ payload, user, req }) => {
-        const d = (await dashboardData(payload, user, req)) as unknown as D
-        const isAdmin = can(user.role, 'system.view')
-        const reviewer = can(user.role, 'workflow.approve') || can(user.role, 'workflow.publish')
-        const [bk, hl, um] = await Promise.all([
-          isAdmin ? backupInfo() : null,
-          isAdmin ? health(payload) : null,
-          umamiData(),
+        const saved = (user as unknown as { dashboardLayout?: unknown }).dashboardLayout
+        const layout = resolveLayout(saved, user.role)
+        const visible = layout.order.filter((id) => !layout.hidden.includes(id))
+        const wants = (...ids: string[]) => ids.some((id) => visible.includes(id))
+        const leadsAllowed = can(user.role, 'enquiries.read')
+        const endOfDay = new Date()
+        endOfDay.setHours(23, 59, 59, 999)
+
+        // Only the data the visible widgets need is loaded.
+        const [d, ex, traffic, tasks, hl, bk, disk, dbBytes, mediaBytes] = await Promise.all([
+          dashboardData(payload, user, req) as unknown as Promise<D>,
+          leadsAllowed && wants('exec', 'sectors', 'sources', 'leaderboard')
+            ? execStats(payload, user, req)
+            : null,
+          can(user.role, 'analytics.view') && wants('traffic', 'trend', 'heatmap', 'kpi')
+            ? trafficStats(payload)
+            : null,
+          leadsAllowed && wants('tasks') ? myTasksDue(payload, user.id, endOfDay) : [],
+          wants('health') ? health(payload) : null,
+          wants('health') ? backupInfo() : null,
+          wants('health') ? diskInfo() : null,
+          wants('health') ? dbSize(payload) : null,
+          wants('health') ? mediaUsage() : null,
         ])
+        const ctx: Ctx = {
+          lang,
+          role: user.role,
+          d,
+          ex,
+          traffic,
+          tasks,
+          health: hl,
+          backup: bk,
+          disk,
+          dbBytes,
+          mediaBytes,
+          version: appVersion(),
+        }
+        const byId = new Map(WIDGETS.map((w) => [w.id, w]))
+        const items = [
+          ...layout.order,
+          ...WIDGETS.filter((w) => w.show(user.role) && !layout.order.includes(w.id)).map(
+            (w) => w.id,
+          ),
+        ].flatMap((id) => {
+          const w = byId.get(id)
+          return w ? [{ id, title: w.title, visible: !layout.hidden.includes(id) }] : []
+        })
+        // Full-width widgets stand alone; half-width ones are paired in a two-column grid.
+        const rows: ({ full: true; id: string } | { full: false; ids: string[] })[] = []
+        for (const id of visible) {
+          const w = byId.get(id)
+          if (!w) continue
+          const last = rows[rows.length - 1]
+          if (w.size === 'full') rows.push({ full: true, id })
+          else if (last && !last.full) last.ids.push(id)
+          else rows.push({ full: false, ids: [id] })
+        }
         return (
           <>
             <div className="ir-actions">
@@ -72,9 +92,14 @@ export async function Dashboard(props: AdminViewServerProps) {
                   {tr(lang, 'uploadMedia')}
                 </Link>
               )}
-              {d.leadsAllowed && (
+              {leadsAllowed && (
                 <Link className="ir-btn ghost" href="/admin/leads-board">
                   {tr(lang, 'openBoard')}
+                </Link>
+              )}
+              {can(user.role, 'analytics.view') && (
+                <Link className="ir-btn ghost" href="/admin/analytics">
+                  Analytics
                 </Link>
               )}
               <a className="ir-btn ghost" href="/" target="_blank" rel="noreferrer">
@@ -82,158 +107,22 @@ export async function Dashboard(props: AdminViewServerProps) {
                 <span className="ir-sr"> (opens in a new tab)</span>
               </a>
             </div>
-
-            {d.leadsAllowed && (
-              <>
-                <KpiGrid>
-                  <Kpi
-                    icon="inbox"
-                    label={tr(lang, 'newToday')}
-                    value={d.d1.cur}
-                    trend={d.d1.trend}
-                  />
-                  <Kpi icon="inbox" label={tr(lang, 'new7')} value={d.d7.cur} trend={d.d7.trend} />
-                  <Kpi
-                    icon="inbox"
-                    label={tr(lang, 'new30')}
-                    value={d.d30.cur}
-                    trend={d.d30.trend}
-                  />
-                  <Kpi icon="user" label={tr(lang, 'unassigned')} value={d.unassigned} />
-                  <Kpi icon="clock" label={tr(lang, 'overdue')} value={d.overdue} />
-                  <Kpi icon="trophy" label={tr(lang, 'wonMonth')} value={d.won} />
-                </KpiGrid>
-                <div className="ir-cols">
-                  <Card title={tr(lang, 'weekly')}>
-                    <LineChart data={d.weeks} name="Enquiries per week over the last 12 weeks" />
-                  </Card>
-                  <Card title={tr(lang, 'funnel')}>
-                    <Funnel data={d.funnel} name="Pipeline funnel from new to won" />
-                  </Card>
-                  <Card title={tr(lang, 'bySector')}>
-                    <Donut data={d.sectors} name="Enquiries by sector" />
-                  </Card>
-                  <Card title={tr(lang, 'bySource')}>
-                    <HBars data={d.sources} name="Enquiries by source" />
-                  </Card>
+            <p className="ir-muted ir-noprint">
+              Press <kbd>Ctrl</kbd> + <kbd>K</kbd> (or <kbd>⌘</kbd> + <kbd>K</kbd>) to search leads,
+              projects and pages.
+            </p>
+            {rows.map((row, i) =>
+              row.full ? (
+                <div key={row.id}>{byId.get(row.id)?.render(ctx)}</div>
+              ) : (
+                <div key={i} className="ir-cols">
+                  {row.ids.map((id) => (
+                    <div key={id}>{byId.get(id)?.render(ctx)}</div>
+                  ))}
                 </div>
-              </>
+              ),
             )}
-
-            <KpiGrid>
-              {reviewer && <Kpi icon="review" label={tr(lang, 'awaiting')} value={d.awaiting} />}
-              <Kpi
-                icon="folder"
-                label={tr(lang, 'pubProjects')}
-                value={d.published['projects'] ?? 0}
-              />
-              <Kpi
-                icon="check"
-                label={tr(lang, 'pubServices')}
-                value={d.published['services'] ?? 0}
-              />
-              <Kpi
-                icon="chart"
-                label={tr(lang, 'pubPosts')}
-                value={d.published['journal-posts'] ?? 0}
-              />
-              <Kpi icon="shield" label={tr(lang, 'unverified')} value={d.unverified} />
-              <Kpi icon="flag" label={tr(lang, 'confirm')} value={d.confirm} />
-              {bk?.at ? (
-                <Kpi
-                  icon="shield"
-                  label={tr(lang, 'lastBackup')}
-                  value={relTime(bk.at)}
-                  note={fmtDate(bk.at)}
-                />
-              ) : null}
-              {hl ? (
-                <Kpi
-                  icon="heart"
-                  label={tr(lang, 'siteHealth')}
-                  value={hl.db && hl.worker ? 'OK' : hl.db ? 'Worker Down' : 'DB Down'}
-                />
-              ) : null}
-              {um ? (
-                <Kpi
-                  icon="users"
-                  label={tr(lang, 'visitors')}
-                  value={um.visitors}
-                  note={`${String(um.pageviews)} page views`}
-                />
-              ) : null}
-            </KpiGrid>
-
-            {um && um.pages.length > 0 && (
-              <div className="ir-cols">
-                <Card title={tr(lang, 'topPages')}>
-                  <HBars
-                    data={um.pages.map((p) => ({ label: p.x, value: p.y }))}
-                    name="Top pages"
-                  />
-                </Card>
-              </div>
-            )}
-
-            <div className="ir-cols">
-              {d.leadsAllowed && (
-                <Card title={tr(lang, 'dueToday')}>
-                  {d.due.length === 0 ? (
-                    <p className="ir-muted ir-empty">Nothing due today.</p>
-                  ) : (
-                    <ul className="ir-list">
-                      {d.due.map((l) => (
-                        <li key={l.id}>
-                          <Link href={`/admin/lead?id=${String(l.id)}`}>
-                            {l.ref} {l.name}
-                          </Link>
-                          <span>{fmtDate(l.followUpAt)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Card>
-              )}
-              {d.leadsAllowed && (
-                <Card title={tr(lang, 'latest')}>
-                  <ul className="ir-list">
-                    {d.latest.map((l) => (
-                      <li key={l.id}>
-                        <Link href={`/admin/lead?id=${String(l.id)}`}>
-                          {l.ref} {l.name}
-                        </Link>
-                        <Badge>{title(l.status ?? 'new')}</Badge>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              )}
-              <Card title={tr(lang, 'activity')}>
-                {d.activity.length === 0 ? (
-                  <p className="ir-muted ir-empty">No activity visible to your role.</p>
-                ) : (
-                  <ul className="ir-list">
-                    {d.activity.map((a) => (
-                      <li key={a.id}>
-                        <span>
-                          {typeof a.actor === 'object' && a.actor ? a.actor.name : 'System'} ·{' '}
-                          {a.action} {a.collection}
-                        </span>
-                        <span className="ir-muted">{relTime(a.at)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </Card>
-              {reviewer && (
-                <Card title={tr(lang, 'reviewCard')}>
-                  <p>
-                    <Link href="/admin/workflow">Open the workflow board</Link>: {d.awaiting}{' '}
-                    item(s) in review.
-                  </p>
-                </Card>
-              )}
-            </div>
+            <LayoutEditor items={items} save={saveDashboardLayout} reset={resetDashboardLayout} />
           </>
         )
       }}
