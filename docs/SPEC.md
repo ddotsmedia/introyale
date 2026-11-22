@@ -86,7 +86,7 @@ date: '21 November 2026 · v1.0 · for approval before production code'
 |               | Development                                                            | Staging                                                     | Production                                           |
 | ------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
 | Where         | Local Windows machine, Docker Desktop                                  | Hostinger VPS, `staging.introyale.online`                   | Hostinger VPS, `introyale.online`                    |
-| Compose files | `compose.yaml` + `compose.dev.yaml` (hot reload, Mailpit, seeded data) | `compose.yaml` + `compose.staging.yaml`                     | `compose.yaml` + `compose.prod.yaml`                 |
+| Compose files | `compose.yaml` + `compose.dev.yaml` (hot reload, Mailpit, seeded data) | `compose.yaml` + `compose.production.yaml`                  | `compose.yaml` + `compose.prod.yaml`                 |
 | Access        | localhost                                                              | HTTP basic auth + `X-Robots-Tag: noindex` + robots disallow | Public; `/admin` rate-limited, optional IP allowlist |
 | Email         | Mailpit (captures all mail)                                            | SMTP to test inboxes only                                   | Production SMTP                                      |
 | CRM           | Stub adapter                                                           | Sandbox                                                     | Approved CRM or none                                 |
@@ -118,10 +118,12 @@ All deploy scripts act only on the `introyale-<env>` Compose project. There are 
 
 ### 2.6.1 Deviations on the shared VPS (Snap Docker), binding for all deploys
 
+**No staging environment (owner decision, 2026-11-22):** CI deploys straight to production on push to main, gated by verify, Trivy, the browser job and the pre-deploy backup, with automatic rollback. References to staging elsewhere in this spec are superseded.
+
 The VPS runs the **Snap build of Docker**. Deploys must follow these deviations:
 
-- **Paths:** Snap Docker cannot bind-mount anything under `/opt`. The staging base is `/home/introyale-deploy/introyale/staging` (set with `INTROYALE_BASE=/home/introyale-deploy/introyale`; scripts default to `/opt/introyale` elsewhere). The home directory is mode 711 so Nginx can serve `media/`. Production on this host uses the same pattern unless Docker is replaced.
-- **`no-new-privileges` is dropped for staging** (`security_opt: !reset []` in `compose.staging.yaml`): Snap's AppArmor profile makes every exec fail when it is set. Compensating controls stay: `cap_drop: ALL`, read-only root, non-root user 10001, internal-only DB network. Local and CI keep it on.
+- **Paths:** Snap Docker cannot bind-mount anything under `/opt`. The production base is `/home/introyale-deploy/introyale/production` (set with `INTROYALE_BASE=/home/introyale-deploy/introyale`; scripts default to `/opt/introyale` elsewhere). The home directory is mode 711 so Nginx can serve `media/`.
+- **`no-new-privileges` is dropped on this host** (`security_opt: !reset []` in `compose.staging.yaml`): Snap's AppArmor profile makes every exec fail when it is set. Compensating controls stay: `cap_drop: ALL`, read-only root, non-root user 10001, internal-only DB network. Local and CI keep it on.
 - **Deploy user:** `introyale-deploy` (docker group, no sudo). The repo is private; the VPS clones over SSH with a read-only GitHub deploy key (`~/.ssh/repo_deploy`). Images are private on GHCR; CI pipes the run's `GITHUB_TOKEN` to `docker login` on each deploy and logs out afterwards, so no registry token is stored on the VPS.
 - **First deploy** checks health only (empty site); later deploys run the full smoke test.
 - **CI gates:** the `browser` job (Playwright + axe against a compose stack: db, migrate, web, worker, Mailpit, seeded via `scripts/ci-stack.sh`) must pass before `publish` and `deploy-staging`.

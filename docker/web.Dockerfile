@@ -16,7 +16,7 @@ CMD ["pnpm", "exec", "next", "dev", "--hostname", "0.0.0.0", "--port", "3000"]
 
 FROM deps AS build
 COPY . .
-RUN pnpm -C apps/web build && pnpm -C apps/web build:worker && pnpm -C apps/web build:migrate && pnpm -C apps/web build:seed-live \
+RUN pnpm -C apps/web build && pnpm -C apps/web build:worker && pnpm -C apps/web build:migrate && pnpm -C apps/web build:seed-live && pnpm -C apps/web build:seed-legal \
  && pnpm --filter @introyale/web deploy --prod /out
 
 FROM ${NODE_IMAGE} AS runtime

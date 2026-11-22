@@ -94,11 +94,11 @@ jobs:
           docker push "ghcr.io/$owner/introyale-web:$tag"
           docker push "ghcr.io/$owner/introyale-backup:$tag"
 
-  deploy-staging:
+  deploy-production:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: publish
-    concurrency: deploy-staging
+    concurrency: deploy-production
     steps:
       - name: deploy over SSH
         env:
@@ -112,4 +112,4 @@ jobs:
           printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
           tag="${GITHUB_SHA::12}"
           printf '%s' "$GHCR_TOKEN" | ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes "introyale-deploy@$VPS_HOST" \
-            "trap 'docker logout ghcr.io >/dev/null 2>&1' EXIT; docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null 2>&1 && cd /home/introyale-deploy/introyale/staging && { [ -d repo/.git ] || git clone -q git@github.com:ddotsmedia/introyale.git repo; } && cd repo && git fetch -q origin main && git checkout -q --force '${GITHUB_SHA}' && INTROYALE_BASE=/home/introyale-deploy/introyale bash scripts/deploy.sh staging '$tag'"
+            "trap 'docker logout ghcr.io >/dev/null 2>&1' EXIT; docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null 2>&1 && cd /home/introyale-deploy/introyale/production && { [ -d repo/.git ] || git clone -q git@github.com:ddotsmedia/introyale.git repo; } && cd repo && git fetch -q origin main && git checkout -q --force '${GITHUB_SHA}' && INTROYALE_BASE=/home/introyale-deploy/introyale bash scripts/deploy.sh production '$tag'"
