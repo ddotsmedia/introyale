@@ -18,11 +18,19 @@ export function ProcessSteps({ block }: { block: BlockOf<'processSteps'> }) {
           {steps.map((s, i) => (
             <li
               key={s.id ?? s.title}
-              className="reveal border-current/20 border-t pt-4"
+              className="step reveal border-current/20 relative border-t pt-4"
               style={{ borderColor: 'color-mix(in srgb, currentColor 22%, transparent)' }}
             >
+              <svg
+                className="step-line"
+                viewBox="0 0 100 2"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <line x1="0" y1="1" x2="100" y2="1" pathLength="1" />
+              </svg>
               <span
-                className={`font-display block ${dark ? 'text-bronze-light' : 'text-bronze-deep'} text-6xl leading-none tracking-tight`}
+                className={`step-n font-display block ${dark ? 'text-bronze-light' : 'text-bronze-deep'} text-6xl leading-none tracking-tight`}
               >
                 {String(i + 1).padStart(2, '0')}
               </span>

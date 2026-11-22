@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import './motion.css';
+@import './motion-2.css';
 
 /* font-display: optional avoids a late swap (LCP/CLS): a preloaded face is used if ready, else the metric-matched fallback. */
 /* Self-hosted fonts (D14). Fraunces 400 and Inter 400 are preloaded in the root layout; fallbacks are metric-matched to avoid layout shift. */

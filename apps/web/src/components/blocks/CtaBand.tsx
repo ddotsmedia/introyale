@@ -5,9 +5,9 @@ import { container, type BlockOf } from './shared'
 /** Full-width call-to-action band over an image (or solid dark when there is no image). */
 export function CtaBand({ block }: { block: BlockOf<'ctaBand'> }) {
   return (
-    <section className="relative isolate overflow-hidden bg-night text-white on-dark">
+    <section className="parallax-wrap relative isolate overflow-hidden bg-night text-white on-dark">
       {block.image && (
-        <div className="absolute inset-0 -z-10">
+        <div className="parallax absolute inset-0 -z-10">
           <Picture media={block.image} sizes="100vw" className="h-full w-full object-cover" />
         </div>
       )}

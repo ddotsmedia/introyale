@@ -9,7 +9,7 @@ export function ImageText({ block }: { block: BlockOf<'imageText'> }) {
     <section className={`${sectionPad} bg-ivory`}>
       <div className={`${container} grid items-center gap-6 md:grid-cols-12 md:gap-10`}>
         <div className={`reveal md:col-span-6 ${left ? 'md:order-1' : 'md:order-2'}`}>
-          <div className="bg-sand aspect-[4/5] overflow-hidden">
+          <div className="img-reveal bg-sand aspect-[4/5] overflow-hidden">
             <Picture
               media={block.image}
               sizes="(min-width: 960px) 46vw, 100vw"

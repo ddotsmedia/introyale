@@ -35,6 +35,7 @@ export async function IntroStats({ block }: { block: BlockOf<'introStats'> }) {
                 <dt className="eyebrow">{s.label}</dt>
                 <dd className="font-display text-[clamp(3rem,6vw,5.5rem)] leading-none tracking-tight">
                   <CountUp value={s.value} />
+                  <span className="stat-line" aria-hidden="true" />
                 </dd>
               </div>
             ))}
