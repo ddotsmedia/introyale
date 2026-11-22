@@ -28,7 +28,7 @@ Hosting: Hostinger VPS, Docker + Docker Compose only. Never Vercel/Netlify/share
 - Build and test locally first (Docker Desktop). VPS work only from milestone M11 onward.
 - VPS: read-only diagnostics first (`df -h`, `free -m`, `docker ps`, `ss -ltn`, `ls /etc/nginx/sites-enabled`). Never: `docker system prune`, `docker volume prune`, `pm2 kill`, `rm -rf` outside /opt/introyale, `git reset --hard`, `git push --force`, global Nginx/service restarts (use `nginx -t && systemctl reload nginx` only).
 - All compose commands use `-p introyale-<env>` explicitly.
-- Never modify the live introyale.com site or DNS until milestone M14 is run with `CUTOVER_APPROVED=yes`.
+- Never touch introyale.com (site, server, DNS, mail) — ever. The new website lives on introyale.online (production) and staging.introyale.online (staging). M14 production launch runs only with `LAUNCH_APPROVED=yes`.
 - Never submit live forms on the current site.
 - Never invent business facts. Unverified facts render nothing; mark content `[CONFIRM]` in CMS seed only.
 - No secrets in git, images, client bundles or logs. Secrets via Docker secrets (`*_FILE`).
@@ -37,3 +37,11 @@ Hosting: Hostinger VPS, Docker + Docker Compose only. Never Vercel/Netlify/share
 ## Definition of done (every milestone)
 
 `pnpm lint && pnpm typecheck && pnpm test` green · relevant Playwright/axe tests green · acceptance criteria in docs/SPEC.md §7 met · docs updated · conventional commit.
+
+## Content and design rules (owner, permanent)
+
+- introyale.com (the client's own site) is the approved content source: use its real text, images, logos and contact details — never placeholder/demo content in previews. Read-only access only.
+- Nothing hard-coded: every piece of site content (text, images, stats, contact, nav, footer, page sections, SEO) is stored in Payload and editable in /admin. Components render CMS data only.
+- Visual quality must be premium (image-led, full-bleed, rich sections) — never ship a bare skeleton for review.
+- Check port availability (Get-NetTCPConnection) before assigning any port; never stop another process to free one.
+- Apply all instructions already given in CLAUDE.md, docs/ and docs/decisions-log.md; do not ask the owner to repeat them.
