@@ -59,6 +59,13 @@ pnpm -C apps/web build:seed-test
 docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" web node /app/cli/seed/seed-test-leads.js
 ```
 
+Locked out or forgotten admin password (local only; clears the lockout, prints a new random password once, stores nothing):
+
+```
+pnpm -C apps/web build:reset-admin-password
+docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" web node /app/cli/seed/reset-admin-password.js admin@introyale.local
+```
+
 Stop: `docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local stop`
 Remove the containers only (keeps `.local-data/`): `... down`
 
