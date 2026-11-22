@@ -92,6 +92,7 @@ export default async function CaseStudy({ params }: { params: Promise<{ slug: st
     <article>
       <JsonLd data={ld} />
       <Hero
+        transitionHero
         block={{
           blockType: 'hero',
           eyebrow: sector?.title,

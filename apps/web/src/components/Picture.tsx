@@ -8,12 +8,26 @@ export type MediaLike = {
   width?: number | null
   height?: number | null
   sizes?: Record<string, MediaVariant> | null
+  lqip?: string | null
+  dominant?: string | null
 } | null
 
 /** A Payload relation: populated object, bare ID (unresolved), or empty. */
 export type MediaInput = MediaLike | number | null | undefined
 
 type Variant = { url: string; width: number }
+
+/** URL of the smallest WebP variant at least `width` wide (falls back to the original). */
+export function mediaSrc(media: MediaInput, width: number): string | null {
+  const m = typeof media === 'object' ? media : null
+  if (!m?.url) return null
+  const v = Object.entries(m.sizes ?? {})
+    .filter(([k]) => k.startsWith('w'))
+    .map(([, s]) => s)
+    .filter((s): s is Variant => !!s?.url && !!s.width && s.width >= width)
+    .sort((a, b) => a.width - b.width)[0]
+  return v?.url ?? m.url
+}
 
 /** Variant keys are w<px> (WebP) and a<px> (AVIF), see collections/Media.ts. */
 function srcSetFor(
@@ -72,6 +86,17 @@ export function Picture({
         fetchPriority={priority ? 'high' : undefined}
         decoding="async"
         className={className}
+        // Blur-up: a tiny preview shows while the image loads (not for the LCP image or contained logos).
+        data-lqip={m.lqip && !priority && !className?.includes('object-contain') ? '' : undefined}
+        style={
+          m.lqip && !priority && !className?.includes('object-contain')
+            ? {
+                backgroundImage: `url(${m.lqip})`,
+                backgroundSize: 'cover',
+                backgroundColor: m.dominant ?? undefined,
+              }
+            : undefined
+        }
       />
     </picture>
   )

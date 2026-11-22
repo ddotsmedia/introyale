@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 const base =
-  'inline-flex min-h-6 items-center justify-center px-3.5 text-[0.8125rem] font-semibold uppercase tracking-[0.16em] transition-colors duration-300'
+  'btn-fx inline-flex min-h-6 items-center justify-center px-3.5 text-[0.8125rem] font-semibold uppercase tracking-[0.16em] transition-colors duration-300'
 const tones = {
   primary: 'bg-bronze-deep hover:bg-ink text-white',
   outline: 'border border-current hover:bg-white/10',
@@ -24,11 +24,11 @@ export function Button({
   const external = /^https?:\/\//.test(cta.href)
   const classes = `${base} ${tones[tone]} ${className}`
   return external ? (
-    <a href={cta.href} className={classes} rel="noopener noreferrer">
+    <a href={cta.href} className={classes} data-magnetic rel="noopener noreferrer">
       {cta.label}
     </a>
   ) : (
-    <Link href={cta.href} className={classes}>
+    <Link href={cta.href} className={classes} data-magnetic>
       {cta.label}
     </Link>
   )

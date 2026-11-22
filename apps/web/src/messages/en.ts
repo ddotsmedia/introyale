@@ -24,6 +24,11 @@ export const ui = {
   clientLogo: 'Client logo',
   viewProject: 'View project',
   explore: 'Explore',
+  view: 'View',
+  backToTop: 'Back to top',
+  pause: 'Pause slideshow',
+  play: 'Play slideshow',
+  slide: 'Show slide',
   filter: {
     label: 'Filter projects',
     all: 'All',

@@ -1,7 +1,21 @@
 import { ValidationError, type CollectionConfig, type Where } from 'payload'
+import sharp from 'sharp'
 import { actionAllowed, allow } from '../lib/access'
 
 const MB = 1024 * 1024
+
+/** Tiny blurred preview (a data URI of about 300 bytes) and the dominant colour, for blur-up image loading. */
+export async function placeholderFor(
+  input: Buffer | string,
+): Promise<{ lqip: string; dominant: string }> {
+  const img = sharp(input).rotate()
+  const [tiny, stats] = await Promise.all([
+    img.clone().resize(20, 20, { fit: 'inside' }).jpeg({ quality: 40 }).toBuffer(),
+    img.clone().resize(1, 1, { fit: 'cover' }).raw().toBuffer(),
+  ])
+  const hex = [...stats.subarray(0, 3)].map((v) => v.toString(16).padStart(2, '0')).join('')
+  return { lqip: `data:image/jpeg;base64,${tiny.toString('base64')}`, dominant: `#${hex}` }
+}
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -20,12 +34,20 @@ export const Media: CollectionConfig = {
   },
   hooks: {
     beforeChange: [
-      ({ req, data }) => {
+      async ({ req, data }) => {
         if (req.file && req.file.size > 25 * MB) {
           throw new ValidationError({
             errors: [{ path: 'filename', message: 'File exceeds 25 MB' }],
             req,
           })
+        }
+        // Blur-up placeholder for new uploads (existing files are backfilled by seed-motion).
+        if (req.file && req.file.mimetype.startsWith('image/') && req.file.data.length) {
+          try {
+            Object.assign(data, await placeholderFor(req.file.data))
+          } catch {
+            // A placeholder is optional; the upload still succeeds without one.
+          }
         }
         return data
       },
@@ -67,6 +89,8 @@ export const Media: CollectionConfig = {
       admin: { readOnly: true },
     },
     { name: 'confidential', type: 'checkbox', defaultValue: false },
+    { name: 'lqip', type: 'text', admin: { hidden: true, readOnly: true } },
+    { name: 'dominant', type: 'text', admin: { hidden: true, readOnly: true } },
     { name: 'tags', type: 'text', hasMany: true },
     {
       name: 'folder',

@@ -1,4 +1,5 @@
 import type { HomePage } from '@/payload-types'
+import { Split } from '../Split'
 
 export type Layout = NonNullable<HomePage['layout']>
 export type BlockOf<K extends Layout[number]['blockType']> = Extract<
@@ -31,9 +32,11 @@ export function SectionHeading({
   if (!eyebrow && !heading && !intro) return null
   return (
     <header className={className}>
-      {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+      {eyebrow && <p className="eyebrow eyebrow-draw">{eyebrow}</p>}
       {heading && (
-        <Tag className="display mt-2 text-[clamp(2.25rem,4.6vw,4rem)] text-balance">{heading}</Tag>
+        <Tag className="display split-view mt-2 text-[clamp(2.25rem,4.6vw,4rem)] text-balance">
+          <Split text={heading} />
+        </Tag>
       )}
       {intro && <p className="mt-3 max-w-2xl text-pretty opacity-80">{intro}</p>}
     </header>

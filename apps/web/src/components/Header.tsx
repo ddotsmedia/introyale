@@ -15,6 +15,7 @@ export type HeaderProps = {
   cta?: { label: string; href: string } | null
   phone?: string | null
   whatsappHref?: string | null
+  menuImages?: { href: string; media: MediaInput }[]
 }
 
 const Icon = ({ d }: { d: string }) => (
@@ -28,8 +29,19 @@ const WHATSAPP =
   'M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.25-.12-1.46-.72-1.7-.8-.22-.08-.4-.12-.56.13-.16.24-.64.8-.78.96-.14.16-.29.18-.54.06a6.7 6.7 0 0 1-3.3-2.9c-.25-.43.25-.4.72-1.34.08-.16.04-.3-.02-.42-.06-.12-.56-1.35-.76-1.85-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.1 3.64 1.5.65 2.1.7 2.86.6.46-.07 1.46-.6 1.66-1.18.2-.58.2-1.08.14-1.18-.06-.1-.22-.16-.46-.28z'
 
 /** Fixed header: transparent over a hero, solid once the page scrolls. Content comes from CMS props. */
-export function Header({ brand, logo, logoLight, nav, cta, phone, whatsappHref }: HeaderProps) {
+export function Header({
+  brand,
+  logo,
+  logoLight,
+  nav,
+  cta,
+  phone,
+  whatsappHref,
+  menuImages,
+}: HeaderProps) {
   const [top, setTop] = useState(true)
+  const [compact, setCompact] = useState(false)
+  const [hidden, setHidden] = useState(false)
   const pathname = usePathname()
 
   // Hydration marker: lets tests and assistive diagnostics know client handlers are bound.
@@ -37,8 +49,16 @@ export function Header({ brand, logo, logoLight, nav, cta, phone, whatsappHref }
     document.documentElement.dataset.hydrated = 'true'
   }, [])
   useEffect(() => {
+    let last = window.scrollY
     const onScroll = () => {
-      setTop(window.scrollY < 40)
+      const y = window.scrollY
+      setTop(y < 40)
+      setCompact(y > 90)
+      // Hide while scrolling down past the first screen, show again on any scroll up.
+      if (Math.abs(y - last) > 6) {
+        setHidden(y > 360 && y > last && !document.body.style.overflow)
+        last = y
+      }
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -55,8 +75,8 @@ export function Header({ brand, logo, logoLight, nav, cta, phone, whatsappHref }
       >
         {ui.skip}
       </a>
-      <header className="site-header" data-top={top}>
-        <div className="mx-auto flex h-[4.5rem] max-w-[1600px] items-center justify-between gap-3 px-2 md:px-4">
+      <header className="site-header" data-top={top} data-compact={compact} data-hidden={hidden}>
+        <div className="header-bar mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-2 md:px-4">
           <Link href="/" aria-label={brand} className="flex shrink-0 items-center">
             {logo ? (
               <>
@@ -116,6 +136,7 @@ export function Header({ brand, logo, logoLight, nav, cta, phone, whatsappHref }
             cta={cta ?? null}
             phone={phone ?? null}
             whatsappHref={whatsappHref ?? null}
+            images={menuImages ?? []}
           />
         </div>
       </header>

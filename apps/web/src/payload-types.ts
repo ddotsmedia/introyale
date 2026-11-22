@@ -136,6 +136,7 @@ export interface Config {
   globals: {
     'site-settings': SiteSetting;
     'home-page': HomePage;
+    'motion-settings': MotionSetting;
     navigation: Navigation;
     footer: Footer;
     'contact-info': ContactInfo;
@@ -148,6 +149,7 @@ export interface Config {
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'motion-settings': MotionSettingsSelect<false> | MotionSettingsSelect<true>;
     navigation: NavigationSelect<false> | NavigationSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
@@ -258,6 +260,8 @@ export interface Media {
   usageApproved?: boolean | null;
   usageApprovedBy?: (number | null) | User;
   confidential?: boolean | null;
+  lqip?: string | null;
+  dominant?: string | null;
   tags?: string[] | null;
   /**
    * Library folder, e.g. Residential/Villas
@@ -565,6 +569,7 @@ export interface Sector {
              */
             projects?: (number | Project)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'horizontal') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -648,6 +653,7 @@ export interface Sector {
              */
             clients?: (number | Client)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'marquee') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -662,6 +668,39 @@ export interface Sector {
             id?: string | null;
             blockName?: string | null;
             blockType: 'clientWall';
+          }
+        | {
+            eyebrow?: string | null;
+            statement: string;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statement';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            /**
+             * A project that has before/after images. Leave empty to use the first published project that has them
+             */
+            project?: (number | null) | Project;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'beforeAfterSpotlight';
           }
         | {
             heading: string;
@@ -893,6 +932,7 @@ export interface Service {
              */
             projects?: (number | Project)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'horizontal') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -976,6 +1016,7 @@ export interface Service {
              */
             clients?: (number | Client)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'marquee') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -990,6 +1031,39 @@ export interface Service {
             id?: string | null;
             blockName?: string | null;
             blockType: 'clientWall';
+          }
+        | {
+            eyebrow?: string | null;
+            statement: string;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statement';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            /**
+             * A project that has before/after images. Leave empty to use the first published project that has them
+             */
+            project?: (number | null) | Project;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'beforeAfterSpotlight';
           }
         | {
             heading: string;
@@ -1393,6 +1467,7 @@ export interface Page {
              */
             projects?: (number | Project)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'horizontal') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -1476,6 +1551,7 @@ export interface Page {
              */
             clients?: (number | Client)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'marquee') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -1490,6 +1566,39 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'clientWall';
+          }
+        | {
+            eyebrow?: string | null;
+            statement: string;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statement';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            /**
+             * A project that has before/after images. Leave empty to use the first published project that has them
+             */
+            project?: (number | null) | Project;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'beforeAfterSpotlight';
           }
         | {
             heading: string;
@@ -2139,6 +2248,8 @@ export interface MediaSelect<T extends boolean = true> {
   usageApproved?: T;
   usageApprovedBy?: T;
   confidential?: T;
+  lqip?: T;
+  dominant?: T;
   tags?: T;
   folder?: T;
   updatedAt?: T;
@@ -2456,6 +2567,7 @@ export interface ServicesSelect<T extends boolean = true> {
               intro?: T;
               projects?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
@@ -2520,12 +2632,38 @@ export interface ServicesSelect<T extends boolean = true> {
               intro?: T;
               clients?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
                     label?: T;
                     href?: T;
                   };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statement?:
+          | T
+          | {
+              eyebrow?: T;
+              statement?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        beforeAfterSpotlight?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              project?: T;
               hidden?: T;
               id?: T;
               blockName?: T;
@@ -2693,6 +2831,7 @@ export interface SectorsSelect<T extends boolean = true> {
               intro?: T;
               projects?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
@@ -2757,12 +2896,38 @@ export interface SectorsSelect<T extends boolean = true> {
               intro?: T;
               clients?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
                     label?: T;
                     href?: T;
                   };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statement?:
+          | T
+          | {
+              eyebrow?: T;
+              statement?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        beforeAfterSpotlight?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              project?: T;
               hidden?: T;
               id?: T;
               blockName?: T;
@@ -3117,6 +3282,7 @@ export interface PagesSelect<T extends boolean = true> {
               intro?: T;
               projects?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
@@ -3181,12 +3347,38 @@ export interface PagesSelect<T extends boolean = true> {
               intro?: T;
               clients?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
                     label?: T;
                     href?: T;
                   };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statement?:
+          | T
+          | {
+              eyebrow?: T;
+              statement?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        beforeAfterSpotlight?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              project?: T;
               hidden?: T;
               id?: T;
               blockName?: T;
@@ -3661,6 +3853,7 @@ export interface HomePage {
              */
             projects?: (number | Project)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'horizontal') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -3744,6 +3937,7 @@ export interface HomePage {
              */
             clients?: (number | Client)[] | null;
             limit?: number | null;
+            display?: ('grid' | 'marquee') | null;
             viewAll?: {
               label?: string | null;
               /**
@@ -3758,6 +3952,39 @@ export interface HomePage {
             id?: string | null;
             blockName?: string | null;
             blockType: 'clientWall';
+          }
+        | {
+            eyebrow?: string | null;
+            statement: string;
+            cta?: {
+              label?: string | null;
+              /**
+               * Path such as /start, or a full URL
+               */
+              href?: string | null;
+            };
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'statement';
+          }
+        | {
+            eyebrow?: string | null;
+            heading?: string | null;
+            /**
+             * A project that has before/after images. Leave empty to use the first published project that has them
+             */
+            project?: (number | null) | Project;
+            /**
+             * Hide this block on the site without deleting it
+             */
+            hidden?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'beforeAfterSpotlight';
           }
         | {
             heading: string;
@@ -3848,6 +4075,59 @@ export interface HomePage {
      * Checked against the title, description and URL in the panel above
      */
     focusKeyword?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "motion-settings".
+ */
+export interface MotionSetting {
+  id: number;
+  /**
+   * Master switch. Off shows the static site: all content, no animation.
+   */
+  enabled?: boolean | null;
+  intensity?: ('subtle' | 'standard' | 'expressive') | null;
+  /**
+   * Extra images for the home hero slideshow (3 to 5 in total with the hero image). Empty shows the single hero image.
+   */
+  heroSlides?: (number | Media)[] | null;
+  /**
+   * Seconds each hero slide stays
+   */
+  slideSeconds?: number | null;
+  /**
+   * Turn individual effects on or off
+   */
+  effects?: {
+    heroSlideshow?: boolean | null;
+    headlineReveal?: boolean | null;
+    scrollCue?: boolean | null;
+    pageTransitions?: boolean | null;
+    header?: boolean | null;
+    mobileMenu?: boolean | null;
+    magnetic?: boolean | null;
+    imageReveals?: boolean | null;
+    parallax?: boolean | null;
+    headingReveals?: boolean | null;
+    statement?: boolean | null;
+    countUp?: boolean | null;
+    processLine?: boolean | null;
+    horizontalGallery?: boolean | null;
+    curtain?: boolean | null;
+    cards?: boolean | null;
+    servicesFloat?: boolean | null;
+    sectorPanels?: boolean | null;
+    marquee?: boolean | null;
+    beforeAfterHint?: boolean | null;
+    blurUp?: boolean | null;
+    lightbox?: boolean | null;
+    caseStudy?: boolean | null;
+    notFound?: boolean | null;
+    formSteps?: boolean | null;
+    backToTop?: boolean | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -4136,6 +4416,7 @@ export interface HomePageSelect<T extends boolean = true> {
               intro?: T;
               projects?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
@@ -4200,12 +4481,38 @@ export interface HomePageSelect<T extends boolean = true> {
               intro?: T;
               clients?: T;
               limit?: T;
+              display?: T;
               viewAll?:
                 | T
                 | {
                     label?: T;
                     href?: T;
                   };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        statement?:
+          | T
+          | {
+              eyebrow?: T;
+              statement?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              hidden?: T;
+              id?: T;
+              blockName?: T;
+            };
+        beforeAfterSpotlight?:
+          | T
+          | {
+              eyebrow?: T;
+              heading?: T;
+              project?: T;
               hidden?: T;
               id?: T;
               blockName?: T;
@@ -4285,6 +4592,49 @@ export interface HomePageSelect<T extends boolean = true> {
         canonicalOverride?: T;
         noindex?: T;
         focusKeyword?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "motion-settings_select".
+ */
+export interface MotionSettingsSelect<T extends boolean = true> {
+  enabled?: T;
+  intensity?: T;
+  heroSlides?: T;
+  slideSeconds?: T;
+  effects?:
+    | T
+    | {
+        heroSlideshow?: T;
+        headlineReveal?: T;
+        scrollCue?: T;
+        pageTransitions?: T;
+        header?: T;
+        mobileMenu?: T;
+        magnetic?: T;
+        imageReveals?: T;
+        parallax?: T;
+        headingReveals?: T;
+        statement?: T;
+        countUp?: T;
+        processLine?: T;
+        horizontalGallery?: T;
+        curtain?: T;
+        cards?: T;
+        servicesFloat?: T;
+        sectorPanels?: T;
+        marquee?: T;
+        beforeAfterHint?: T;
+        blurUp?: T;
+        lightbox?: T;
+        caseStudy?: T;
+        notFound?: T;
+        formSteps?: T;
+        backToTop?: T;
       };
   updatedAt?: T;
   createdAt?: T;

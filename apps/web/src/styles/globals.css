@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import './motion.css';
 
 /* font-display: optional avoids a late swap (LCP/CLS): a preloaded face is used if ready, else the metric-matched fallback. */
 /* Self-hosted fonts (D14). Fraunces 400 and Inter 400 are preloaded in the root layout; fallbacks are metric-matched to avoid layout shift. */
@@ -200,22 +201,27 @@ body:has([data-hero]) main {
   top: 0;
   z-index: 40;
   color: var(--color-ink);
-  background: color-mix(in srgb, var(--color-ivory) 94%, transparent);
-  backdrop-filter: blur(10px);
+  transition: color 0.3s ease;
+}
+/* The solid, blurred bar lives on a pseudo-element: a backdrop-filter on the header itself would trap the fixed mobile menu. */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--color-ivory) 90%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 1px 0 var(--color-travertine);
-  transition:
-    background-color 0.3s ease,
-    box-shadow 0.3s ease,
-    color 0.3s ease;
+  transition: opacity 0.3s ease;
 }
 .site-header .logo-white {
   display: none;
 }
 body:has([data-hero]) .site-header[data-top='true'] {
   color: #fff;
-  background: transparent;
-  backdrop-filter: none;
-  box-shadow: none;
+}
+body:has([data-hero]) .site-header[data-top='true']::before {
+  opacity: 0;
 }
 body:has([data-hero]) .site-header[data-top='true'] .logo-white {
   display: block;

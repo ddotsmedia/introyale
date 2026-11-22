@@ -95,6 +95,15 @@ export const FeaturedWorkBlock: Block = {
       admin: { description: 'Pick projects. Leave empty to show the latest published ones' },
     },
     { name: 'limit', type: 'number', defaultValue: 5, min: 1, max: 12 },
+    {
+      name: 'display',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid', value: 'grid' },
+        { label: 'Pinned horizontal gallery (desktop), swipeable on mobile', value: 'horizontal' },
+      ],
+    },
     link('viewAll'),
     hidden,
   ],
@@ -177,7 +186,46 @@ export const ClientWallBlock: Block = {
       admin: { description: 'Leave empty to show every client with logo permission' },
     },
     { name: 'limit', type: 'number', defaultValue: 12, min: 1, max: 60 },
+    {
+      name: 'display',
+      type: 'select',
+      defaultValue: 'grid',
+      options: [
+        { label: 'Grid', value: 'grid' },
+        { label: 'Two-row marquee', value: 'marquee' },
+      ],
+    },
     link('viewAll'),
+    hidden,
+  ],
+}
+
+export const StatementBlock: Block = {
+  slug: 'statement',
+  labels: { singular: 'Statement', plural: 'Statements' },
+  fields: [
+    text('eyebrow'),
+    { name: 'statement', type: 'textarea', localized: true, required: true },
+    link('cta'),
+    hidden,
+  ],
+}
+
+export const BeforeAfterSpotlightBlock: Block = {
+  slug: 'beforeAfterSpotlight',
+  labels: { singular: 'Before/after spotlight', plural: 'Before/after spotlights' },
+  fields: [
+    text('eyebrow'),
+    text('heading'),
+    {
+      name: 'project',
+      type: 'relationship',
+      relationTo: 'projects',
+      admin: {
+        description:
+          'A project that has before/after images. Leave empty to use the first published project that has them',
+      },
+    },
     hidden,
   ],
 }
@@ -274,6 +322,8 @@ export const pageBlocks: Block[] = [
   ServicesListBlock,
   ProcessStepsBlock,
   ClientWallBlock,
+  StatementBlock,
+  BeforeAfterSpotlightBlock,
   CtaBandBlock,
   ImageTextBlock,
   TextSectionBlock,

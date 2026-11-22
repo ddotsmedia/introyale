@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { ui } from '@/messages/en'
 import type { NavItem } from './Header'
+import { Picture, type MediaInput } from './Picture'
 
 /** Full-screen mobile menu. Focus is trapped while open; Esc closes it and returns focus to the trigger. */
 export function MobileNav({
@@ -10,13 +11,16 @@ export function MobileNav({
   cta,
   phone,
   whatsappHref,
+  images = [],
 }: {
   items: NavItem[]
   cta: { label: string; href: string } | null
   phone: string | null
   whatsappHref: string | null
+  images?: { href: string; media: MediaInput }[]
 }) {
   const [open, setOpen] = useState(false)
+  const [active, setActive] = useState<string | null>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
 
@@ -79,7 +83,7 @@ export function MobileNav({
           role="dialog"
           aria-modal="true"
           aria-label={ui.menu}
-          className="bg-night text-ivory on-dark fixed inset-0 z-50 flex flex-col overflow-y-auto px-3 py-2.5"
+          className="menu-panel bg-night text-ivory on-dark fixed inset-0 z-50 flex flex-col overflow-y-auto px-3 py-2.5"
         >
           <div className="flex justify-end">
             <button
@@ -90,12 +94,31 @@ export function MobileNav({
               {ui.close}
             </button>
           </div>
-          <ul className="mt-3 flex flex-col gap-0.5">
-            {items.map((item) => (
-              <li key={item.href}>
+          {/* Background image crossfade: the hovered or focused link decides which image shows (CMS sector heroes). */}
+          <div className="menu-bg" aria-hidden="true">
+            {images
+              .filter((i) => i.media)
+              .map((i) => (
+                <div key={i.href} data-on={active === i.href}>
+                  <Picture media={i.media} sizes="100vw" className="h-full w-full object-cover" />
+                </div>
+              ))}
+          </div>
+          <ul className="menu-links relative mt-3 flex flex-col gap-0.5">
+            {items.map((item, n) => (
+              <li key={item.href} style={{ '--i': n } as React.CSSProperties}>
                 <Link
                   href={item.href}
                   onClick={close}
+                  onMouseEnter={() => {
+                    setActive(item.href)
+                  }}
+                  onFocus={() => {
+                    setActive(item.href)
+                  }}
+                  onTouchStart={() => {
+                    setActive(item.href)
+                  }}
                   className="font-display block py-1 text-[2rem] leading-tight tracking-tight"
                 >
                   {item.label}

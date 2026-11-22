@@ -2,6 +2,7 @@ import type { GlobalConfig } from 'payload'
 import { allow } from '../lib/access'
 import { seoField } from '../fields/common'
 import { layoutField } from '../blocks'
+import { FX, INTENSITIES } from '../lib/motionFx'
 
 const readAll = () => true
 const manage = allow('globals.manage')
@@ -245,9 +246,63 @@ export const HomePage: GlobalConfig = {
   fields: [layoutField, seoField],
 }
 
+/** Motion settings: master switch, intensity and one switch per effect. Read on every request, no rebuild needed. */
+export const MotionSettings: GlobalConfig = {
+  slug: 'motion-settings',
+  label: 'Motion settings',
+  access: { read: readAll, update: manage },
+  fields: [
+    {
+      name: 'enabled',
+      type: 'checkbox',
+      defaultValue: true,
+      admin: {
+        description: 'Master switch. Off shows the static site: all content, no animation.',
+      },
+    },
+    {
+      name: 'intensity',
+      type: 'select',
+      defaultValue: 'standard',
+      options: INTENSITIES.map((v) => ({ label: v, value: v })),
+    },
+    {
+      name: 'heroSlides',
+      type: 'upload',
+      relationTo: 'media',
+      hasMany: true,
+      maxRows: 5,
+      admin: {
+        description:
+          'Extra images for the home hero slideshow (3 to 5 in total with the hero image). Empty shows the single hero image.',
+      },
+    },
+    {
+      name: 'slideSeconds',
+      type: 'number',
+      defaultValue: 7,
+      min: 4,
+      max: 12,
+      admin: { description: 'Seconds each hero slide stays' },
+    },
+    {
+      name: 'effects',
+      type: 'group',
+      admin: { description: 'Turn individual effects on or off' },
+      fields: FX.map(([name, label]) => ({
+        name,
+        type: 'checkbox' as const,
+        label,
+        defaultValue: true,
+      })),
+    },
+  ],
+}
+
 export const globals: GlobalConfig[] = [
   SiteSettings,
   HomePage,
+  MotionSettings,
   Navigation,
   Footer,
   ContactInfo,

@@ -6,13 +6,45 @@ import { StickyActionBar } from '@/components/StickyActionBar'
 import { WebVitals } from '@/components/WebVitals'
 import { organization, website, localBusiness } from '@/lib/schema'
 import { SITE_URL } from '@/lib/seo'
+import { cms } from '@/lib/cms'
+import { getMotion } from '@/lib/motion'
 import { siteChrome } from '@/lib/site'
+import { MotionLoader } from '@/components/motion/MotionLoader'
 
 export const dynamic = 'force-dynamic'
+
+/** Background image per menu link (sector heroes, the latest project for Work), for the mobile menu crossfade. */
+async function menuImages(nav: { href: string }[]) {
+  const payload = await cms()
+  const [sectors, work] = await Promise.all([
+    payload.find({
+      collection: 'sectors',
+      where: { 'workflow.status': { equals: 'published' } },
+      limit: 12,
+      depth: 1,
+      overrideAccess: false,
+    }),
+    payload.find({
+      collection: 'projects',
+      where: { 'workflow.status': { equals: 'published' } },
+      limit: 1,
+      depth: 1,
+      overrideAccess: false,
+    }),
+  ])
+  const bySlug = new Map(sectors.docs.map((s) => [`/${s.slug}`, s.hero]))
+  const first = work.docs[0]?.hero
+  return nav.map((n) => ({
+    href: n.href,
+    media: bySlug.get(n.href) ?? (n.href === '/work' ? first : null),
+  }))
+}
 
 /** Public chrome: header, footer and mobile action bar. Everything shown comes from the CMS or verified facts. */
 export default async function ChromeLayout({ children }: { children: ReactNode }) {
   const c = await siteChrome()
+  const motion = await getMotion()
+  const navImages = await menuImages(c.nav)
   const digits = c.phone ? c.phone.replace(/[^\d+]/g, '') : null
 
   // Site-wide structured data. LocalBusiness is emitted only with verified address and phone (SPEC §5.2).
@@ -23,8 +55,14 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
   ]
 
   return (
-    <>
+    <div
+      className="fx-root"
+      data-fx={motion.fx.join(' ')}
+      data-intensity={motion.intensity}
+      data-motion={motion.on ? 'on' : 'off'}
+    >
       <JsonLd data={ld} />
+      <MotionLoader />
       <WebVitals />
       {c.banner ? (
         <div
@@ -42,6 +80,7 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
         cta={c.cta}
         phone={c.phone}
         whatsappHref={c.whatsappHref}
+        menuImages={navImages}
       />
       <main id="main" className="pb-14 md:pb-0">
         {children}
@@ -64,6 +103,6 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
         whatsappHref={c.whatsappHref}
         cta={c.cta}
       />
-    </>
+    </div>
   )
 }
