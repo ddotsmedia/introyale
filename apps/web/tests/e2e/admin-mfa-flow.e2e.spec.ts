@@ -7,8 +7,10 @@ import { generateSync } from 'otplib'
 const email = process.env.E2E_ADMIN_EMAIL ?? 'e2e-admin@introyale.local'
 const password = process.env.E2E_ADMIN_PW
 
-test('fresh administrator: sign in, enrol MFA, reach the dashboard', async ({ page }) => {
+test('fresh administrator: sign in, enrol MFA, reach the dashboard', async ({ page }, testInfo) => {
   test.skip(!password, 'E2E_ADMIN_PW not set (needs the MFA-enforced CI stack)')
+  // The administrator is single-use (enrolment happens once), so only one project runs the flow.
+  test.skip(testInfo.project.name !== 'desktop', 'runs once, on the desktop project')
   test.setTimeout(90_000)
   await page.goto('/admin/login')
   await page.locator('input[name="email"]').fill(email)
