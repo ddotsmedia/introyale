@@ -52,6 +52,13 @@ pnpm -C apps/web build:seed-live
 docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" -v "<abs path to .local-data/import>:/import:ro" web node /app/cli/seed/seed-live-content.js
 ```
 
+Demo leads and role users for the admin (local only; prints the role users' passwords once):
+
+```
+pnpm -C apps/web build:seed-test
+docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local run --rm --no-deps -v "<abs path to apps/web/dist>:/app/cli/seed:ro" web node /app/cli/seed/seed-test-leads.js
+```
+
 Stop: `docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local stop`
 Remove the containers only (keeps `.local-data/`): `... down`
 

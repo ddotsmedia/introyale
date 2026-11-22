@@ -3,6 +3,7 @@ import config from '@payload-config'
 import { readSecret } from './lib/secrets'
 import { scrubEvent } from './lib/sentryScrub'
 import { createServer } from 'node:http'
+import { dubaiParts } from './lib/leads'
 import { getPayload } from 'payload'
 
 // Error tracking for jobs (SPEC §2.9). No DSN means no reporting.
@@ -52,3 +53,28 @@ setInterval(() => {
     payload.logger.error({ msg: 'could not queue retention purge' })
   })
 }, DAY_MS)
+
+// CRM schedules (admin v2). The digest task is idempotent per Dubai day (audit-log check), so checking every minute is safe.
+let lastDigest = ''
+let lastUnassigned = 0
+let lastScheduled = 0
+setInterval(() => {
+  const now = new Date()
+  const p = dubaiParts(now)
+  const queue = (task: 'leadDigest' | 'unassignedAlert' | 'publishScheduled') =>
+    payload.jobs.queue({ task, input: {} }).catch(() => {
+      payload.logger.error({ msg: 'could not queue job', task })
+    })
+  if (lastDigest !== p.date && (p.h > 8 || (p.h === 8 && p.min >= 30))) {
+    lastDigest = p.date
+    void queue('leadDigest')
+  }
+  if (Date.now() - lastUnassigned > 15 * 60_000) {
+    lastUnassigned = Date.now()
+    void queue('unassignedAlert')
+  }
+  if (Date.now() - lastScheduled > 5 * 60_000) {
+    lastScheduled = Date.now()
+    void queue('publishScheduled')
+  }
+}, 60_000)

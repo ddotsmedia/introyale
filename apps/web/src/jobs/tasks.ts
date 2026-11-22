@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/nextjs'
 import type { Payload, TaskConfig } from 'payload'
 import { ALERT_EMAIL, FROM, STAFF_INBOX, mailer, shell } from '../lib/mail'
+import { notify } from '../lib/audit'
+import { runDigest, runScheduledPublish, runUnassignedAlert, type Send } from '../lib/crmJobs'
 
 // Lead delivery tasks (SPEC M8). Retries: 3 attempts with exponential backoff. After the final
 // failure, onFail sends an alert with the reference only (no personal data) and logs the error type.
@@ -53,6 +55,26 @@ async function alertOnFinalFailure(
     tags: { task },
     extra: { enquiryId },
   })
+  // Bell notification for administrators (admin v2): reference only, no personal data.
+  try {
+    const admins = await payload.find({
+      collection: 'users',
+      where: { role: { equals: 'administrator' } },
+      overrideAccess: true,
+      depth: 0,
+      limit: 20,
+    })
+    for (const a of admins.docs)
+      await notify(
+        payload,
+        a.id,
+        'job.failed',
+        `Job ${task} failed after retries (enquiry #${String(enquiryId)})`,
+        '/admin/system',
+      )
+  } catch {
+    payload.logger.error({ msg: 'could not notify admins of job failure', task })
+  }
   if (!ALERT_EMAIL) return
   try {
     await mailer().sendMail({
@@ -169,4 +191,47 @@ export const purgeEnquiries: TaskConfig<'purgeEnquiries'> = {
   },
 }
 
-export const jobTasks = [deliverStaffEmail, sendConfirmation, deliverCrm, purgeEnquiries]
+const send: Send = async (m) => {
+  await mailer().sendMail({
+    from: FROM,
+    to: m.to,
+    subject: m.subject,
+    html: shell(m.subject, m.html),
+  })
+}
+
+export const leadDigest: TaskConfig<'leadDigest'> = {
+  slug: 'leadDigest',
+  label: 'Daily lead follow-up digest (08:30 Dubai)',
+  inputSchema: [],
+  outputSchema: [{ name: 'sent', type: 'number' }],
+  handler: async ({ req }) => ({ output: await runDigest(req.payload, send) }),
+}
+
+export const unassignedAlert: TaskConfig<'unassignedAlert'> = {
+  slug: 'unassignedAlert',
+  label: 'Alert on leads unassigned over 4 business hours',
+  inputSchema: [],
+  outputSchema: [{ name: 'alerted', type: 'number' }],
+  handler: async ({ req }) => ({
+    output: await runUnassignedAlert(req.payload, send, ALERT_EMAIL || STAFF_INBOX),
+  }),
+}
+
+export const publishScheduled: TaskConfig<'publishScheduled'> = {
+  slug: 'publishScheduled',
+  label: 'Publish scheduled documents',
+  inputSchema: [],
+  outputSchema: [{ name: 'published', type: 'number' }],
+  handler: async ({ req }) => ({ output: await runScheduledPublish(req.payload) }),
+}
+
+export const jobTasks = [
+  deliverStaffEmail,
+  sendConfirmation,
+  deliverCrm,
+  purgeEnquiries,
+  leadDigest,
+  unassignedAlert,
+  publishScheduled,
+]
