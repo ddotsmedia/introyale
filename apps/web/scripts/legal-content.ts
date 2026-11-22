@@ -51,7 +51,7 @@ export const LEGAL = [
       '6. Liability',
       'To the extent the law allows, Introyale Interiors is not liable for loss arising from your use of, or inability to use, this website.',
       '7. Governing law',
-      'These terms are governed by the laws of the United Arab Emirates as applied in the Emirate of Dubai, and the courts of Dubai have jurisdiction, unless the law requires otherwise.',
+      'These terms are governed by the laws of the United Arab Emirates, and the competent UAE courts have jurisdiction, unless the law requires otherwise.',
       '8. Contact',
       'Questions about these terms can be sent to us using the details on our Contact page.',
     ].join('\n\n'),

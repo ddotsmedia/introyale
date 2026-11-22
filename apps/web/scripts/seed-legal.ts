@@ -23,6 +23,8 @@ if (!admin) throw new Error(`administrator ${email} not found`)
 const write = { ...system, user: { ...admin, collection: 'users' } as never }
 const clip = (s: string, n: number) => (s.length <= n ? s : `${s.slice(0, n - 1).trimEnd()}…`)
 
+// RESEED_LEGAL=1 replaces the four legal pages with the current template text (use only before the owner has edited them).
+const reseed = process.env.RESEED_LEGAL === '1'
 let created = 0
 for (const p of LEGAL) {
   const have = await payload.find({
@@ -32,7 +34,8 @@ for (const p of LEGAL) {
     depth: 0,
     ...system,
   })
-  if (have.docs[0]) continue
+  if (have.docs[0] && !reseed) continue
+  if (have.docs[0]) await payload.delete({ collection: 'pages', id: have.docs[0].id, ...write })
   const doc = await payload.create({
     collection: 'pages',
     data: {
