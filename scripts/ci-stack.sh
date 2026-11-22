@@ -25,7 +25,7 @@ case "${1:?up|down}" in
     # Fresh administrator (no MFA yet) for the MFA regression test; the password comes from the caller's environment.
     if [ -n "${E2E_ADMIN_PW:-}" ]; then
       # One user per test file: concurrent logins of one account race on its session list.
-      for u in e2e-admin e2e-api e2e-motion; do
+      for u in e2e-admin e2e-api e2e-motion e2e-v3; do
         dcx run --rm --no-deps -e ADMIN_PW="$E2E_ADMIN_PW" -v "$PWD/apps/web/dist:/app/cli/seed:ro" worker node /app/cli/seed/admin-user.js create "$u@introyale.local" >/dev/null
       done
     fi

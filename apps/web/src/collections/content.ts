@@ -1,6 +1,6 @@
 import type { CollectionConfig, CollectionSlug, Field } from 'payload'
 import { allow, publicReadPublished } from '../lib/access'
-import { seoField, slugField, workflowField } from '../fields/common'
+import { insightsField, seoField, slugField, workflowField } from '../fields/common'
 import { auditAfterChange, auditAfterDelete, publishGuard, workflowGuard } from '../hooks/workflow'
 import { layoutField } from '../blocks'
 
@@ -99,6 +99,7 @@ export const Services: CollectionConfig = {
     },
     seoField,
     workflowField,
+    insightsField,
   ],
 }
 
@@ -201,6 +202,7 @@ export const Projects: CollectionConfig = {
     },
     seoField,
     workflowField,
+    insightsField,
   ],
 }
 
@@ -239,5 +241,6 @@ export const Pages: CollectionConfig = {
     layoutField,
     seoField,
     workflowField,
+    insightsField,
   ],
 }

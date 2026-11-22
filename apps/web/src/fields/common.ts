@@ -61,6 +61,13 @@ export const seoField: Field = {
   ],
 }
 
+/** Sidebar card with 30-day views, time on page, attributed enquiries and SEO health (admin v3). */
+export const insightsField: Field = {
+  name: 'insights',
+  type: 'ui',
+  admin: { position: 'sidebar', components: { Field: '/admin/components/Insights#Insights' } },
+}
+
 export const slugField: Field = {
   name: 'slug',
   type: 'text',
