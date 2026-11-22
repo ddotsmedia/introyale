@@ -67,5 +67,12 @@ export const Media: CollectionConfig = {
       admin: { readOnly: true },
     },
     { name: 'confidential', type: 'checkbox', defaultValue: false },
+    { name: 'tags', type: 'text', hasMany: true },
+    {
+      name: 'folder',
+      type: 'text',
+      index: true,
+      admin: { description: 'Library folder, e.g. Residential/Villas' },
+    },
   ],
 }

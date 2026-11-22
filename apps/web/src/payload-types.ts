@@ -86,6 +86,11 @@ export interface Config {
     redirects: Redirect;
     'audit-log': AuditLog;
     'rate-limits': RateLimit;
+    'email-templates': EmailTemplate;
+    notifications: Notification;
+    'saved-views': SavedView;
+    'not-found-log': NotFoundLog;
+    'login-history': LoginHistory;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -113,6 +118,11 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
     'rate-limits': RateLimitsSelect<false> | RateLimitsSelect<true>;
+    'email-templates': EmailTemplatesSelect<false> | EmailTemplatesSelect<true>;
+    notifications: NotificationsSelect<false> | NotificationsSelect<true>;
+    'saved-views': SavedViewsSelect<false> | SavedViewsSelect<true>;
+    'not-found-log': NotFoundLogSelect<false> | NotFoundLogSelect<true>;
+    'login-history': LoginHistorySelect<false> | LoginHistorySelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -158,6 +168,9 @@ export interface Config {
       sendConfirmation: TaskSendConfirmation;
       deliverCrm: TaskDeliverCrm;
       purgeEnquiries: TaskPurgeEnquiries;
+      leadDigest: TaskLeadDigest;
+      unassignedAlert: TaskUnassignedAlert;
+      publishScheduled: TaskPublishScheduled;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -209,6 +222,10 @@ export interface User {
       | null;
   };
   lastLoginAt?: string | null;
+  /**
+   * Also email me bell notifications
+   */
+  notifyByEmail?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -241,6 +258,11 @@ export interface Media {
   usageApproved?: boolean | null;
   usageApprovedBy?: (number | null) | User;
   confidential?: boolean | null;
+  tags?: string[] | null;
+  /**
+   * Library folder, e.g. Residential/Villas
+   */
+  folder?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -439,6 +461,11 @@ export interface Project {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -725,6 +752,11 @@ export interface Sector {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1048,6 +1080,11 @@ export interface Service {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1103,6 +1140,11 @@ export interface Testimonial {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1145,6 +1187,11 @@ export interface TeamMember {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1215,6 +1262,11 @@ export interface JournalPost {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1512,6 +1564,11 @@ export interface Page {
     approvedBy?: (number | null) | User;
     publishedBy?: (number | null) | User;
     reviewNotes?: string | null;
+    /**
+     * Scheduled publication (approved items only; the worker publishes at this time)
+     */
+    publishAt?: string | null;
+    scheduledBy?: (number | null) | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1577,6 +1634,41 @@ export interface Enquiry {
     | boolean
     | null;
   assignedTo?: (number | null) | User;
+  status?: ('new' | 'contacted' | 'site_visit' | 'proposal_sent' | 'won' | 'lost') | null;
+  lostReason?: string | null;
+  priority?: ('low' | 'normal' | 'high') | null;
+  followUpAt?: string | null;
+  /**
+   * AED
+   */
+  estimatedValue?: number | null;
+  tags?: string[] | null;
+  notes?:
+    | {
+        author?: (number | null) | User;
+        text: string;
+        at: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Automatic timeline: status changes, assignments, emails
+   */
+  activity?:
+    | {
+        kind: string;
+        text: string;
+        actor?: (number | null) | User;
+        at: string;
+        id?: string | null;
+      }[]
+    | null;
+  related?: (number | Enquiry)[] | null;
+  /**
+   * Local demo data
+   */
+  isTest?: boolean | null;
+  unassignedAlertAt?: string | null;
   deliveryStatus?: {
     email?: string | null;
     crm?: string | null;
@@ -1627,6 +1719,72 @@ export interface RateLimit {
   id: number;
   key: string;
   count: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates".
+ */
+export interface EmailTemplate {
+  id: number;
+  name: string;
+  subject: string;
+  /**
+   * Use {{name}} and {{ref}}
+   */
+  body: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications".
+ */
+export interface Notification {
+  id: number;
+  user: number | User;
+  kind: string;
+  text: string;
+  link?: string | null;
+  read?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "saved-views".
+ */
+export interface SavedView {
+  id: number;
+  user: number | User;
+  name: string;
+  query: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "not-found-log".
+ */
+export interface NotFoundLog {
+  id: number;
+  path: string;
+  count?: number | null;
+  lastSeenAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "login-history".
+ */
+export interface LoginHistory {
+  id: number;
+  user?: (number | null) | User;
+  at: string;
+  ip?: string | null;
+  userAgent?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1700,7 +1858,15 @@ export interface PayloadJob {
         executedAt: string;
         completedAt: string;
         taskSlug:
-          'inline' | 'deliverStaffEmail' | 'sendConfirmation' | 'deliverCrm' | 'purgeEnquiries' | 'schedulePublish';
+          | 'inline'
+          | 'deliverStaffEmail'
+          | 'sendConfirmation'
+          | 'deliverCrm'
+          | 'purgeEnquiries'
+          | 'leadDigest'
+          | 'unassignedAlert'
+          | 'publishScheduled'
+          | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -1734,7 +1900,18 @@ export interface PayloadJob {
       }[]
     | null;
   taskSlug?:
-    ('inline' | 'deliverStaffEmail' | 'sendConfirmation' | 'deliverCrm' | 'purgeEnquiries' | 'schedulePublish') | null;
+    | (
+        | 'inline'
+        | 'deliverStaffEmail'
+        | 'sendConfirmation'
+        | 'deliverCrm'
+        | 'purgeEnquiries'
+        | 'leadDigest'
+        | 'unassignedAlert'
+        | 'publishScheduled'
+        | 'schedulePublish'
+      )
+    | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1823,6 +2000,26 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'rate-limits';
         value: number | RateLimit;
+      } | null)
+    | ({
+        relationTo: 'email-templates';
+        value: number | EmailTemplate;
+      } | null)
+    | ({
+        relationTo: 'notifications';
+        value: number | Notification;
+      } | null)
+    | ({
+        relationTo: 'saved-views';
+        value: number | SavedView;
+      } | null)
+    | ({
+        relationTo: 'not-found-log';
+        value: number | NotFoundLog;
+      } | null)
+    | ({
+        relationTo: 'login-history';
+        value: number | LoginHistory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1888,6 +2085,7 @@ export interface UsersSelect<T extends boolean = true> {
             };
       };
   lastLoginAt?: T;
+  notifyByEmail?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1917,6 +2115,8 @@ export interface MediaSelect<T extends boolean = true> {
   usageApproved?: T;
   usageApprovedBy?: T;
   confidential?: T;
+  tags?: T;
+  folder?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -2134,6 +2334,8 @@ export interface ProjectsSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2388,6 +2590,8 @@ export interface ServicesSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2621,6 +2825,8 @@ export interface SectorsSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2679,6 +2885,8 @@ export interface TeamMembersSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2708,6 +2916,8 @@ export interface TestimonialsSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2779,6 +2989,8 @@ export interface JournalPostsSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3034,6 +3246,8 @@ export interface PagesSelect<T extends boolean = true> {
         approvedBy?: T;
         publishedBy?: T;
         reviewNotes?: T;
+        publishAt?: T;
+        scheduledBy?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3088,6 +3302,32 @@ export interface EnquiriesSelect<T extends boolean = true> {
   sourcePage?: T;
   utm?: T;
   assignedTo?: T;
+  status?: T;
+  lostReason?: T;
+  priority?: T;
+  followUpAt?: T;
+  estimatedValue?: T;
+  tags?: T;
+  notes?:
+    | T
+    | {
+        author?: T;
+        text?: T;
+        at?: T;
+        id?: T;
+      };
+  activity?:
+    | T
+    | {
+        kind?: T;
+        text?: T;
+        actor?: T;
+        at?: T;
+        id?: T;
+      };
+  related?: T;
+  isTest?: T;
+  unassignedAlertAt?: T;
   deliveryStatus?:
     | T
     | {
@@ -3137,6 +3377,64 @@ export interface AuditLogSelect<T extends boolean = true> {
 export interface RateLimitsSelect<T extends boolean = true> {
   key?: T;
   count?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates_select".
+ */
+export interface EmailTemplatesSelect<T extends boolean = true> {
+  name?: T;
+  subject?: T;
+  body?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "notifications_select".
+ */
+export interface NotificationsSelect<T extends boolean = true> {
+  user?: T;
+  kind?: T;
+  text?: T;
+  link?: T;
+  read?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "saved-views_select".
+ */
+export interface SavedViewsSelect<T extends boolean = true> {
+  user?: T;
+  name?: T;
+  query?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "not-found-log_select".
+ */
+export interface NotFoundLogSelect<T extends boolean = true> {
+  path?: T;
+  count?: T;
+  lastSeenAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "login-history_select".
+ */
+export interface LoginHistorySelect<T extends boolean = true> {
+  user?: T;
+  at?: T;
+  ip?: T;
+  userAgent?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3224,6 +3522,18 @@ export interface SiteSetting {
   tagline?: string | null;
   ctaLabel?: string | null;
   ctaLink?: string | null;
+  /**
+   * Announcement or maintenance banner shown above the site header
+   */
+  banner?: {
+    enabled?: boolean | null;
+    tone?: ('info' | 'maintenance') | null;
+    message?: string | null;
+  };
+  /**
+   * Hero image on the admin sign-in page
+   */
+  adminLoginImage?: (number | null) | Media;
   /**
    * Closing call-to-action band used at the end of case studies
    */
@@ -3680,6 +3990,10 @@ export interface Integration {
     booking?: boolean | null;
   };
   /**
+   * Date of the last backup restore drill
+   */
+  lastRestoreDrill?: string | null;
+  /**
    * Names of Docker secrets only. Values never live in the database.
    */
   secretNames?:
@@ -3703,6 +4017,14 @@ export interface SiteSettingsSelect<T extends boolean = true> {
   tagline?: T;
   ctaLabel?: T;
   ctaLink?: T;
+  banner?:
+    | T
+    | {
+        enabled?: T;
+        tone?: T;
+        message?: T;
+      };
+  adminLoginImage?: T;
   closingCta?:
     | T
     | {
@@ -4080,6 +4402,7 @@ export interface IntegrationsSelect<T extends boolean = true> {
         umami?: T;
         booking?: T;
       };
+  lastRestoreDrill?: T;
   secretNames?:
     | T
     | {
@@ -4144,6 +4467,36 @@ export interface TaskPurgeEnquiries {
   input?: unknown;
   output: {
     purged?: number | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskLeadDigest".
+ */
+export interface TaskLeadDigest {
+  input?: unknown;
+  output: {
+    sent?: number | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskUnassignedAlert".
+ */
+export interface TaskUnassignedAlert {
+  input?: unknown;
+  output: {
+    alerted?: number | null;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskPublishScheduled".
+ */
+export interface TaskPublishScheduled {
+  input?: unknown;
+  output: {
+    published?: number | null;
   };
 }
 /**

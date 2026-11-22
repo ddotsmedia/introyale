@@ -9,7 +9,18 @@ import { Media } from './collections/Media'
 import { Sectors, PropertyTypes, Services, Projects, Faqs, Pages } from './collections/content'
 import { TeamMembers, Testimonials, Clients, Awards } from './collections/people'
 import { JournalPosts, JournalCategories } from './collections/journal'
-import { Facts, Enquiries, Redirects, AuditLog, RateLimits } from './collections/system'
+import {
+  Facts,
+  Enquiries,
+  Redirects,
+  AuditLog,
+  RateLimits,
+  EmailTemplates,
+  Notifications,
+  SavedViews,
+  NotFoundLog,
+  LoginHistory,
+} from './collections/system'
 import { jobTasks } from './jobs/tasks'
 import { globals } from './globals'
 import { readSecret } from './lib/secrets'
@@ -17,12 +28,76 @@ import { migrations } from './migrations'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Sidebar groups: Leads, Content, Projects, Media, Site, System (admin v2). Custom views are linked above these by NavLinks.
+const GROUPS: Record<string, string> = {
+  enquiries: 'Leads',
+  'email-templates': 'Leads',
+  pages: 'Content',
+  sectors: 'Content',
+  services: 'Content',
+  'property-types': 'Content',
+  faqs: 'Content',
+  'journal-posts': 'Content',
+  'journal-categories': 'Content',
+  'team-members': 'Content',
+  testimonials: 'Content',
+  clients: 'Content',
+  awards: 'Content',
+  projects: 'Projects',
+  media: 'Media',
+  facts: 'Site',
+  redirects: 'Site',
+  'not-found-log': 'Site',
+  users: 'System',
+  'audit-log': 'System',
+  'login-history': 'System',
+}
+const grouped = <T extends { slug: string; admin?: Record<string, unknown> }>(list: T[]): T[] =>
+  list.map((c) => ({ ...c, admin: { ...c.admin, group: GROUPS[c.slug] ?? c.admin?.group } }))
+
 export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
+    meta: {
+      titleSuffix: ' | Introyale Studio',
+      icons: [
+        {
+          rel: 'icon',
+          url: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%226%22 fill=%22%231f1d1a%22/%3E%3Ctext x=%2216%22 y=%2223%22 font-size=%2220%22 text-anchor=%22middle%22 fill=%22%23c9a37a%22 font-family=%22Georgia%22%3EI%3C/text%3E%3C/svg%3E',
+        },
+      ],
+    },
+    components: {
+      graphics: {
+        Logo: '/admin/components/Branding#Logo',
+        Icon: '/admin/components/Branding#Icon',
+      },
+      beforeLogin: ['/admin/components/Branding#BeforeLogin'],
+      beforeNavLinks: ['/admin/components/Branding#NavLinks'],
+      actions: ['/admin/components/Branding#Bell'],
+      views: {
+        dashboard: { Component: '/admin/views/Dashboard#Dashboard' },
+        leadsBoard: { Component: '/admin/views/LeadsBoard#LeadsBoard', path: '/leads-board' },
+        leadsTable: { Component: '/admin/views/LeadsTable#LeadsTable', path: '/leads' },
+        leadDetail: { Component: '/admin/views/LeadDetail#LeadDetail', path: '/lead' },
+        workflow: { Component: '/admin/views/Workflow#Workflow', path: '/workflow' },
+        contentHealth: {
+          Component: '/admin/views/ContentHealth#ContentHealth',
+          path: '/content-health',
+        },
+        mediaLibrary: {
+          Component: '/admin/views/MediaLibrary#MediaLibrary',
+          path: '/media-library',
+        },
+        siteTools: { Component: '/admin/views/SiteTools#SiteTools', path: '/site-tools' },
+        system: { Component: '/admin/views/System#System', path: '/system' },
+        security: { Component: '/admin/views/Security#Security', path: '/security' },
+        audit: { Component: '/admin/views/Audit#Audit', path: '/audit' },
+      },
+    },
   },
-  collections: [
+  collections: grouped([
     Users,
     Media,
     Projects,
@@ -42,9 +117,14 @@ export default buildConfig({
     Redirects,
     AuditLog,
     RateLimits,
-  ],
+    EmailTemplates,
+    Notifications,
+    SavedViews,
+    NotFoundLog,
+    LoginHistory,
+  ]),
   jobs: { tasks: jobTasks },
-  globals,
+  globals: grouped(globals),
   editor: lexicalEditor(),
   secret: readSecret('PAYLOAD_SECRET'),
   localization: {

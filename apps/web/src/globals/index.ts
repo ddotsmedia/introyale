@@ -25,6 +25,27 @@ export const SiteSettings: GlobalConfig = {
     { name: 'ctaLabel', type: 'text', localized: true },
     { name: 'ctaLink', type: 'text' },
     {
+      name: 'banner',
+      type: 'group',
+      admin: { description: 'Announcement or maintenance banner shown above the site header' },
+      fields: [
+        { name: 'enabled', type: 'checkbox', defaultValue: false },
+        {
+          name: 'tone',
+          type: 'select',
+          defaultValue: 'info',
+          options: ['info', 'maintenance'].map((v) => ({ label: v, value: v })),
+        },
+        { name: 'message', type: 'text', localized: true },
+      ],
+    },
+    {
+      name: 'adminLoginImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: { description: 'Hero image on the admin sign-in page' },
+    },
+    {
       name: 'closingCta',
       type: 'group',
       admin: { description: 'Closing call-to-action band used at the end of case studies' },
@@ -202,6 +223,11 @@ export const Integrations: GlobalConfig = {
         { name: 'umami', type: 'checkbox', defaultValue: true },
         { name: 'booking', type: 'checkbox', defaultValue: false },
       ],
+    },
+    {
+      name: 'lastRestoreDrill',
+      type: 'date',
+      admin: { description: 'Date of the last backup restore drill' },
     },
     {
       name: 'secretNames',

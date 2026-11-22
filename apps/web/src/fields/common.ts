@@ -26,6 +26,15 @@ export const workflowField: Field = {
     { name: 'approvedBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
     { name: 'publishedBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
     { name: 'reviewNotes', type: 'textarea' },
+    {
+      name: 'publishAt',
+      type: 'date',
+      admin: {
+        description:
+          'Scheduled publication (approved items only; the worker publishes at this time)',
+      },
+    },
+    { name: 'scheduledBy', type: 'relationship', relationTo: 'users', admin: { readOnly: true } },
   ],
 }
 

@@ -21,6 +21,22 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { Icon as Icon_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { Logo as Logo_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { Bell as Bell_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { BeforeLogin as BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { NavLinks as NavLinks_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { Dashboard as Dashboard_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
+import { LeadsBoard as LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02 } from '../../../admin/views/LeadsBoard'
+import { LeadsTable as LeadsTable_c8f9c81cc0765d2b5628bba76211762a } from '../../../admin/views/LeadsTable'
+import { LeadDetail as LeadDetail_1a06c8bb0dcb0ed65d10b949d4606c3d } from '../../../admin/views/LeadDetail'
+import { Workflow as Workflow_1528ff110dea53b8c12f104ef9a668f3 } from '../../../admin/views/Workflow'
+import { ContentHealth as ContentHealth_e7686ba5d69317a8ede58fc042edba69 } from '../../../admin/views/ContentHealth'
+import { MediaLibrary as MediaLibrary_5a8cf7e4f05fdf472ee03ff40f0ed454 } from '../../../admin/views/MediaLibrary'
+import { SiteTools as SiteTools_71f70f91bf174961be0cec8629e3e668 } from '../../../admin/views/SiteTools'
+import { System as System_e525cb802952609112d17bfdd7aa7fbc } from '../../../admin/views/System'
+import { Security as Security_5330e7735f8017320f20f534d402e011 } from '../../../admin/views/Security'
+import { Audit as Audit_0c62faf2a28a198cc91d0891793e5ec9 } from '../../../admin/views/Audit'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -48,5 +64,21 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/admin/components/Branding#Icon": Icon_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/Branding#Logo": Logo_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/Branding#Bell": Bell_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/Branding#BeforeLogin": BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/Branding#NavLinks": NavLinks_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/views/Dashboard#Dashboard": Dashboard_c7d7fc284b3b0552574b75a0421f4260,
+  "/admin/views/LeadsBoard#LeadsBoard": LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02,
+  "/admin/views/LeadsTable#LeadsTable": LeadsTable_c8f9c81cc0765d2b5628bba76211762a,
+  "/admin/views/LeadDetail#LeadDetail": LeadDetail_1a06c8bb0dcb0ed65d10b949d4606c3d,
+  "/admin/views/Workflow#Workflow": Workflow_1528ff110dea53b8c12f104ef9a668f3,
+  "/admin/views/ContentHealth#ContentHealth": ContentHealth_e7686ba5d69317a8ede58fc042edba69,
+  "/admin/views/MediaLibrary#MediaLibrary": MediaLibrary_5a8cf7e4f05fdf472ee03ff40f0ed454,
+  "/admin/views/SiteTools#SiteTools": SiteTools_71f70f91bf174961be0cec8629e3e668,
+  "/admin/views/System#System": System_e525cb802952609112d17bfdd7aa7fbc,
+  "/admin/views/Security#Security": Security_5330e7735f8017320f20f534d402e011,
+  "/admin/views/Audit#Audit": Audit_0c62faf2a28a198cc91d0891793e5ec9,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

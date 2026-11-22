@@ -1,0 +1,396 @@
+/* Introyale Studio admin theme (ink / bronze / sand). Loaded only by the (payload) layout. */
+:root {
+  --ir-ink: #1f1d1a;
+  --ir-bronze: #7a5a36;
+  --ir-bronze-light: #c9a37a;
+  --ir-sand: #efe8dd;
+  --ir-ivory: #fbf9f6;
+  --ir-ok: #2f6b4f;
+  --ir-warn: #8a5a00;
+  --ir-bad: #a23b2a;
+  --ir-card: #ffffff;
+  --ir-line: #e3dccf;
+  --ir-muted: #5f5950;
+}
+html[data-theme='dark'] {
+  --ir-card: #25221e;
+  --ir-line: #3a352e;
+  --ir-muted: #b4ab9d;
+  --ir-bronze: #d1a877;
+  --ir-ok: #6fc29a;
+  --ir-warn: #e0b04a;
+  --ir-bad: #f08d7b;
+  --ir-sand: #2b2721;
+  --ir-ivory: #16130f;
+  --ir-ink: #f2ece2;
+}
+/* Payload variables: brand the buttons, links and focus ring */
+html[data-theme='light'] {
+  --theme-bg: var(--ir-ivory);
+  --theme-elevation-0: #fff;
+  --theme-elevation-50: #f6f1e8;
+  --theme-elevation-100: #efe8dd;
+  --theme-elevation-800: var(--ir-bronze);
+  --theme-elevation-1000: var(--ir-ink);
+  --theme-success-500: var(--ir-ok);
+  --theme-error-500: var(--ir-bad);
+}
+html[data-theme='dark'] {
+  --theme-bg: #16130f;
+  --theme-elevation-0: #1c1915;
+  --theme-elevation-50: #25221e;
+  --theme-elevation-100: #2b2721;
+  --theme-elevation-800: #d1a877;
+  --theme-elevation-1000: #f2ece2;
+}
+.template-default .nav a:focus-visible,
+.ir a:focus-visible,
+.ir button:focus-visible,
+.ir input:focus-visible,
+.ir select:focus-visible,
+.ir textarea:focus-visible {
+  outline: 3px solid var(--ir-bronze);
+  outline-offset: 2px;
+}
+
+.ir {
+  color: var(--theme-text, var(--ir-ink));
+  font-family: Inter, system-ui, sans-serif;
+  padding-block: 8px 48px;
+}
+.ir h1 {
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 8px 0 4px;
+}
+.ir h2 {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ir-muted);
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+.ir p.sub {
+  color: var(--ir-muted);
+  margin: 0 0 24px;
+}
+.ir a {
+  color: var(--ir-bronze);
+}
+.ir-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-block-end: 24px;
+}
+.ir-cols {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  margin-block-end: 24px;
+}
+.ir-card {
+  background: var(--ir-card);
+  border: 1px solid var(--ir-line);
+  border-radius: 10px;
+  padding: 16px 18px;
+  min-width: 0;
+}
+.ir-kpi b {
+  display: block;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.ir-kpi span {
+  color: var(--ir-muted);
+  font-size: 0.85rem;
+}
+.ir-kpi small {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+}
+.ir-up {
+  color: var(--ir-ok);
+}
+.ir-down {
+  color: var(--ir-bad);
+}
+.ir-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.ir-table th {
+  text-align: start;
+  font-weight: 600;
+  color: var(--ir-muted);
+  padding: 6px 8px;
+  border-block-end: 1px solid var(--ir-line);
+}
+.ir-table td {
+  padding: 8px;
+  border-block-end: 1px solid var(--ir-line);
+  vertical-align: top;
+}
+.ir-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--ir-sand);
+  color: var(--ir-ink);
+  border: 1px solid var(--ir-line);
+  white-space: nowrap;
+}
+.ir-badge.ok {
+  color: var(--ir-ok);
+  border-color: var(--ir-ok);
+}
+.ir-badge.warn {
+  color: var(--ir-warn);
+  border-color: var(--ir-warn);
+}
+.ir-badge.bad {
+  color: var(--ir-bad);
+  border-color: var(--ir-bad);
+}
+.ir-btn {
+  display: inline-block;
+  background: var(--ir-bronze);
+  color: #fff !important;
+  border: 0;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+html[data-theme='dark'] .ir-btn {
+  color: #16130f !important;
+}
+.ir-btn.ghost {
+  background: transparent;
+  color: var(--ir-bronze) !important;
+  border: 1px solid var(--ir-bronze);
+}
+.ir-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block-end: 24px;
+}
+.ir-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.ir-list li {
+  padding: 8px 0;
+  border-block-end: 1px solid var(--ir-line);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.ir-muted {
+  color: var(--ir-muted);
+}
+.ir-svg text {
+  fill: var(--ir-muted);
+  font-size: 11px;
+}
+.ir-svg .bar {
+  fill: var(--ir-bronze);
+}
+.ir-svg .line {
+  stroke: var(--ir-bronze);
+  fill: none;
+  stroke-width: 2;
+}
+.ir-svg .area {
+  fill: var(--ir-bronze);
+  opacity: 0.12;
+}
+.ir-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  margin-block-end: 16px;
+}
+.ir-filters label {
+  display: grid;
+  gap: 2px;
+  font-size: 0.8rem;
+  color: var(--ir-muted);
+}
+.ir input[type='text'],
+.ir input[type='search'],
+.ir input[type='date'],
+.ir input[type='number'],
+.ir input[type='email'],
+.ir select,
+.ir textarea {
+  background: var(--ir-card);
+  color: inherit;
+  border: 1px solid var(--ir-line);
+  border-radius: 6px;
+  padding: 7px 9px;
+  font: inherit;
+}
+.ir textarea {
+  width: 100%;
+  min-height: 90px;
+}
+
+/* Kanban */
+.ir-board {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(170px, 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  padding-block-end: 12px;
+}
+.ir-col {
+  background: var(--ir-sand);
+  border-radius: 10px;
+  padding: 10px;
+  min-height: 220px;
+}
+.ir-col.over {
+  outline: 2px dashed var(--ir-bronze);
+}
+.ir-col h3 {
+  font-size: 0.85rem;
+  margin: 0 0 8px;
+  display: flex;
+  justify-content: space-between;
+}
+.ir-lead {
+  background: var(--ir-card);
+  border: 1px solid var(--ir-line);
+  border-radius: 8px;
+  padding: 10px;
+  margin-block-end: 8px;
+  cursor: grab;
+}
+.ir-lead[aria-grabbed='true'] {
+  opacity: 0.5;
+}
+.ir-lead a {
+  font-weight: 600;
+}
+.ir-lead select {
+  width: 100%;
+  margin-top: 6px;
+  font-size: 0.8rem;
+}
+.ir-score {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--ir-line);
+  overflow: hidden;
+}
+.ir-score i {
+  display: block;
+  height: 100%;
+  background: var(--ir-ok);
+}
+.ir-timeline {
+  border-inline-start: 2px solid var(--ir-line);
+  margin: 0;
+  padding: 0 0 0 14px;
+  list-style: none;
+}
+.ir-timeline li {
+  margin-block-end: 12px;
+}
+.ir-bell > summary {
+  list-style: none;
+  cursor: pointer;
+  position: relative;
+  padding: 6px 10px;
+  border: 1px solid var(--ir-line);
+  border-radius: 6px;
+}
+.ir-bell > summary::-webkit-details-marker {
+  display: none;
+}
+.ir-bell[open] > div {
+  position: absolute;
+  inset-inline-end: 0;
+  z-index: 30;
+  width: 320px;
+  max-height: 70vh;
+  overflow: auto;
+  background: var(--ir-card);
+  border: 1px solid var(--ir-line);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+.ir-bell {
+  position: relative;
+}
+.ir-count {
+  background: var(--ir-bad);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  padding: 1px 6px;
+  margin-inline-start: 6px;
+}
+
+/* Login */
+.ir-login {
+  display: grid;
+  gap: 16px;
+  margin-block-end: 24px;
+  text-align: center;
+}
+.ir-login img.hero {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.ir-login img.logo {
+  max-width: 180px;
+  margin-inline: auto;
+}
+.ir-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.localizer-button__label {
+  color: var(--ir-ink) !important;
+}
+.ir-col {
+  max-height: 75vh;
+  overflow-y: auto;
+}
+.ir-svg text {
+  font-size: 13px;
+}
+.ir > .ir-card {
+  margin-block-end: 16px;
+}
+.ir form label {
+  display: grid;
+  gap: 2px;
+  margin-block-end: 8px;
+  font-size: 0.85rem;
+}
+.ir form.ir-filters label {
+  margin-block-end: 0;
+}

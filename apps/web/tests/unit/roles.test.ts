@@ -14,6 +14,14 @@ const EXPECTED: Record<Action, Role[]> = {
   'users.manage': ['administrator'],
   'redirects.manage': ['administrator', 'marketing_reviewer'],
   'globals.manage': ['administrator'],
+  'system.view': ['administrator'],
+  'content.health': [
+    'administrator',
+    'content_editor',
+    'project_editor',
+    'marketing_reviewer',
+    'publisher',
+  ],
   comment: ['administrator', 'content_editor', 'project_editor', 'marketing_reviewer', 'publisher'],
 }
 

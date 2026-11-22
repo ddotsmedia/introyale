@@ -14,6 +14,23 @@ export const Users: CollectionConfig = {
     tokenExpiration: 2 * 60 * 60,
     cookies: { secure: isProd, sameSite: 'Lax' },
   },
+  hooks: {
+    afterLogin: [
+      async ({ req, user }) => {
+        await req.payload.create({
+          collection: 'login-history',
+          overrideAccess: true,
+          req, // same transaction as the login, or the insert waits on the user row lock
+          data: {
+            user: (user as { id: number }).id,
+            at: new Date().toISOString(),
+            ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+            userAgent: (req.headers.get('user-agent') ?? '').slice(0, 200),
+          },
+        })
+      },
+    ],
+  },
   access: {
     create: allow('users.manage'),
     // Staff see the full list only with MFA satisfied; everyone else sees only their own record.
@@ -75,5 +92,11 @@ export const Users: CollectionConfig = {
       ],
     },
     { name: 'lastLoginAt', type: 'date', admin: { readOnly: true } },
+    {
+      name: 'notifyByEmail',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { description: 'Also email me bell notifications' },
+    },
   ],
 }
