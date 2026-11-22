@@ -48,6 +48,16 @@ export const seoField: Field = {
     { name: 'ogImage', type: 'upload', relationTo: 'media' },
     { name: 'canonicalOverride', type: 'text' },
     { name: 'noindex', type: 'checkbox', defaultValue: false },
+    {
+      name: 'focusKeyword',
+      type: 'text',
+      admin: { description: 'Checked against the title, description and URL in the panel above' },
+    },
+    {
+      name: 'panel',
+      type: 'ui',
+      admin: { components: { Field: '/admin/components/SeoPanel#SeoPanel' } },
+    },
   ],
 }
 

@@ -182,7 +182,9 @@ export async function runScheduledPublish(
           collection: c,
           id: d.id,
           user,
-          overrideAccess: false,
+          // The worker has no MFA cookie, so collection access cannot pass here. Authorisation was checked when the user
+          // scheduled it (with MFA); the workflow and publish-gate hooks still run with this user as the actor.
+          overrideAccess: true,
           data: { workflow: { status: 'published', publishAt: null } } as never,
         })
         await writeAudit(payload, {
@@ -194,7 +196,13 @@ export async function runScheduledPublish(
           toStatus: 'published',
         })
         published++
-      } catch {
+      } catch (err) {
+        payload.logger.error({
+          msg: 'scheduled publish failed',
+          collection: c,
+          id: d.id,
+          err: err instanceof Error ? err.message : 'unknown',
+        })
         await notify(
           payload,
           by,

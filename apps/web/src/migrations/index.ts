@@ -7,6 +7,7 @@ import * as migration_20261121_193207_m10_7_blocks from './20261121_193207_m10_7
 import * as migration_20261121_194543_m10_7_closing_cta from './20261121_194543_m10_7_closing_cta'
 import * as migration_20261121_201245_m10_7_consent from './20261121_201245_m10_7_consent'
 import * as migration_20261122_005545_m11_admin_v2 from './20261122_005545_m11_admin_v2'
+import * as migration_20261122_013400_m11_seo_keyword from './20261122_013400_m11_seo_keyword'
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20261122_005545_m11_admin_v2.up,
     down: migration_20261122_005545_m11_admin_v2.down,
     name: '20261122_005545_m11_admin_v2',
+  },
+  {
+    up: migration_20261122_013400_m11_seo_keyword.up,
+    down: migration_20261122_013400_m11_seo_keyword.down,
+    name: '20261122_013400_m11_seo_keyword',
   },
 ]

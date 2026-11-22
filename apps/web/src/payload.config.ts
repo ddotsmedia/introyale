@@ -24,6 +24,9 @@ import {
 import { jobTasks } from './jobs/tasks'
 import { globals } from './globals'
 import { readSecret } from './lib/secrets'
+import { signPreview } from './lib/previewToken'
+import { ar } from '@payloadcms/translations/languages/ar'
+import { en } from '@payloadcms/translations/languages/en'
 import { migrations } from './migrations'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -68,6 +71,22 @@ export default buildConfig({
         },
       ],
     },
+    livePreview: {
+      collections: ['pages', 'projects'],
+      globals: ['home-page'],
+      // Signed, short-lived link to the draft preview route; the page refreshes when the document is saved.
+      url: ({ data, collectionConfig }) => {
+        const c =
+          collectionConfig?.slug === 'projects'
+            ? 'projects'
+            : collectionConfig
+              ? 'pages'
+              : 'home-page'
+        const id = typeof data.id === 'number' ? data.id : 0
+        return `/preview/${signPreview({ c, id, exp: Date.now() + 24 * 3_600_000 }, readSecret('PAYLOAD_SECRET'))}`
+      },
+    },
+    avatar: { Component: '/admin/components/Avatar#Avatar' },
     components: {
       graphics: {
         Logo: '/admin/components/Branding#Logo',
@@ -123,6 +142,7 @@ export default buildConfig({
     NotFoundLog,
     LoginHistory,
   ]),
+  i18n: { supportedLanguages: { en, ar } },
   jobs: { tasks: jobTasks },
   globals: grouped(globals),
   editor: lexicalEditor(),

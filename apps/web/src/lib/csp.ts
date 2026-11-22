@@ -3,7 +3,7 @@
 
 export function buildCsp(
   nonce: string,
-  opts: { dev: boolean; umamiOrigin?: string | null },
+  opts: { dev: boolean; umamiOrigin?: string | null; frameSelf?: boolean },
 ): string {
   const scriptSrc = [`'self'`, `'nonce-${nonce}'`, `'strict-dynamic'`]
   if (opts.dev) scriptSrc.push(`'unsafe-eval'`) // Next dev runtime only
@@ -22,7 +22,8 @@ export function buildCsp(
     `object-src 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,
-    `frame-ancestors 'none'`,
+    // Only /preview pages may be framed, and only by this site (admin live preview).
+    `frame-ancestors ${opts.frameSelf ? "'self'" : "'none'"}`,
   ].join('; ')
 }
 

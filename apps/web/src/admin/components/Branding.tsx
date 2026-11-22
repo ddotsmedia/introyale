@@ -36,20 +36,16 @@ export async function Logo() {
   )
 }
 
-export function Icon() {
-  // Compact mark for the collapsed header; the full logo is shown by Logo and on the sign-in page.
-  return (
-    <span
-      aria-hidden="true"
-      style={{
-        fontFamily: 'Fraunces, Georgia, serif',
-        fontSize: 24,
-        fontWeight: 600,
-        color: 'var(--ir-bronze)',
-      }}
-    >
-      I
-    </span>
+export async function Icon() {
+  const b = await branding()
+  return b.logo ? (
+    <img
+      src={b.logo}
+      alt="Introyale"
+      style={{ height: 30, width: 120, objectFit: 'contain', display: 'block' }}
+    />
+  ) : (
+    <strong>I</strong>
   )
 }
 

@@ -9,7 +9,7 @@ date: '21 November 2026 · v1.0 · for approval before production code'
 - **Purpose:** the required first response before any production code. It reconciles the Development Brief (authority for architecture, performance, security, accessibility, CMS governance, SEO/redirects, testing, migration, deployment and launch criteria) with the Website Blueprint (authority for vision, sitemap, page experience, visual design, components and roadmap).
 - **Hosting:** Hostinger VPS only. The full production system runs on Docker and Docker Compose. No Vercel, Netlify, shared hosting or other platform.
 - **Build:** the whole site is built through Claude Code. No external agency is assumed.
-- **Live site:** introyale.com is not modified until the replacement is approved and the cutover is authorised.
+- **Old site:** introyale.com is never modified. The new website launches on introyale.online.
 - **Facts:** nothing is invented. Every business fact is marked **[CONFIRM]** until it is verified in the Facts Register.
 - **Managed services** (Cloudflare, R2, SaaS email, CRM, analytics, booking): these are optional adapters. The site runs fully without any of them.
 
@@ -85,7 +85,7 @@ date: '21 November 2026 · v1.0 · for approval before production code'
 
 |               | Development                                                            | Staging                                                     | Production                                           |
 | ------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------- |
-| Where         | Local Windows machine, Docker Desktop                                  | Hostinger VPS, `staging.introyale.com`                      | Hostinger VPS, `introyale.com`                       |
+| Where         | Local Windows machine, Docker Desktop                                  | Hostinger VPS, `staging.introyale.online`                   | Hostinger VPS, `introyale.online`                    |
 | Compose files | `compose.yaml` + `compose.dev.yaml` (hot reload, Mailpit, seeded data) | `compose.yaml` + `compose.staging.yaml`                     | `compose.yaml` + `compose.prod.yaml`                 |
 | Access        | localhost                                                              | HTTP basic auth + `X-Robots-Tag: noindex` + robots disallow | Public; `/admin` rate-limited, optional IP allowlist |
 | Email         | Mailpit (captures all mail)                                            | SMTP to test inboxes only                                   | Production SMTP                                      |

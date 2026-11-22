@@ -12,7 +12,12 @@ import { getRedirectMap } from './lib/redirects'
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const production = process.env.NODE_ENV === 'production'
   const nonce = newNonce()
-  const csp = buildCsp(nonce, { dev: !production, umamiOrigin: process.env.UMAMI_ORIGIN ?? null })
+  const framed = request.nextUrl.pathname.startsWith('/preview/')
+  const csp = buildCsp(nonce, {
+    dev: !production,
+    umamiOrigin: process.env.UMAMI_ORIGIN ?? null,
+    frameSelf: framed,
+  })
 
   // Next reads the nonce from the request's CSP header and applies it to its own inline scripts.
   const requestHeaders = new Headers(request.headers)
@@ -34,6 +39,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   for (const [name, value] of Object.entries(staticSecurityHeaders(production))) {
     response.headers.set(name, value)
   }
+  if (framed) response.headers.set('X-Frame-Options', 'SAMEORIGIN')
   if (process.env.ROBOTS_NOINDEX === 'true') {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow')
   }

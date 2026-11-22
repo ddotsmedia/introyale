@@ -137,7 +137,11 @@ export async function transitionDoc(fd: FormData): Promise<void> {
   if (!chk.ok) throw new Error(chk.reason)
   if (to === 'draft' && from === 'in_review' && !comment.trim())
     throw new Error('Add a comment when requesting changes')
-  const schedule = to === 'published' && publishAt && new Date(publishAt).getTime() > Date.now()
+  // The form sends Dubai local time (datetime-local); a bare date means 09:00.
+  const at = publishAt
+    ? new Date(publishAt.length <= 10 ? `${publishAt}T09:00:00+04:00` : `${publishAt}:00+04:00`)
+    : null
+  const schedule = to === 'published' && !!at && at.getTime() > Date.now()
   await payload.update({
     collection: collection as 'pages',
     id,
@@ -146,7 +150,7 @@ export async function transitionDoc(fd: FormData): Promise<void> {
     data: schedule
       ? {
           workflow: {
-            publishAt: new Date(publishAt).toISOString(),
+            publishAt: at.toISOString(),
             scheduledBy: user.id,
             ...(comment ? { reviewNotes: comment } : {}),
           },

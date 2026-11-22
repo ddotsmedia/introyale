@@ -19,6 +19,7 @@
     "build:worker": "esbuild src/worker.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/worker.js",
     "build:migrate": "esbuild src/migrate.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/migrate.js",
     "build:seed-test": "esbuild scripts/seed-test-leads.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-test-leads.js",
+    "build:jobs-trigger": "esbuild scripts/jobs-trigger.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/jobs-trigger.js",
     "build:seed-live": "esbuild scripts/seed-live-content.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-live-content.js"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "@payloadcms/db-postgres": "3.93.0",
     "@payloadcms/next": "3.93.0",
     "@payloadcms/richtext-lexical": "3.93.0",
+    "@payloadcms/translations": "3.93.0",
     "@payloadcms/ui": "3.93.0",
     "@sentry/nextjs": "11.11.0",
     "altcha": "3.5.0",

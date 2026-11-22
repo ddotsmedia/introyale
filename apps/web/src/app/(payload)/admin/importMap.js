@@ -1,3 +1,4 @@
+import { SeoPanel as SeoPanel_1a7f7b6be93672b73cff83d36bcb4348 } from '../../../admin/components/SeoPanel'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -21,6 +22,7 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { Avatar as Avatar_7755d814caa876cc147a54fb2cf67784 } from '../../../admin/components/Avatar'
 import { Icon as Icon_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { Logo as Logo_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { Bell as Bell_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
@@ -41,6 +43,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/admin/components/SeoPanel#SeoPanel": SeoPanel_1a7f7b6be93672b73cff83d36bcb4348,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#LexicalDiffComponent": LexicalDiffComponent_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -64,6 +67,7 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/admin/components/Avatar#Avatar": Avatar_7755d814caa876cc147a54fb2cf67784,
   "/admin/components/Branding#Icon": Icon_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#Logo": Logo_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#Bell": Bell_4a6b8348bce4701645eb9bbaaeda305b,

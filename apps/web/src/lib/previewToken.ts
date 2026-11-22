@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto'
 
 // Shareable draft preview links: stateless HMAC tokens that expire (admin v2).
-export type PreviewClaim = { c: 'pages' | 'projects'; id: number; exp: number }
+export type PreviewClaim = { c: 'pages' | 'projects' | 'home-page'; id: number; exp: number }
 
 const b64 = (b: Buffer) => b.toString('base64url')
 
@@ -22,7 +22,8 @@ export function verifyPreview(
   if (got.length !== want.length || !timingSafeEqual(got, want)) return null
   try {
     const claim = JSON.parse(Buffer.from(body, 'base64url').toString()) as PreviewClaim
-    if (!['pages', 'projects'].includes(claim.c) || typeof claim.id !== 'number') return null
+    if (!['pages', 'projects', 'home-page'].includes(claim.c) || typeof claim.id !== 'number')
+      return null
     return claim.exp > now ? claim : null
   } catch {
     return null

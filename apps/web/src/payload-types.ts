@@ -453,6 +453,10 @@ export interface Project {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -744,6 +748,10 @@ export interface Sector {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -1072,6 +1080,10 @@ export interface Service {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -1179,6 +1191,10 @@ export interface TeamMember {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -1254,6 +1270,10 @@ export interface JournalPost {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -1556,6 +1576,10 @@ export interface Page {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   workflow: {
     status: 'draft' | 'in_review' | 'approved' | 'published';
@@ -2324,6 +2348,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -2580,6 +2605,7 @@ export interface ServicesSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -2815,6 +2841,7 @@ export interface SectorsSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -2875,6 +2902,7 @@ export interface TeamMembersSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -2979,6 +3007,7 @@ export interface JournalPostsSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -3236,6 +3265,7 @@ export interface PagesSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   workflow?:
     | T
@@ -3814,6 +3844,10 @@ export interface HomePage {
     ogImage?: (number | null) | Media;
     canonicalOverride?: string | null;
     noindex?: boolean | null;
+    /**
+     * Checked against the title, description and URL in the panel above
+     */
+    focusKeyword?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -4250,6 +4284,7 @@ export interface HomePageSelect<T extends boolean = true> {
         ogImage?: T;
         canonicalOverride?: T;
         noindex?: T;
+        focusKeyword?: T;
       };
   updatedAt?: T;
   createdAt?: T;

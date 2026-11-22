@@ -108,8 +108,8 @@ export async function Workflow(props: AdminViewServerProps) {
                               </label>
                               {s === 'approved' && (
                                 <label style={{ display: 'block', fontSize: '0.8rem' }}>
-                                  Schedule for (optional)
-                                  <input type="date" name="publishAt" />
+                                  Schedule for, Dubai time (optional; then press Publish)
+                                  <input type="datetime-local" name="publishAt" />
                                 </label>
                               )}
                               <div className="ir-actions" style={{ marginTop: 6, marginBottom: 0 }}>
