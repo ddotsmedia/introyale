@@ -116,6 +116,16 @@ date: '21 November 2026 · v1.0 · for approval before production code'
 
 All deploy scripts act only on the `introyale-<env>` Compose project. There are no server-wide commands (no prune, no global restarts). Old Introyale images are removed by explicit tag only, keeping the last 5.
 
+### 2.6.1 Deviations on the shared VPS (Snap Docker), binding for all deploys
+
+The VPS runs the **Snap build of Docker**. Deploys must follow these deviations:
+
+- **Paths:** Snap Docker cannot bind-mount anything under `/opt`. The staging base is `/home/introyale-deploy/introyale/staging` (set with `INTROYALE_BASE=/home/introyale-deploy/introyale`; scripts default to `/opt/introyale` elsewhere). The home directory is mode 711 so Nginx can serve `media/`. Production on this host uses the same pattern unless Docker is replaced.
+- **`no-new-privileges` is dropped for staging** (`security_opt: !reset []` in `compose.staging.yaml`): Snap's AppArmor profile makes every exec fail when it is set. Compensating controls stay: `cap_drop: ALL`, read-only root, non-root user 10001, internal-only DB network. Local and CI keep it on.
+- **Deploy user:** `introyale-deploy` (docker group, no sudo). The repo is private; the VPS clones over SSH with a read-only GitHub deploy key (`~/.ssh/repo_deploy`). Images are private on GHCR; CI pipes the run's `GITHUB_TOKEN` to `docker login` on each deploy and logs out afterwards, so no registry token is stored on the VPS.
+- **First deploy** checks health only (empty site); later deploys run the full smoke test.
+- **CI gates:** the `browser` job (Playwright + axe against a compose stack: db, migrate, web, worker, Mailpit, seeded via `scripts/ci-stack.sh`) must pass before `publish` and `deploy-staging`.
+
 ## 2.7 Reverse proxy, TLS and headers
 
 - **TLS:** Mode A uses host Nginx + certbot (auto-renew timer, verified with `certbot renew --dry-run` in the runbook). Mode B uses Caddy with automatic Let's Encrypt and renewal. HSTS `max-age=63072000; includeSubDomains` (preload after a stability period).

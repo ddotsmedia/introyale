@@ -9,7 +9,8 @@ export default defineConfig({
   fullyParallel: true,
   globalSetup: './apps/web/tests/global-setup.ts',
   reporter: [['list']],
-  use: { baseURL, trace: 'retain-on-failure' },
+  // Reduced motion: scroll-reveal fades otherwise make axe read mid-animation colours (flaky contrast).
+  use: { baseURL, trace: 'retain-on-failure', reducedMotion: 'reduce' },
   projects: [
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },

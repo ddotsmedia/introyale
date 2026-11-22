@@ -200,7 +200,8 @@ function Showcase({ p }: { p: string }) {
 }
 
 export default function ComponentsShowcase() {
-  if (process.env.NODE_ENV === 'production') notFound()
+  // Dev showcase: hidden in every deployed build; visible in the local/CI stack (ENV=local is never deployed).
+  if (process.env.NODE_ENV === 'production' && process.env.ENV !== 'local') notFound()
   return (
     <main id="main">
       <Header brand="Introyale Interiors" nav={nav} />

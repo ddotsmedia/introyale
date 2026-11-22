@@ -49,7 +49,7 @@ test.describe('mobile navigation (M4)', () => {
     const menu = page.getByRole('button', { name: 'Menu' })
     await menu.focus()
     await page.keyboard.press('Enter')
-    const panel = page.getByRole('dialog', { name: 'Site menu' })
+    const panel = page.getByRole('dialog', { name: 'Menu' })
     await expect(panel).toBeVisible()
     await page.keyboard.press('Shift+Tab')
     const insidePanel = await page.evaluate(

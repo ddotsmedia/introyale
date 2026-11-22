@@ -6,6 +6,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
+import sharp from 'sharp'
 import {
   ABOUT,
   BUSINESS_HOURS,
@@ -154,8 +155,15 @@ async function media(file: string, alt: string): Promise<number | string> {
     mediaIds.set(file, existing.id)
     return existing.id
   }
-  const data = fs.readFileSync(path.join(IMPORT_DIR, 'images', file))
   const mimetype = file.endsWith('.png') ? 'image/png' : 'image/jpeg'
+  const src = path.join(IMPORT_DIR, 'images', file)
+  // CI only (ephemeral stack): flat placeholder pixels so the content tree seeds without the crawled photos.
+  const data =
+    process.env.PLACEHOLDER_IMAGES === '1' && !fs.existsSync(src)
+      ? await sharp({ create: { width: 1600, height: 1000, channels: 3, background: '#8a8a8a' } })
+          [file.endsWith('.png') ? 'png' : 'jpeg']()
+          .toBuffer()
+      : fs.readFileSync(src)
   counts.created += 1
   const doc = (await payload.create({
     collection: 'media',
