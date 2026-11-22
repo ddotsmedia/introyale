@@ -1,19 +1,17 @@
-import { mfaEnforced } from './envPolicy'
 import { MFA_COOKIE, readCookie, verifyMfaToken } from './mfa'
-import { requiresMfa, type Role } from './roles'
 import { readSecret } from './secrets'
 
-// Admin pages a signed-in user may open without a verified MFA session (sign-in, MFA enrol/verify, recovery).
+// Admin pages a signed-in user may open without a verified MFA session (sign-in, MFA verify, recovery).
 const OPEN = ['/admin/mfa', '/admin/login', '/admin/logout', '/admin/forgot', '/admin/reset']
 
-/** Reads the (unverified) id and role from the Payload JWT. Only used to route the request; access control stays in Payload. */
-function jwtClaims(token: string | undefined): { id?: string | number; role?: Role } | null {
+/** Reads the (unverified) id and MFA flag from the Payload JWT. Only used to route the request; Payload enforces access. */
+function jwtClaims(token: string | undefined): { id?: string | number; mfaOn?: boolean } | null {
   const mid = token?.split('.')[1]
   if (!mid) return null
   try {
     return JSON.parse(Buffer.from(mid, 'base64url').toString('utf8')) as {
       id?: string | number
-      role?: Role
+      mfaOn?: boolean
     }
   } catch {
     return null
@@ -21,19 +19,14 @@ function jwtClaims(token: string | undefined): { id?: string | number; role?: Ro
 }
 
 /**
- * True when a signed-in user who needs MFA opens an admin page without a verified MFA session: the request is sent to
- * /admin/mfa (enrol or verify) instead of Payload's "Unauthorized". access.admin still denies until MFA is verified.
+ * True when a signed-in user who has enabled two-factor opens an admin page without a verified MFA session: the request
+ * goes to /admin/mfa to enter the code. Users without 2FA are never redirected. access.admin still denies until verified.
  */
-export function needsMfaRedirect(
-  pathname: string,
-  cookieHeader: string | null,
-  env: Record<string, string | undefined> = process.env,
-): boolean {
+export function needsMfaRedirect(pathname: string, cookieHeader: string | null): boolean {
   if (pathname !== '/admin' && !pathname.startsWith('/admin/')) return false
   if (OPEN.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return false
-  if (!mfaEnforced(env)) return false
   const claims = jwtClaims(readCookie(cookieHeader, 'payload-token'))
-  if (!claims?.id || !requiresMfa(claims.role)) return false
+  if (!claims?.id || claims.mfaOn !== true) return false
   return !verifyMfaToken(
     readCookie(cookieHeader, MFA_COOKIE),
     String(claims.id),

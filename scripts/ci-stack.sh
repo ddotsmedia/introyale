@@ -14,7 +14,7 @@ case "${1:?up|down}" in
     printf '%s' "$dbp" > "$T/secrets/db_password.txt"; : > "$T/secrets/sentry_dsn.txt"; : > "$T/secrets/smtp_password.txt"; : > "$T/secrets/backup_sftp_key.txt"
     printf 'postgres://introyale_app:%s@db:5432/introyale' "$dbp" > "$T/secrets/database_url.txt"
     chmod 644 "$T"/secrets/*.txt; chmod 755 "$T/secrets"
-    printf 'WEB_PORT=%s\nMAILPIT_PORT=%s\nSECRETS_DIR=%s/secrets\nMEDIA_DIR=%s/media\nDB_DIR=%s/db\nBACKUP_DIR=%s/backups\nMFA_ENFORCE=true\n' "${CI_WEB_PORT:-3100}" "${CI_MAILPIT_PORT:-8100}" "$T" "$T" "$T" "$T" > "$T/.env"
+    printf 'WEB_PORT=%s\nMAILPIT_PORT=%s\nSECRETS_DIR=%s/secrets\nMEDIA_DIR=%s/media\nDB_DIR=%s/db\nBACKUP_DIR=%s/backups\n' "${CI_WEB_PORT:-3100}" "${CI_MAILPIT_PORT:-8100}" "$T" "$T" "$T" "$T" > "$T/.env"
     docker build -q -f docker/web.Dockerfile -t introyale-web:local .
     dcx up -d --wait web worker db mailpit
     pnpm -C apps/web build:seed-live; pnpm -C apps/web build:seed-test; pnpm -C apps/web build:admin-user

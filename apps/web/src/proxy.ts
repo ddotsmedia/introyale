@@ -7,7 +7,7 @@ import { getRedirectMap } from './lib/redirects'
  * Request-level policy (Next 16 `proxy` convention, Node runtime):
  *  - a per-request CSP nonce, passed to Next so its scripts carry it (SPEC §2.7)
  *  - security headers on every response (HSTS in production)
- *  - admin MFA gate: signed-in administrators/publishers without a verified MFA session go to /admin/mfa
+ *  - admin MFA gate: signed-in users who enabled 2FA but have not entered the code go to /admin/mfa
  *  - legacy and CMS redirects (301/302) and gone pages (410), SPEC §4 and §5.2
  *  - X-Robots-Tag noindex when ROBOTS_NOINDEX=true (staging, SPEC §2.3)
  */
@@ -29,7 +29,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const hit = (await getRedirectMap()).get(request.nextUrl.pathname)
   let response: NextResponse
   if (needsMfaRedirect(request.nextUrl.pathname, request.headers.get('cookie'))) {
-    // Signed in but MFA not verified yet: go to enrol/verify, not Payload's Unauthorized page.
+    // 2FA enabled but not verified in this session: enter the code, not Payload's Unauthorized page.
     response = NextResponse.redirect(new URL('/admin/mfa', request.url), 307)
   } else if (hit?.type === 410) {
     response = new NextResponse('Gone', { status: 410, headers: { 'content-type': 'text/plain' } })

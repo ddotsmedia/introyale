@@ -1,40 +1,72 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 import { generateSync } from 'otplib'
 
-// Regression (production launch): a fresh administrator with MFA enforced must land on MFA enrolment, not on
-// "Unauthorized". Flow: sign in -> enrol -> confirm with a TOTP computed from the shown key -> verify -> dashboard.
-// Needs a stack with MFA_ENFORCE=true and a fresh administrator (scripts/ci-stack.sh creates one from E2E_ADMIN_PW).
+// Two-factor authentication is OPTIONAL for every role (D10). One fresh administrator walks through:
+//  1. sign in -> dashboard directly (no MFA screen)
+//  2. opt in on the account page (QR/key, confirm a code, recovery codes)
+//  3. sign in again -> the code is now required -> dashboard
+//  4. opt out (current password + code) -> sign in -> dashboard directly again
+// Needs a stack with a fresh administrator: scripts/ci-stack.sh creates one from E2E_ADMIN_PW.
 const email = process.env.E2E_ADMIN_EMAIL ?? 'e2e-admin@introyale.local'
-const password = process.env.E2E_ADMIN_PW
+const password = process.env.E2E_ADMIN_PW ?? ''
 
-test('fresh administrator: sign in, enrol MFA, reach the dashboard', async ({ page }, testInfo) => {
-  test.skip(!password, 'E2E_ADMIN_PW not set (needs the MFA-enforced CI stack)')
-  // The administrator is single-use (enrolment happens once), so only one project runs the flow.
-  test.skip(testInfo.project.name !== 'desktop', 'runs once, on the desktop project')
-  test.setTimeout(90_000)
+async function signIn(page: Page): Promise<void> {
+  await page.context().clearCookies()
   await page.goto('/admin/login')
   await page.locator('input[name="email"]').fill(email)
-  await page.locator('input[name="password"]').fill(password ?? '')
+  await page.locator('input[name="password"]').fill(password)
   await page.locator('button[type="submit"]').click()
+}
+const dashboard = (page: Page) => page.getByRole('heading', { name: 'Dashboard' })
 
-  // Not denied: sent to the MFA screen.
-  await expect(page).toHaveURL(/\/admin\/mfa/, { timeout: 30_000 })
+test('2FA is optional, opt-in works, and once on the code is required', async ({
+  page,
+}, testInfo) => {
+  test.skip(!password, 'E2E_ADMIN_PW not set (needs the CI stack)')
+  test.skip(testInfo.project.name !== 'desktop', 'single-user flow: runs once, on desktop')
+  test.setTimeout(150_000)
+
+  // 1. No 2FA yet: straight to the dashboard.
+  await signIn(page)
+  await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 30_000 })
+  await expect(dashboard(page)).toBeVisible({ timeout: 20_000 })
   await expect(page.getByText('does not have access')).toHaveCount(0)
-  await page.getByRole('button', { name: 'Set up authenticator app' }).click()
-  const key = (await page.locator('section[aria-labelledby="scan"] code').innerText()).trim()
+
+  // 2. Opt in on the account page.
+  await page.goto('/admin/account')
+  const panel = page.getByTestId('mfa-account')
+  await expect(page.getByRole('heading', { name: 'Two-factor authentication' })).toBeVisible()
+  await panel.getByRole('button', { name: 'Set up authenticator app' }).click()
+  const key = (await panel.locator('section[aria-labelledby="scan"] code').innerText()).trim()
   expect(key.length).toBeGreaterThan(10)
+  await panel.locator('#c1').fill(generateSync({ secret: key }))
+  await panel.getByRole('button', { name: 'Confirm' }).click()
+  await expect(panel.getByRole('heading', { name: 'Recovery codes' })).toBeVisible()
+  await expect(
+    panel.getByRole('heading', { name: 'Two-factor authentication is on' }),
+  ).toBeVisible()
 
-  await page.locator('#c1').fill(generateSync({ secret: key }))
-  await page.getByRole('button', { name: 'Confirm' }).click()
-  await expect(page.getByRole('heading', { name: 'Recovery codes' })).toBeVisible()
-
+  // 3. A fresh sign-in now needs the code.
+  await signIn(page)
+  await expect(page).toHaveURL(/\/admin\/mfa/, { timeout: 30_000 })
+  await page.goto('/admin') // the password alone must not open the admin
+  await expect(page).toHaveURL(/\/admin\/mfa/)
+  await page.locator('#c2').fill('000000')
+  await page.getByRole('button', { name: 'Verify and continue' }).click()
+  await expect(page.getByRole('alert').filter({ hasText: 'Invalid code' })).toBeVisible()
   await page.locator('#c2').fill(generateSync({ secret: key }))
   await page.getByRole('button', { name: 'Verify and continue' }).click()
   await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 30_000 })
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible()
-  await expect(page.getByText('does not have access')).toHaveCount(0)
+  await expect(dashboard(page)).toBeVisible({ timeout: 20_000 })
 
-  // The MFA session persists: another admin page opens without bouncing back to /admin/mfa.
-  await page.goto('/admin/collections/pages')
-  await expect(page).not.toHaveURL(/\/admin\/mfa/)
+  // 4. Opt out with the current password and a code, then sign in without a code again.
+  await page.goto('/admin/account')
+  const off = page.getByTestId('mfa-account')
+  await off.locator('#pw').fill(password)
+  await off.locator('#c3').fill(generateSync({ secret: key }))
+  await off.getByRole('button', { name: 'Turn off two-factor authentication' }).click()
+  await expect(off.getByText('Two-factor authentication is now off.')).toBeVisible()
+  await signIn(page)
+  await expect(page).toHaveURL(/\/admin\/?$/, { timeout: 30_000 })
+  await expect(dashboard(page)).toBeVisible({ timeout: 20_000 })
 })

@@ -12,10 +12,10 @@ export async function LeadsBoard(props: AdminViewServerProps) {
       title={tr(lang, 'leadsBoard')}
       sub={tr(lang, 'leadsBoardSub')}
     >
-      {async ({ payload, user }) => {
+      {async ({ payload, req }) => {
         const res = await payload.find({
           collection: 'enquiries',
-          user,
+          req,
           overrideAccess: false,
           depth: 1,
           limit: 300,

@@ -6,7 +6,7 @@ import type { Role } from '../../src/lib/roles'
 // Stub PAYLOAD_SECRET so mfaSatisfied can verify tokens signed with the same key.
 vi.stubEnv('PAYLOAD_SECRET', 'test-secret')
 
-type FakeUser = { id: number; role: Role } | null
+type FakeUser = { id: number; role: Role; totp?: { enabled: boolean } } | null
 const req = (user: FakeUser, cookie?: string) =>
   ({ user, headers: new Headers(cookie ? { cookie } : {}) }) as never
 
@@ -15,20 +15,25 @@ const withMfa = (user: { id: number; role: Role }) =>
 
 const ctx = (user: FakeUser, cookie?: string) => ({ req: req(user, cookie) }) as never
 
-describe('MFA gate', () => {
-  it('requires a valid cookie for administrators', () => {
-    const admin = { id: 1, role: 'administrator' as const }
-    expect(mfaSatisfied(req(admin))).toBe(false)
-    expect(mfaSatisfied(req(admin, withMfa(admin)))).toBe(true)
+describe('MFA gate (opt-in, D10)', () => {
+  it('lets every signed-in role through while 2FA is off', () => {
+    for (const role of ['administrator', 'publisher', 'content_editor'] as const)
+      expect(mfaSatisfied(req({ id: 1, role }))).toBe(true)
+    expect(mfaSatisfied(req({ id: 1, role: 'administrator', totp: { enabled: false } }))).toBe(true)
+    expect(mfaSatisfied(req(null))).toBe(false)
   })
 
-  it('requires a valid cookie for publishers', () => {
-    const pub = { id: 2, role: 'publisher' as const }
-    expect(mfaSatisfied(req(pub))).toBe(false)
+  it('requires the signed cookie once a user has enabled 2FA', () => {
+    const u = { id: 1, role: 'administrator' as const, totp: { enabled: true } }
+    expect(mfaSatisfied(req(u))).toBe(false)
+    expect(mfaSatisfied(req(u, withMfa(u)))).toBe(true)
+    expect(mfaSatisfied(req(u, withMfa({ ...u, id: 2 })))).toBe(false)
   })
 
-  it('does not require MFA for content editors', () => {
-    expect(mfaSatisfied(req({ id: 3, role: 'content_editor' }))).toBe(true)
+  it('has no trust shortcut: a local-API call without the cookie is denied for a 2FA user', () => {
+    const u = { id: 1, role: 'administrator' as const, totp: { enabled: true } }
+    const local = { user: u, payloadAPI: 'local', headers: new Headers() } as never
+    expect(mfaSatisfied(local)).toBe(false)
   })
 })
 
@@ -47,12 +52,16 @@ describe('allow(action)', () => {
     expect(check(ctx({ id: 4, role: 'project_editor' }))).toBe(false)
   })
 
-  it('denies an administrator without an MFA cookie', () => {
-    expect(check(ctx({ id: 1, role: 'administrator' }))).toBe(false)
+  it('allows an administrator who has not enabled 2FA', () => {
+    expect(check(ctx({ id: 1, role: 'administrator' }))).toBe(true)
+  })
+
+  it('denies a 2FA administrator without the MFA cookie', () => {
+    expect(check(ctx({ id: 1, role: 'administrator', totp: { enabled: true } }))).toBe(false)
   })
 
   it('allows an administrator with a valid MFA cookie', () => {
-    const admin = { id: 1, role: 'administrator' as const }
+    const admin = { id: 1, role: 'administrator' as const, totp: { enabled: true } }
     expect(check(ctx(admin, withMfa(admin)))).toBe(true)
   })
 })

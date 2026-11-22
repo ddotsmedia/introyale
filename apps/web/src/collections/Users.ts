@@ -48,7 +48,7 @@ export const Users: CollectionConfig = {
       return { id: { equals: u.id } }
     },
     delete: allow('users.manage'),
-    // The admin panel requires MFA for administrator and publisher (D10).
+    // Role decides who is a staff user; 2FA is opt-in, and once enabled it is required at sign-in (D10).
     admin: ({ req }) => !!req.user && mfaSatisfied(req),
   },
   fields: [
@@ -59,7 +59,6 @@ export const Users: CollectionConfig = {
       required: true,
       defaultValue: 'content_editor',
       options: ROLES.map((r) => ({ label: r, value: r })),
-      saveToJWT: true, // the MFA gate in proxy.ts reads the role from the token
       access: { update: ({ req }) => req.user?.role === 'administrator' },
     },
     {
@@ -69,7 +68,13 @@ export const Users: CollectionConfig = {
         description: 'MFA state. Secrets are encrypted and never readable through the API.',
       },
       fields: [
-        { name: 'enabled', type: 'checkbox', defaultValue: false, access: { update: () => false } },
+        {
+          name: 'enabled',
+          type: 'checkbox',
+          defaultValue: false,
+          saveToJWT: 'mfaOn', // JWT key read by proxy.ts to send users who enabled 2FA to the code screen
+          access: { update: () => false },
+        },
         {
           name: 'secret',
           type: 'text',
@@ -91,6 +96,12 @@ export const Users: CollectionConfig = {
           fields: [{ name: 'hash', type: 'text', required: true }],
         },
       ],
+    },
+    {
+      // Shown on the user's own account page only (the component hides itself elsewhere).
+      name: 'twoFactorSection',
+      type: 'ui',
+      admin: { components: { Field: '/components/admin/AccountMfa#AccountMfa' } },
     },
     { name: 'lastLoginAt', type: 'date', admin: { readOnly: true } },
     {

@@ -1,8 +1,10 @@
-import type { Payload, Where } from 'payload'
+import type { Payload, PayloadRequest, Where } from 'payload'
 import { can, type Role } from '../lib/roles'
 import { LEAD_STATUSES, OPEN_STATUSES } from '../lib/leads'
 
 export type U = { id: number; role: Role; name: string }
+/** Request passed to local-API calls that enforce access, so the user and the MFA cookie are both seen. */
+export type Req = Partial<PayloadRequest>
 export const WORKFLOW_COLLECTIONS = [
   'projects',
   'services',
@@ -15,14 +17,14 @@ export const WORKFLOW_COLLECTIONS = [
 const DAY = 86_400_000
 const iso = (ms: number) => new Date(ms).toISOString()
 
-export const leadQuery = (payload: Payload, user: U) => ({
+export const leadQuery = (payload: Payload, req: Req) => ({
   payload,
-  user,
+  req,
   overrideAccess: false as const,
 })
 
-async function countLeads(payload: Payload, user: U, where: Where): Promise<number> {
-  const r = await payload.count({ collection: 'enquiries', where, user, overrideAccess: false })
+async function countLeads(payload: Payload, req: Req, where: Where): Promise<number> {
+  const r = await payload.count({ collection: 'enquiries', where, req, overrideAccess: false })
   return r.totalDocs
 }
 
@@ -31,17 +33,17 @@ function trend(cur: number, prev: number): number | null {
   return Math.round(((cur - prev) / prev) * 100)
 }
 
-export async function dashboardData(payload: Payload, user: U) {
+export async function dashboardData(payload: Payload, user: U, req: Req) {
   const now = Date.now()
   const leadsAllowed = can(user.role, 'enquiries.read')
   const out: Record<string, unknown> = { leadsAllowed }
 
   if (leadsAllowed) {
     const win = async (days: number) => {
-      const cur = await countLeads(payload, user, {
+      const cur = await countLeads(payload, req, {
         createdAt: { greater_than: iso(now - days * DAY) },
       })
-      const prev = await countLeads(payload, user, {
+      const prev = await countLeads(payload, req, {
         and: [
           { createdAt: { greater_than: iso(now - 2 * days * DAY) } },
           { createdAt: { less_than_equal: iso(now - days * DAY) } },
@@ -56,13 +58,13 @@ export async function dashboardData(payload: Payload, user: U) {
       win(1),
       win(7),
       win(30),
-      countLeads(payload, user, {
+      countLeads(payload, req, {
         and: [{ assignedTo: { exists: false } }, { status: { in: [...OPEN_STATUSES] } }],
       }),
-      countLeads(payload, user, {
+      countLeads(payload, req, {
         and: [{ followUpAt: { less_than: iso(now) } }, { status: { in: [...OPEN_STATUSES] } }],
       }),
-      countLeads(payload, user, {
+      countLeads(payload, req, {
         and: [
           { status: { equals: 'won' } },
           { updatedAt: { greater_than_equal: iso(monthStart.getTime()) } },
@@ -73,7 +75,7 @@ export async function dashboardData(payload: Payload, user: U) {
 
     const recent = await payload.find({
       collection: 'enquiries',
-      user,
+      req,
       overrideAccess: false,
       depth: 0,
       limit: 2000,
@@ -120,7 +122,7 @@ export async function dashboardData(payload: Payload, user: U) {
     const [due, latest] = await Promise.all([
       payload.find({
         collection: 'enquiries',
-        user,
+        req,
         overrideAccess: false,
         depth: 0,
         limit: 8,
@@ -135,7 +137,7 @@ export async function dashboardData(payload: Payload, user: U) {
       }),
       payload.find({
         collection: 'enquiries',
-        user,
+        req,
         overrideAccess: false,
         depth: 0,
         limit: 10,
@@ -191,7 +193,7 @@ export async function dashboardData(payload: Payload, user: U) {
   Object.assign(out, { awaiting, published, unverified, confirm: confirmP + confirmC })
 
   const activity = await payload
-    .find({ collection: 'audit-log', user, overrideAccess: false, depth: 1, limit: 8, sort: '-at' })
+    .find({ collection: 'audit-log', req, overrideAccess: false, depth: 1, limit: 8, sort: '-at' })
     .catch(() => ({ docs: [] }))
   out.activity = activity.docs
   return out

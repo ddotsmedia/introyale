@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { can, requiresMfa, type Action, type Role } from '../../src/lib/roles'
+import { can, type Action, type Role } from '../../src/lib/roles'
 
 // Expected matrix transcribed from SPEC §5.4. Each row: action → roles allowed.
 const EXPECTED: Record<Action, Role[]> = {
@@ -45,13 +45,5 @@ describe('role matrix (SPEC §5.4)', () => {
   it('denies missing or unknown roles', () => {
     expect(can(undefined, 'content.write')).toBe(false)
     expect(can(null, 'content.write')).toBe(false)
-  })
-
-  it('requires MFA for administrator and publisher only (D10)', () => {
-    expect(requiresMfa('administrator')).toBe(true)
-    expect(requiresMfa('publisher')).toBe(true)
-    expect(requiresMfa('content_editor')).toBe(false)
-    expect(requiresMfa('project_editor')).toBe(false)
-    expect(requiresMfa('marketing_reviewer')).toBe(false)
   })
 })

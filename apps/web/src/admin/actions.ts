@@ -117,7 +117,7 @@ const WF = new Set<string>(WORKFLOW_COLLECTIONS)
 
 /** Moves a document through the workflow with the caller's own permissions: the collection hooks re-check role and gates. */
 export async function transitionDoc(fd: FormData): Promise<void> {
-  const { payload, user } = await session('comment')
+  const { payload, user, req } = await session('comment')
   const collection = str(fd.get('collection'))
   const id = num(fd.get('id'))
   const to = str(fd.get('to')) as Status
@@ -145,7 +145,7 @@ export async function transitionDoc(fd: FormData): Promise<void> {
   await payload.update({
     collection: collection as 'pages',
     id,
-    user,
+    req,
     overrideAccess: false,
     data: schedule
       ? {
@@ -231,14 +231,14 @@ export async function createPreviewLink(
 
 // ---------- media ----------
 export async function bulkAlt(fd: FormData): Promise<void> {
-  const { payload, user } = await session('media.write')
+  const { payload, user, req } = await session('media.write')
   for (const [k, v] of fd.entries()) {
     if (!k.startsWith('alt_') || typeof v !== 'string' || !v.trim()) continue
     await payload.update({
       collection: 'media',
       id: Number(k.slice(4)),
       data: { alt: v.trim() },
-      user,
+      req,
       overrideAccess: false,
     })
   }
@@ -252,7 +252,7 @@ export async function bulkAlt(fd: FormData): Promise<void> {
 }
 
 export async function bulkMediaMeta(fd: FormData): Promise<void> {
-  const { payload, user } = await session('media.write')
+  const { payload, user, req } = await session('media.write')
   const ids = fd.getAll('ids').map(Number)
   const folder = str(fd.get('folder')).trim()
   const tags = str(fd.get('tags'))
@@ -264,7 +264,7 @@ export async function bulkMediaMeta(fd: FormData): Promise<void> {
       collection: 'media',
       id,
       data: { ...(folder ? { folder } : {}), ...(tags.length ? { tags } : {}) },
-      user,
+      req,
       overrideAccess: false,
     })
   }
@@ -280,13 +280,13 @@ export async function bulkMediaMeta(fd: FormData): Promise<void> {
 
 /** Delete is blocked while any document references the file. */
 export async function deleteMedia(fd: FormData): Promise<void> {
-  const { payload, user } = await session('media.write')
+  const { payload, user, req } = await session('media.write')
   const id = num(fd.get('id'))
   const { usedIn } = await import('./media')
   const refs = await usedIn(payload, id)
   if (refs.length)
     throw new Error(`In use by ${String(refs.length)} document(s); remove those references first`)
-  await payload.delete({ collection: 'media', id, user, overrideAccess: false })
+  await payload.delete({ collection: 'media', id, req, overrideAccess: false })
   await writeAudit(payload, {
     actor: user.id,
     action: 'media.delete',
@@ -309,12 +309,12 @@ export async function testRedirect(path: string): Promise<Result> {
 }
 
 export async function redirectFrom404(fd: FormData): Promise<void> {
-  const { payload, user } = await session('redirects.manage')
+  const { payload, user, req } = await session('redirects.manage')
   const from = str(fd.get('from'))
   const to = str(fd.get('to')).trim()
   const created = await payload.create({
     collection: 'redirects',
-    user,
+    req,
     overrideAccess: false,
     data: { from, to, type: '301', active: true, notes: 'Created from the 404 log' },
   })
@@ -432,7 +432,7 @@ export async function forceMfaReset(fd: FormData): Promise<void> {
     payload,
     uid,
     'security',
-    'Your MFA was reset by an administrator. Set it up again at next sign-in.',
+    'Your two-factor authentication was turned off by an administrator. You can enable it again in your account.',
   )
   revalidatePath('/admin/security')
 }

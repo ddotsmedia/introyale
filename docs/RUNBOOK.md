@@ -69,7 +69,7 @@ docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-fi
 Stop: `docker compose -p introyale-local -f compose.yaml -f compose.local.yaml --env-file .env.local stop`
 Remove the containers only (keeps `.local-data/`): `... down`
 
-Local-only settings: `ENV=local`, `MFA_ENFORCE=false` (admin MFA bypass; refused by the app at boot in any other ENV, see `src/lib/envPolicy.ts`), `ROBOTS_NOINDEX=true`, `FEATURE_AR=false`. The database is not published to the host.
+Local-only settings: `ENV=local`, `ROBOTS_NOINDEX=true`, `FEATURE_AR=false`. The database is not published to the host.
 
 Facts are marked verified with source introyale.com on the owner's instruction. Project names, locations and years, and client names, were never published on the live site, so they are empty or marked `[CONFIRM]` in admin-only fields.
 
@@ -86,4 +86,4 @@ Facts are marked verified with source introyale.com on the owner's instruction. 
 - Image pulls use the CI run's `GITHUB_TOKEN` (piped over SSH, logged out on exit). Nothing is stored on the VPS. To deploy by hand from the VPS, `docker login ghcr.io` with a classic token that has `read:packages` and log out afterwards.
 - Package visibility has no API: GitHub → profile → Packages → `introyale-web` / `introyale-backup` → Package settings → Change visibility → Private.
 - CI `browser` job: `scripts/ci-stack.sh up` builds the image and starts a throwaway stack with random secrets (ENV=local, placeholder images), runs the whole Playwright suite, then `down`. Run it locally on free ports: `CI_WEB_PORT=3190 CI_MAILPIT_PORT=8190 RUNNER_TEMP=<abs tmp> scripts/ci-stack.sh up`.
-- First sign-in of an administrator or publisher: after the password, the proxy sends them to `/admin/mfa` to enrol (scan the key, confirm a code, save the recovery codes) and verify; the dashboard opens after that. Temporary test admins: `ADMIN_PW=<16+ chars> node /app/cli/dist/admin-user.js create tmp-<name>@introyale.online` (production also needs `TEMP_ADMIN=yes`), then `delete` the same email. Only `tmp-*` and `e2e-*` emails are accepted.
+- Two-factor authentication is optional for every role. A user turns it on or off under Account → Two-factor authentication (QR or key, confirm a code, save the recovery codes; turning it off needs the current password and a code). Once on, sign-in goes to `/admin/mfa` for the code. A locked-out user can be reset by an administrator (Security view → reset MFA). Temporary test admins: `ADMIN_PW=<16+ chars> node /app/cli/dist/admin-user.js create tmp-<name>@introyale.online` (production also needs `TEMP_ADMIN=yes`), then `delete` the same email. Only `tmp-*` and `e2e-*` emails are accepted.

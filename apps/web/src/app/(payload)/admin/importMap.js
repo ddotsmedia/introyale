@@ -1,3 +1,4 @@
+import { AccountMfa as AccountMfa_049a42cb26e2acba94d2b5886201bca0 } from '../../../components/admin/AccountMfa'
 import { SeoPanel as SeoPanel_1a7f7b6be93672b73cff83d36bcb4348 } from '../../../admin/components/SeoPanel'
 import { RscEntryLexicalCell as RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
 import { RscEntryLexicalField as RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e } from '@payloadcms/richtext-lexical/rsc'
@@ -43,6 +44,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/components/admin/AccountMfa#AccountMfa": AccountMfa_049a42cb26e2acba94d2b5886201bca0,
   "/admin/components/SeoPanel#SeoPanel": SeoPanel_1a7f7b6be93672b73cff83d36bcb4348,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalField": RscEntryLexicalField_44fe37237e0ebf4470c9990d8cb7b07e,

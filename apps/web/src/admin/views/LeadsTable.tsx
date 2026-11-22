@@ -12,7 +12,7 @@ export async function LeadsTable(props: AdminViewServerProps) {
   const lang = props.initPageResult.req.i18n.language
   return (
     <Shell view={props} action="enquiries.read" title={tr(lang, 'leadsTable')}>
-      {async ({ payload, user, sp }) => {
+      {async ({ payload, user, req, sp }) => {
         const f = {
           status: one(sp.status),
           sector: one(sp.sector),
@@ -42,7 +42,7 @@ export async function LeadsTable(props: AdminViewServerProps) {
         const [res, users, views, sectors] = await Promise.all([
           payload.find({
             collection: 'enquiries',
-            user,
+            req,
             overrideAccess: false,
             depth: 1,
             limit: 50,
@@ -58,7 +58,7 @@ export async function LeadsTable(props: AdminViewServerProps) {
           }),
           payload.find({
             collection: 'saved-views',
-            user,
+            req,
             overrideAccess: false,
             depth: 0,
             limit: 20,

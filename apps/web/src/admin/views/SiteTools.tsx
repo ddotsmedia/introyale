@@ -19,11 +19,11 @@ export async function SiteTools(props: AdminViewServerProps) {
       title={tr(lang, 'siteTools')}
       sub="Redirects, missing pages, integrations and the site banner."
     >
-      {async ({ payload, user }) => {
+      {async ({ payload, user, req }) => {
         const [logs, redirects, integ, site] = await Promise.all([
           payload.find({
             collection: 'not-found-log',
-            user,
+            req,
             overrideAccess: false,
             depth: 0,
             limit: 25,

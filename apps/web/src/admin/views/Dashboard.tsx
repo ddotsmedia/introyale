@@ -45,8 +45,8 @@ export async function Dashboard(props: AdminViewServerProps) {
   const lang = props.initPageResult.req.i18n.language
   return (
     <Shell bare view={props} title={tr(lang, 'dashboard')} sub={tr(lang, 'dashboardSub')}>
-      {async ({ payload, user }) => {
-        const d = (await dashboardData(payload, user)) as unknown as D
+      {async ({ payload, user, req }) => {
+        const d = (await dashboardData(payload, user, req)) as unknown as D
         const isAdmin = can(user.role, 'system.view')
         const reviewer = can(user.role, 'workflow.approve') || can(user.role, 'workflow.publish')
         const [bk, hl, um] = await Promise.all([

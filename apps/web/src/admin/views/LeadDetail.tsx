@@ -13,14 +13,14 @@ const nameOf = (u: unknown): string =>
 export async function LeadDetail(props: AdminViewServerProps) {
   return (
     <Shell view={props} action="enquiries.read" title="Lead">
-      {async ({ payload, user, sp }) => {
+      {async ({ payload, user, req, sp }) => {
         const id = Number(Array.isArray(sp.id) ? sp.id[0] : sp.id)
         let lead: L | null = null
         try {
           lead = await payload.findByID({
             collection: 'enquiries',
             id,
-            user,
+            req,
             overrideAccess: false,
             depth: 1,
           })
@@ -44,7 +44,7 @@ export async function LeadDetail(props: AdminViewServerProps) {
           }),
           payload.find({
             collection: 'email-templates',
-            user,
+            req,
             overrideAccess: false,
             depth: 0,
             limit: 50,

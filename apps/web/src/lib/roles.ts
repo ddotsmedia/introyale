@@ -51,8 +51,3 @@ const MATRIX: Record<Action, readonly Role[]> = {
 export function can(role: Role | undefined | null, action: Action): boolean {
   return !!role && MATRIX[action].includes(role)
 }
-
-/** MFA is mandatory for these roles (D10). */
-export function requiresMfa(role: Role | undefined | null): boolean {
-  return role === 'administrator' || role === 'publisher'
-}
