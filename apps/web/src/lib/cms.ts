@@ -1,3 +1,4 @@
+import { previewScope } from './previewScope'
 import config from '@payload-config'
 import { getPayload, type DataFromCollectionSlug, type Payload } from 'payload'
 import { pickVerifiedFact, type FactRow } from './facts'
@@ -16,6 +17,14 @@ export async function getPageBySlug<
   T extends 'pages' | 'sectors' | 'services' | 'team-members' | 'projects' | 'journal-posts',
 >(collection: T, slug: string): Promise<DataFromCollectionSlug<T> | null> {
   const payload = await cms()
+  // Draft preview (admin v2): inside a verified preview scope, the one claimed document is readable before publishing.
+  const claim = previewScope.getStore()
+  if (claim && claim.c === collection) {
+    const doc = await payload
+      .findByID({ collection, id: claim.id, depth: 2, overrideAccess: true })
+      .catch(() => null)
+    if (doc && (doc as { slug?: string }).slug === slug) return doc
+  }
   const res = await payload.find({
     collection,
     where: { and: [{ slug: { equals: slug } }, published] },
