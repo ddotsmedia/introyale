@@ -2,7 +2,7 @@
 // Protection Law (Federal Decree-Law No. 45 of 2021). A template: not legal advice and not yet reviewed by counsel.
 // Stored in the CMS by seed-legal.ts and editable in /admin. No business facts are invented here.
 export const REVIEW_NOTE =
-  'OWNER REVIEW REQUIRED (admin-only, not shown on the site). Standard template aligned with the UAE PDPL (Federal Decree-Law 45 of 2021), not reviewed by legal counsel. Before relying on it, confirm: the legal entity name and registered address, how long enquiries are kept, which service providers process data (hosting, email, analytics), and the cookie and analytics position. Then edit the text here and keep this note until counsel has approved it.'
+  'OWNER REVIEW REQUIRED (admin-only, not shown on the site). Standard template aligned with the UAE PDPL (Federal Decree-Law 45 of 2021), not reviewed by legal counsel. Before relying on it, confirm: the legal entity name and registered address, how long enquiries are kept, which service providers process data (hosting, email, analytics), and the cookie and analytics position (the analytics wording describes first-party, cookieless analytics with 90-day raw and 25-month aggregate retention and must match what is configured). Then edit the text here and keep this note until counsel has approved it.'
 
 const CONTACT_LINE =
   'To exercise any of these rights or to ask a question, contact us using the details on our Contact page.'
@@ -17,12 +17,13 @@ export const LEGAL = [
       'This policy explains how Introyale Interiors ("we", "us") handles personal data collected through this website, in line with the UAE Personal Data Protection Law (Federal Decree-Law No. 45 of 2021).',
       '1. What we collect',
       'When you send an enquiry or request a consultation we collect the details you give us: your name, email address, phone number, project type, location, budget range and any message or files you add. We also record technical data needed to keep the site secure and working, such as your IP address and browser type.',
+      'We count visits to this website with our own privacy-friendly analytics. It sets no cookies and does not store your IP address. Each day a new random code, combined in a one-way hash with technical details of your request, lets us count unique visitors for that day only; the code is deleted the next day, so visits cannot be linked from one day to the next. We record the pages you view, the website you came from, your device type, browser, operating system, screen size, language and time zone, simple actions such as clicking a call, WhatsApp or email link, how far you scroll, and how quickly pages load. We do not count visitors whose browser sends a Do Not Track or Global Privacy Control signal. When you send an enquiry we attach the pages you viewed that day and where you came from, so we can understand which content helps.',
       '2. Why we use it',
       'We use your details to respond to your enquiry, prepare proposals, schedule consultations, manage our projects and relationship with you, keep the website secure, and meet our legal obligations. We rely on your consent, on steps taken at your request before a contract, and on our legitimate interest in running a secure business.',
       '3. Who receives it',
       'Your data is accessed by our team and by service providers who help us run the website and our communications, such as hosting, email and analytics providers, under written terms that require them to protect it. We do not sell personal data. Where a provider is outside the UAE, we take steps so that your data stays protected as the law requires.',
       '4. How long we keep it',
-      'We keep enquiry data only for as long as needed for the purposes above or as the law requires, and then delete or anonymise it.',
+      'We keep enquiry data only for as long as needed for the purposes above or as the law requires, and then delete or anonymise it. Detailed analytics records are deleted after 90 days; daily summaries, which contain no personal data, are kept for 25 months.',
       '5. Your rights',
       'You may ask us to confirm whether we hold your personal data and to give you a copy, to correct it, to delete it, to restrict or object to its use, to move it to another provider, and to withdraw your consent at any time. Withdrawing consent does not affect earlier lawful use. You may also complain to the UAE Data Office.',
       CONTACT_LINE,
@@ -65,7 +66,7 @@ export const LEGAL = [
       '1. Essential cookies',
       'The site uses only the storage it needs to work and stay secure, for example to protect forms against spam and to keep our staff signed in to the administration area. These do not need your consent.',
       '2. Analytics',
-      'We measure visits with privacy-friendly analytics that do not set cookies on your device and do not build profiles of individual visitors.',
+      'We measure visits with our own analytics, hosted on our servers. It does not set cookies or store anything on your device, does not store your IP address, and does not follow you from one day to the next or across other websites. We ignore visitors whose browser sends a Do Not Track or Global Privacy Control signal. See the Privacy Policy for what is counted and how long it is kept.',
       '3. No advertising cookies',
       'We do not use advertising or cross-site tracking cookies.',
       '4. Your choices',

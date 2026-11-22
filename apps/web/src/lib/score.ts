@@ -50,7 +50,7 @@ const SOURCE: Record<string, number> = {
   newsletter: 6,
   social: 5,
 }
-const DETAIL_PAGE = /^\/(work\/[^/]+|(residential|commercial|hospitality-leisure)\/[^/]+)$/
+const DETAIL_PAGE = /^\/(work|services)\/[^/]+$/
 
 export function scoreLead(i: ScoreInput): Score {
   const reasons: Reason[] = []

@@ -91,7 +91,8 @@ describe('classification', () => {
     expect(templateOf('/work')).toBe('work')
     expect(templateOf('/work/villa-one')).toBe('case study')
     expect(templateOf('/start')).toBe('start')
-    expect(templateOf('/residential/fit-out')).toBe('service')
+    expect(templateOf('/services/fit-out')).toBe('service')
+    expect(templateOf('/residential')).toBe('sector')
   })
   it('never records admin, API or preview paths, and drops query and hash', () => {
     expect(cleanPath('/admin/collections/enquiries')).toBeNull()

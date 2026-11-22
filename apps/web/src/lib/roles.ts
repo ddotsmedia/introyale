@@ -23,6 +23,7 @@ export type Action =
   | 'comment'
   | 'system.view'
   | 'content.health'
+  | 'analytics.view'
 
 const MATRIX: Record<Action, readonly Role[]> = {
   'content.write': ['administrator', 'content_editor', 'publisher'],
@@ -38,6 +39,7 @@ const MATRIX: Record<Action, readonly Role[]> = {
   'redirects.manage': ['administrator', 'marketing_reviewer'],
   'globals.manage': ['administrator'],
   'system.view': ['administrator'],
+  'analytics.view': ['administrator', 'marketing_reviewer', 'publisher'],
   'content.health': [
     'administrator',
     'content_editor',

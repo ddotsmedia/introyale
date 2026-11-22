@@ -1,0 +1,380 @@
+/* Analytics (admin v3): sparklines, range bar, figures, heatmap, ring, vitals, print. */
+.ir-spark {
+  display: block;
+  width: 100%;
+  height: 28px;
+  margin-block: 2px;
+}
+.ir-spark .stroke {
+  fill: none;
+  stroke: var(--ir-bronze);
+  stroke-width: 1.8;
+  vector-effect: non-scaling-stroke;
+}
+.ir-spark .fill {
+  fill: var(--ir-bronze);
+  opacity: 0.12;
+}
+.ir-range {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: end;
+  margin-block-end: 20px;
+}
+.ir-range .seg {
+  display: inline-flex;
+  border: 1px solid var(--ir-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ir-range .seg a {
+  padding: 7px 12px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  border-inline-end: 1px solid var(--ir-line);
+  background: var(--ir-card);
+}
+.ir-range .seg a:last-child {
+  border-inline-end: 0;
+}
+.ir-range .seg a[aria-current='true'] {
+  background: var(--ir-bronze);
+  color: #fff;
+}
+.ir-range form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+}
+.ir-fig {
+  margin: 0;
+}
+.ir-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 0.8rem;
+  color: var(--ir-muted);
+  margin-block-start: 4px;
+}
+.ir-legend i,
+.ir-live i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-inline-end: 6px;
+}
+.ir-data {
+  margin-block-start: 8px;
+  font-size: 0.85rem;
+}
+.ir-data summary {
+  cursor: pointer;
+  color: var(--ir-muted);
+}
+.ir-wide {
+  grid-column: 1 / -1;
+}
+.ir-live {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: start;
+}
+.ir-live b.big {
+  font-size: 2.2rem;
+  line-height: 1;
+  display: block;
+}
+.ir-live .pulse {
+  background: var(--ir-ok);
+  animation: ir-pulse 2s infinite;
+}
+@keyframes ir-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ir-live .pulse {
+    animation: none;
+  }
+}
+.ir-heat {
+  display: grid;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: var(--ir-muted);
+}
+.ir-heat .row,
+.ir-heat {
+  grid-template-columns: 34px repeat(24, 1fr);
+}
+.ir-heat .row {
+  display: contents;
+}
+.ir-heat .cell {
+  height: 20px;
+  border-radius: 3px;
+  background: var(--ir-bronze);
+}
+.ir-heat .hh {
+  text-align: center;
+}
+.ir-heat .dd {
+  align-self: center;
+}
+.ir-ring {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.ir-ring .track {
+  stroke: var(--ir-line);
+}
+.ir-ring .bar {
+  stroke: var(--ir-bronze);
+}
+.ir-ring text {
+  fill: var(--ir-ink);
+  font-size: 9px;
+}
+.ir-ring text.big {
+  font-size: 20px;
+  font-weight: 700;
+}
+.ir-vitals {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.ir-vitals > div {
+  border: 1px solid var(--ir-line);
+  border-radius: 10px;
+  padding: 12px;
+}
+.ir-vitals b {
+  display: block;
+  font-size: 1.4rem;
+}
+.ir-skel {
+  background: linear-gradient(90deg, var(--ir-sand), var(--ir-line), var(--ir-sand));
+  background-size: 200% 100%;
+  animation: ir-shimmer 1.4s infinite;
+  border-radius: 8px;
+  min-height: 120px;
+}
+@keyframes ir-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ir-skel {
+    animation: none;
+  }
+}
+@media (max-width: 1100px) {
+  .ir-heat {
+    font-size: 0.6rem;
+  }
+}
+@media print {
+  .template-default .nav,
+  .template-default .app-header,
+  .ir-range,
+  .ir-actions,
+  .ir-noprint,
+  .ir-data summary {
+    display: none !important;
+  }
+  .ir-data[open],
+  .ir-data {
+    display: block;
+  }
+  .ir-data > table {
+    display: table;
+  }
+  .ir-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  .ir h1 {
+    font-size: 1.4rem;
+  }
+  :root {
+    --ir-card: #fff;
+    --ir-ink: #000;
+    --ir-line: #ddd;
+  }
+}
+
+/* Command palette, calendar, bulk bar, score chips */
+.ir-palette {
+  border: 1px solid var(--ir-line);
+  border-radius: 12px;
+  padding: 0;
+  width: min(640px, 92vw);
+  background: var(--ir-card);
+  color: var(--ir-ink);
+  margin-block-start: 12vh;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.ir-palette::backdrop {
+  background: rgba(20, 17, 13, 0.55);
+}
+.ir-palette input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--ir-line);
+  padding: 16px 18px;
+  font-size: 1rem;
+  background: transparent;
+  color: inherit;
+  outline: none;
+}
+.ir-palette ul {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 50vh;
+  overflow: auto;
+}
+.ir-palette li {
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.ir-palette li.on {
+  background: var(--ir-bronze);
+  color: #fff;
+}
+.ir-palette li small {
+  display: inline-block;
+  min-width: 64px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+}
+.ir-palette .hint {
+  margin: 0;
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  color: var(--ir-muted);
+  border-top: 1px solid var(--ir-line);
+}
+.ir-cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.ir-cal .dow {
+  font-size: 0.75rem;
+  color: var(--ir-muted);
+  text-transform: uppercase;
+  padding: 2px 4px;
+}
+.ir-cal .day {
+  min-height: 104px;
+  border: 1px solid var(--ir-line);
+  border-radius: 8px;
+  padding: 6px;
+  background: var(--ir-card);
+  font-size: 0.78rem;
+}
+.ir-cal .day.out {
+  background: transparent;
+}
+.ir-cal .day.out b {
+  color: var(--ir-muted);
+  font-weight: 400;
+}
+.ir-cal .day.today {
+  border-color: var(--ir-bronze);
+  box-shadow: inset 0 0 0 1px var(--ir-bronze);
+}
+.ir-cal .day b {
+  display: block;
+  margin-block-end: 4px;
+}
+.ir-cal .item {
+  display: block;
+  margin-block-end: 3px;
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: var(--ir-sand);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ir-cal .item.visit {
+  background: color-mix(in srgb, var(--ir-ok) 22%, transparent);
+}
+.ir-cal .item.follow {
+  background: color-mix(in srgb, var(--ir-warn) 22%, transparent);
+}
+.ir-cal .item.done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+.ir-cal.week .day {
+  min-height: 260px;
+}
+.ir-bulk {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: end;
+  margin-block-end: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--ir-line);
+  border-radius: 10px;
+  background: var(--ir-card);
+}
+.ir-bulk label {
+  display: grid;
+  gap: 2px;
+  font-size: 0.75rem;
+}
+.ir-chip {
+  display: inline-block;
+  min-width: 2.2em;
+  text-align: center;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 1px solid var(--ir-line);
+  cursor: help;
+}
+.ir-chip.hot {
+  background: color-mix(in srgb, var(--ir-ok) 22%, transparent);
+  border-color: var(--ir-ok);
+  color: var(--ir-ink);
+}
+.ir-chip.warm {
+  background: color-mix(in srgb, var(--ir-warn) 22%, transparent);
+  border-color: var(--ir-warn);
+  color: var(--ir-ink);
+}
+.ir-layout summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.ir-insight dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 4px 12px;
+  margin: 8px 0;
+}
+.ir-insight dd {
+  margin: 0;
+  text-align: end;
+  font-weight: 600;
+}

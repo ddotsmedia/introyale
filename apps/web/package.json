@@ -26,6 +26,7 @@
     "build:seed-live": "esbuild scripts/seed-live-content.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-live-content.js",
     "build:seed-legal": "esbuild scripts/seed-legal.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-legal.js",
     "build:admin-user": "esbuild scripts/admin-user.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/admin-user.js",
+    "build:seed-analytics-demo": "esbuild scripts/seed-analytics-demo.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-analytics-demo.js",
     "build:seed-motion": "esbuild scripts/seed-motion.ts --bundle --platform=node --format=esm --target=node22 --packages=external --tsconfig=tsconfig.json --outfile=dist/seed-motion.js"
   },
   "dependencies": {

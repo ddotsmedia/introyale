@@ -103,7 +103,7 @@ export function templateOf(path: string): string {
   if (/^\/work\/[^/]+/.test(path)) return 'case study'
   if (path === '/work') return 'work'
   if (/^\/start/.test(path)) return 'start'
-  if (/^\/(residential|commercial|hospitality-leisure)\/[^/]+/.test(path)) return 'service'
+  if (/^\/services\/[^/]+/.test(path)) return 'service'
   if (/^\/(residential|commercial|hospitality-leisure)$/.test(path)) return 'sector'
   if (/^\/journal/.test(path)) return 'journal'
   if (/^\/(studio|clients|contact|process)/.test(path)) return path.slice(1).split('/')[0] ?? 'page'

@@ -15,6 +15,7 @@ const EXPECTED: Record<Action, Role[]> = {
   'redirects.manage': ['administrator', 'marketing_reviewer'],
   'globals.manage': ['administrator'],
   'system.view': ['administrator'],
+  'analytics.view': ['administrator', 'marketing_reviewer', 'publisher'],
   'content.health': [
     'administrator',
     'content_editor',

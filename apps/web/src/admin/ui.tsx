@@ -58,12 +58,18 @@ export function Kpi({
   trend,
   note,
   icon,
+  spark,
+  invert,
 }: {
   label: string
   value: ReactNode
   trend?: number | null
   note?: string
   icon?: string
+  /** Sparkline element shown under the number. */
+  spark?: ReactNode
+  /** Lower is better (bounce rate, response time): colours the delta accordingly. */
+  invert?: boolean
 }) {
   return (
     <div className="ir-card ir-kpi">
@@ -72,8 +78,9 @@ export function Kpi({
         {icon ? <Ico name={icon} /> : null}
       </div>
       <b>{value}</b>
+      {spark}
       {trend != null ? (
-        <small className={trend >= 0 ? 'ir-up' : 'ir-down'}>
+        <small className={(invert ? trend <= 0 : trend >= 0) ? 'ir-up' : 'ir-down'}>
           {trend >= 0 ? '▲' : '▼'} {Math.abs(trend)}% vs previous period
         </small>
       ) : (
@@ -108,7 +115,7 @@ export function Badge({ tone, children }: { tone?: 'ok' | 'warn' | 'bad'; childr
 }
 
 type Point = { label: string; value: number }
-const EMPTY = <p className="ir-muted ir-empty">No data yet. It will appear as enquiries arrive.</p>
+const EMPTY = <p className="ir-muted ir-empty">No data for this period yet.</p>
 
 /** Weekly line chart with area fill, grid, and a native hover tooltip on every point. */
 export function LineChart({ data, name }: { data: Point[]; name: string }) {
@@ -199,7 +206,15 @@ const SLICES = [
 ]
 
 /** Donut with a legend; each slice has a hover tooltip. */
-export function Donut({ data, name }: { data: Point[]; name: string }) {
+export function Donut({
+  data,
+  name,
+  unit = 'enquiries',
+}: {
+  data: Point[]
+  name: string
+  unit?: string
+}) {
   const total = data.reduce((n, d) => n + d.value, 0)
   if (total === 0) return EMPTY
   const r = 52
@@ -235,7 +250,7 @@ export function Donut({ data, name }: { data: Point[]; name: string }) {
           {total}
         </text>
         <text x="70" y="84" textAnchor="middle">
-          enquiries
+          {unit}
         </text>
       </svg>
       <ul>

@@ -100,7 +100,8 @@ export async function recordHit(payload: Payload, c: Collect, ctx: HitContext): 
       payload,
       sql`UPDATE analytics_sessions SET "last_ts" = now(), "exit_path" = ${path}, "pages" = "pages" + 1 WHERE "sid" = ${sid}`,
     )
-  } else if (c.t === 'ev') {
+  } else if (c.t === 'ev' && c.n !== 'scroll' && c.n !== 'time') {
+    // Scrolling and time-on-page are passive; only deliberate actions (clicks, form steps) end a bounce.
     await run(
       payload,
       sql`UPDATE analytics_sessions SET "last_ts" = now(), "events" = "events" + 1 WHERE "sid" = ${sid}`,
@@ -181,7 +182,7 @@ const SESSION_DIMS: [kind: string, column: string][] = [
   ['exit', 'exit_path'],
 ]
 
-const DETAIL = String.raw`^/(work/[^/]+|(residential|commercial|hospitality-leisure)/[^/]+)$`
+const DETAIL = String.raw`^/(work|services)/[^/]+$`
 
 /** Rebuilds the aggregate rows for one Dubai day from raw events. Idempotent: safe to run any number of times. */
 export async function rollup(payload: Payload, day: string): Promise<void> {

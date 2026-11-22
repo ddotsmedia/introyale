@@ -36,7 +36,14 @@ const projects = (
 const detail = projects.length
   ? projects
   : ['/work/residential-interior-01', '/work/commercial-fit-out-01']
-const sectors = ['/residential', '/commercial', '/hospitality-leisure']
+const sectors = [
+  '/residential',
+  '/commercial',
+  '/hospitality-leisure',
+  '/services/interior-design',
+  '/services/fit-out',
+  '/services/space-planning',
+]
 const sourcesList = [
   { source: 'organic search', ref: 'google.com', w: 38 },
   { source: 'direct', ref: '', w: 26 },
@@ -135,7 +142,7 @@ for (let back = DAYS - 1; back >= 0; back--) {
     const last = Math.max(at, ...evs.map((e) => e.at))
     await x(
       sql`INSERT INTO analytics_sessions ("sid","vid","day","first_ts","last_ts","entry_path","exit_path","pages","events","ref_domain","source","utm_medium","utm_campaign","device","browser","os","screen","lang","region")
-          VALUES (${sid}, ${vid}, ${day}::date, ${new Date(t0).toISOString()}, ${new Date(last).toISOString()}, ${entry}, ${pages[pages.length - 1] ?? entry}, ${pages.length}, ${evs.length},
+          VALUES (${sid}, ${vid}, ${day}::date, ${new Date(t0).toISOString()}, ${new Date(last).toISOString()}, ${entry}, ${pages[pages.length - 1] ?? entry}, ${pages.length}, ${evs.filter((e) => e.name !== 'scroll' && e.name !== 'time').length},
           ${src.ref}, ${src.source}, ${src.campaign ? 'campaign' : null}, ${src.campaign ?? null}, ${dev.device}, ${dev.browser}, ${dev.os}, ${dev.screen}, 'en', ${pick(regions)})`,
     )
     let pt = t0
@@ -237,6 +244,9 @@ for (const e of tests.docs as unknown as Record<string, unknown>[]) {
     },
   })
 }
+await x(
+  sql`UPDATE enquiries SET first_contact_at = created_at + ((1 + id % 7) * interval '1 hour') WHERE is_test AND status <> 'new' AND first_contact_at IS NULL`,
+)
 await rollup(payload, today)
 console.log(
   `demo analytics: ${String(sessionsTotal)} sessions over ${String(DAYS)} days; ${String(tests.docs.length)} test enquiries scored`,
