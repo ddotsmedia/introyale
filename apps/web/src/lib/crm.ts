@@ -17,6 +17,8 @@ export type Lead = {
   activity?: Activity[] | null
   notes?: { author?: number | null; text: string; at: string }[] | null
   related?: (number | { id: number })[] | null
+  firstContactAt?: string | null
+  tags?: string[] | null
   createdAt: string
 }
 
@@ -45,12 +47,19 @@ async function patch(
   entry?: Activity,
   req?: PayloadRequest,
 ): Promise<void> {
+  // The first status move away from "new" or the first email stops the response-time (SLA) clock.
+  const contacted =
+    (typeof data['status'] === 'string' && data['status'] !== 'new') || entry?.kind === 'email'
   await payload.update({
     collection: 'enquiries',
     id: lead.id,
     overrideAccess: true,
     req,
-    data: { ...data, ...(entry ? { activity: [...(lead.activity ?? []), entry] } : {}) },
+    data: {
+      ...data,
+      ...(contacted && !lead.firstContactAt ? { firstContactAt: new Date().toISOString() } : {}),
+      ...(entry ? { activity: [...(lead.activity ?? []), entry] } : {}),
+    },
   })
 }
 
@@ -229,7 +238,7 @@ export async function sendReply(
 }
 
 /** CSV export: administrators only, always audited. Cells are escaped and formula-prefixed values neutralised. */
-export async function leadsCsv(payload: Payload, actor: Actor): Promise<string> {
+export async function leadsCsv(payload: Payload, actor: Actor, ids?: number[]): Promise<string> {
   if (actor.role !== 'administrator') throw new Error('Not permitted')
   const res = await payload.find({
     collection: 'enquiries',
@@ -238,9 +247,11 @@ export async function leadsCsv(payload: Payload, actor: Actor): Promise<string> 
     limit: 5000,
     pagination: false,
     sort: '-createdAt',
+    ...(ids?.length ? { where: { id: { in: ids } } } : {}),
   })
   const cols = [
     'ref',
+    'score',
     'createdAt',
     'status',
     'priority',
