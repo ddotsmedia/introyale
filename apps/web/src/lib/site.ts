@@ -56,6 +56,10 @@ export async function siteChrome() {
     logo: settings.logo,
     footerLogo: settings.footerLogo ?? settings.logo,
     tagline: settings.tagline ?? null,
+    banner:
+      settings.banner?.enabled && settings.banner.message
+        ? { message: settings.banner.message, tone: settings.banner.tone ?? 'info' }
+        : null,
     cta:
       settings.ctaLabel && settings.ctaLink
         ? { label: settings.ctaLabel, href: settings.ctaLink }

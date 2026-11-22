@@ -26,6 +26,14 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
     <>
       <JsonLd data={ld} />
       <WebVitals />
+      {c.banner ? (
+        <div
+          role="status"
+          className={`px-2 py-1 text-center text-xs ${c.banner.tone === 'maintenance' ? 'bg-bronze-deep text-ivory' : 'bg-sand text-ink'}`}
+        >
+          {c.banner.message}
+        </div>
+      ) : null}
       <Header
         brand={c.brand}
         logo={c.logo}

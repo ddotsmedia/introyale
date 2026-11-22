@@ -1,9 +1,12 @@
+import { headers } from 'next/headers'
 import Link from 'next/link'
+import { logNotFound } from '@/lib/notFoundLog'
 import { PageHeader } from '@/components/PageHeader'
 import { container, sectionPad } from '@/components/blocks/shared'
 import { ui } from '@/messages/en'
 
-export default function NotFound() {
+export default async function NotFound() {
+  await logNotFound((await headers()).get('x-pathname'))
   return (
     <>
       <PageHeader title={ui.notFound.title} intro={ui.notFound.body} />

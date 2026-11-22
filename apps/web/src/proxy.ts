@@ -17,6 +17,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   // Next reads the nonce from the request's CSP header and applies it to its own inline scripts.
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('Content-Security-Policy', csp)
+  requestHeaders.set('x-pathname', request.nextUrl.pathname) // read by the 404 page for the 404 log
 
   const hit = (await getRedirectMap()).get(request.nextUrl.pathname)
   let response: NextResponse
