@@ -78,8 +78,8 @@ jobs:
       - name: build and push images
         run: |
           owner="${GITHUB_REPOSITORY_OWNER,,}"; tag="${GITHUB_SHA::12}"
-          docker build -f docker/web.Dockerfile --target runtime -t "ghcr.io/$owner/introyale-web:$tag" .
-          docker build -f docker/backup.Dockerfile -t "ghcr.io/$owner/introyale-backup:$tag" .
+          docker build -f docker/web.Dockerfile --target runtime --label org.opencontainers.image.source=https://github.com/ddotsmedia/introyale -t "ghcr.io/$owner/introyale-web:$tag" .
+          docker build -f docker/backup.Dockerfile --label org.opencontainers.image.source=https://github.com/ddotsmedia/introyale -t "ghcr.io/$owner/introyale-backup:$tag" .
           docker push "ghcr.io/$owner/introyale-web:$tag"
           docker push "ghcr.io/$owner/introyale-backup:$tag"
 
