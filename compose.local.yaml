@@ -19,12 +19,12 @@ services:
     networks: [internal, edge, egress]
 
   migrate:
-    image: introyale-web:local
+    image: introyale-cli:local
     environment:
       ENV: local
 
   worker:
-    image: introyale-web:local
+    image: introyale-cli:local
     networks: [internal, egress]
     environment:
       ENV: local

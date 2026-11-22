@@ -23,7 +23,7 @@ x-app-env: &app-env
 
 services:
   migrate:
-    image: ${WEB_IMAGE:-introyale-web:local}
+    image: ${CLI_IMAGE:-introyale-cli:local}
     command: ['node', '/app/cli/dist/migrate.js']
     restart: 'no'
     logging: *logging
@@ -60,7 +60,7 @@ services:
 
   worker:
     <<: *hardening
-    image: ${WEB_IMAGE:-introyale-web:local}
+    image: ${CLI_IMAGE:-introyale-cli:local}
     command: ['node', '/app/cli/dist/worker.js']
     read_only: true
     tmpfs: ['/tmp']

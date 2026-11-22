@@ -13,12 +13,12 @@ services:
       NODE_ENV: development
 
   migrate:
-    build: { context: ., dockerfile: docker/web.Dockerfile, target: runtime }
-    image: introyale-web:local
+    build: { context: ., dockerfile: docker/web.Dockerfile, target: cli }
+    image: introyale-cli:local
 
   worker:
-    build: { context: ., dockerfile: docker/web.Dockerfile, target: runtime }
-    image: introyale-web:local
+    build: { context: ., dockerfile: docker/web.Dockerfile, target: cli }
+    image: introyale-cli:local
 
   db:
     # Docker does not publish ports on internal networks, so dev adds a host-facing network.

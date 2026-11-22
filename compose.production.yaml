@@ -27,11 +27,11 @@ services:
   worker:
     <<: *smtp
     security_opt: !reset []
-    image: ghcr.io/${GH_OWNER}/introyale-web:${IMAGE_TAG}
+    image: ghcr.io/${GH_OWNER}/introyale-cli:${IMAGE_TAG}
     environment: *prod-env
   migrate:
     <<: *no-nnp
-    image: ghcr.io/${GH_OWNER}/introyale-web:${IMAGE_TAG}
+    image: ghcr.io/${GH_OWNER}/introyale-cli:${IMAGE_TAG}
     environment: *prod-env
   backup:
     <<: *no-nnp
