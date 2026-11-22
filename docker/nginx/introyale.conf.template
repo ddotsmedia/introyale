@@ -1,4 +1,5 @@
 # Mode A (shared VPS): host Nginx vhost. Render with envsubst for ${SERVER_NAME} ${WEB_PORT} ${ENV}.
+# Render with BASE=/opt/introyale (home path on Snap-Docker hosts, see decisions-log).
 # Install: nginx -t && systemctl reload nginx  (never a global restart; CLAUDE.md).
 limit_req_zone $binary_remote_addr zone=introyale_enquiries:10m rate=5r/m;
 limit_req_zone $binary_remote_addr zone=introyale_admin:10m rate=30r/m;
@@ -29,7 +30,7 @@ server {
     # add_header X-Robots-Tag "noindex, nofollow" always;
 
     location /media/ {
-        alias /opt/introyale/${ENV}/media/;
+        alias ${BASE}/${ENV}/media/;
         expires 1y;
         add_header Cache-Control "public, max-age=31536000, immutable";
     }

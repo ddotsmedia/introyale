@@ -9,5 +9,5 @@ check() { # check <path> <expected-substring>
   if [ "$code" = 200 ] && grep -q -- "$2" <<<"$body"; then echo "ok   $1"; else echo "FAIL $1 ($code)"; fail=1; fi
 }
 check /api/health '"db":true'
-check / 'Introyale'
+[ "${SMOKE_HEALTH_ONLY:-0}" = 1 ] || check / 'Introyale'
 exit $fail
