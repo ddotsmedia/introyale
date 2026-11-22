@@ -28,13 +28,18 @@ import {
   CONSENT_TEXT,
 } from './live-content'
 
-if (process.env.ENV !== 'local') {
-  console.error('seed-live-content refused: ENV must be "local"')
+if (
+  process.env.ENV !== 'local' &&
+  !(process.env.ENV === 'staging' && process.env.SEED_ADMIN_EMAIL)
+) {
+  console.error(
+    'seed-live-content refused: ENV must be "local" (or "staging" with SEED_ADMIN_EMAIL)',
+  )
   process.exit(1)
 }
 
 const IMPORT_DIR = process.env.IMPORT_DIR ?? '/import'
-const ADMIN_EMAIL = 'admin@introyale.local'
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@introyale.local'
 type Doc = { id: number | string; workflow?: { status?: string } & Record<string, unknown> }
 const counts = { created: 0, skipped: 0, removed: 0 }
 

@@ -19,7 +19,7 @@ jobs:
       - run: pnpm -C apps/web build
       - name: gitleaks
         uses: gitleaks/gitleaks-action@v2
-        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
       - name: osv-scanner (lockfile)
         uses: google/osv-scanner-action/osv-scanner-action@v2.0.2
         with:
@@ -60,3 +60,45 @@ jobs:
           PAYLOAD_SECRET: ci-only-not-a-secret
           DATABASE_URL: postgres://ci:ci@127.0.0.1:1/ci
           PAYLOAD_MIGRATING: 'true'
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: [verify, image]
+    permissions: { contents: read, packages: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          {
+            registry: ghcr.io,
+            username: '${{ github.actor }}',
+            password: '${{ secrets.GITHUB_TOKEN }}',
+          }
+      - name: build and push images
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"; tag="${GITHUB_SHA::12}"
+          docker build -f docker/web.Dockerfile --target runtime -t "ghcr.io/$owner/introyale-web:$tag" .
+          docker build -f docker/backup.Dockerfile -t "ghcr.io/$owner/introyale-backup:$tag" .
+          docker push "ghcr.io/$owner/introyale-web:$tag"
+          docker push "ghcr.io/$owner/introyale-backup:$tag"
+
+  deploy-staging:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: publish
+    concurrency: deploy-staging
+    steps:
+      - name: deploy over SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/deploy_key && chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          tag="${GITHUB_SHA::12}"
+          printf '%s' "$GHCR_TOKEN" | ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes "introyale-deploy@$VPS_HOST" \
+            "docker login ghcr.io -u '${{ github.actor }}' --password-stdin >/dev/null && cd /opt/introyale/staging && { [ -d repo/.git ] || git clone -q https://github.com/ddotsmedia/introyale.git repo; } && cd repo && git fetch -q origin main && git checkout -q --force '${GITHUB_SHA}' && scripts/deploy.sh staging '$tag'"

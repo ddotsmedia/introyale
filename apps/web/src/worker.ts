@@ -65,11 +65,13 @@ setInterval(() => {
     payload.jobs.queue({ task, input: {} }).catch(() => {
       payload.logger.error({ msg: 'could not queue job', task })
     })
-  if (lastDigest !== p.date && (p.h > 8 || (p.h === 8 && p.min >= 30))) {
+  if (process.env.FEATURE_EMAIL === 'false') {
+    // Email jobs are paused until SMTP is configured; scheduled publishing still runs.
+  } else if (lastDigest !== p.date && (p.h > 8 || (p.h === 8 && p.min >= 30))) {
     lastDigest = p.date
     void queue('leadDigest')
   }
-  if (Date.now() - lastUnassigned > 15 * 60_000) {
+  if (process.env.FEATURE_EMAIL !== 'false' && Date.now() - lastUnassigned > 15 * 60_000) {
     lastUnassigned = Date.now()
     void queue('unassignedAlert')
   }

@@ -53,6 +53,15 @@ export async function System(props: AdminViewServerProps) {
               <Kpi label="Database" value={hl.db ? 'OK' : 'Down'} />
               <Kpi label="Worker" value={hl.worker ? 'OK' : 'Down'} />
               <Kpi label="App version / image" value={appVersion()} />
+              <Kpi
+                label="Email"
+                value={process.env.FEATURE_EMAIL === 'false' ? 'Not configured' : 'On'}
+                note={
+                  process.env.FEATURE_EMAIL === 'false'
+                    ? 'Email not configured: leads are stored, email jobs are paused'
+                    : undefined
+                }
+              />
               <Kpi label="Database size" value={fmtBytes(size)} />
               <Kpi label="Media disk usage" value={fmtBytes(media)} />
               <Kpi

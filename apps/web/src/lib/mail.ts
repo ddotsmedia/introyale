@@ -4,19 +4,26 @@ import { readSecret } from './secrets'
 // SMTP via env (D4). TLS is required in production; Mailpit is plain in development.
 let transport: Transporter | undefined
 
+/** FEATURE_EMAIL=false: leads are stored, nothing is sent (no SMTP configured yet). */
+export const EMAIL_ENABLED = process.env.FEATURE_EMAIL !== 'false'
+
 export function mailer(): Transporter {
-  transport ??= createTransport({
-    host: process.env.SMTP_HOST ?? 'localhost',
-    port: Number(process.env.SMTP_PORT ?? 1025),
-    secure: Number(process.env.SMTP_PORT ?? 1025) === 465,
-    // TLS is required in production (SPEC §5.2). Local Mailpit sets SMTP_REQUIRE_TLS=false.
-    requireTLS: process.env.SMTP_REQUIRE_TLS
-      ? process.env.SMTP_REQUIRE_TLS === 'true'
-      : process.env.NODE_ENV === 'production',
-    auth: process.env.SMTP_USER
-      ? { user: process.env.SMTP_USER, pass: readSecret('SMTP_PASSWORD') }
-      : undefined,
-  })
+  transport ??= createTransport(
+    EMAIL_ENABLED
+      ? {
+          host: process.env.SMTP_HOST ?? 'localhost',
+          port: Number(process.env.SMTP_PORT ?? 1025),
+          secure: Number(process.env.SMTP_PORT ?? 1025) === 465,
+          // TLS is required in production (SPEC §5.2). Local Mailpit sets SMTP_REQUIRE_TLS=false.
+          requireTLS: process.env.SMTP_REQUIRE_TLS
+            ? process.env.SMTP_REQUIRE_TLS === 'true'
+            : process.env.NODE_ENV === 'production',
+          auth: process.env.SMTP_USER
+            ? { user: process.env.SMTP_USER, pass: readSecret('SMTP_PASSWORD') }
+            : undefined,
+        }
+      : { jsonTransport: true },
+  )
   return transport
 }
 
