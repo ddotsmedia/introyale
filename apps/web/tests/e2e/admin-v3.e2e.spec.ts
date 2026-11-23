@@ -117,6 +117,7 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
       .first()
       .getByRole('checkbox'),
   ).not.toBeChecked()
+  await page.waitForLoadState('networkidle') // charts have settled, so the button is not moving
   await Promise.all([
     page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin')),
     page.getByRole('button', { name: 'Reset to default' }).click(),

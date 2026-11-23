@@ -22,7 +22,7 @@ export function LazyChart(props: ChartProps & { xLabel?: string }) {
       ? [props.xLabel ?? 'Item', 'Count']
       : [props.xLabel ?? 'Day', ...(props.series ?? []).map((s) => s.label)]
   return (
-    <div className="ir-chart">
+    <div className="ir-chart" style={{ minHeight: props.height ?? 260 }}>
       {table ? (
         <div className="ir-chart-table" style={{ maxHeight: props.height ?? 260 }}>
           <table className="ir-table">

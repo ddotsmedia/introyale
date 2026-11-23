@@ -38,7 +38,7 @@ async function submitCode(
     await page.waitForTimeout(1500)
   }
 }
-const dashboard = (page: Page) => page.getByRole('heading', { name: 'Dashboard' })
+const dashboard = (page: Page) => page.getByRole('region', { name: 'Welcome' })
 
 test('2FA is optional, opt-in works, and once on the code is required', async ({
   page,
