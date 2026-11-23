@@ -17,3 +17,5 @@ backups
 *.docx
 *.zip
 **/*.tsbuildinfo
+**/dist-cli
+**/dist-cli-test

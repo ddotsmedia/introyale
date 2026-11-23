@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM alpine:3.22
+LABEL org.opencontainers.image.source="https://github.com/ddotsmedia/introyale"
 RUN apk add --no-cache postgresql16-client restic tzdata busybox \
  && adduser -D -u 10002 backup
 ENV TZ=Asia/Dubai

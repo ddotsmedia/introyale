@@ -16,14 +16,16 @@ CMD ["pnpm", "exec", "next", "dev", "--hostname", "0.0.0.0", "--port", "3000"]
 
 FROM deps AS build
 COPY . .
-RUN pnpm -C apps/web build && pnpm -C apps/web build:worker && pnpm -C apps/web build:migrate && pnpm -C apps/web build:seed-live && pnpm -C apps/web build:seed-legal && pnpm -C apps/web build:admin-user && pnpm -C apps/web build:seed-motion \
+# CLI scripts are fully bundled (dist-cli); only native sharp (+libvips) is needed at runtime.
+RUN pnpm -C apps/web build && pnpm -C apps/web build:cli \
  && pnpm --filter @introyale/web deploy --prod /out \
- # CLI image never renders pages or the admin UI: drop heavy, unused packages (verified by migrate/worker/seed runs).
- && cd /out/node_modules/.pnpm && rm -rf @next+swc-* monaco-editor@* happy-dom@* sass@* @esbuild+* esbuild@* lightningcss* @playwright+* playwright* \
+ && cd /out/node_modules/.pnpm && ls | grep -vE '^(sharp@|@img\+|detect-libc|semver|node_modules)' | xargs rm -rf \
+ && cd /out/node_modules && find . -maxdepth 1 -mindepth 1 ! -name .pnpm ! -name sharp -exec rm -rf {} + \
  && find /out -name '*.map' -delete && find /out -name '*.d.ts' -delete
 
 FROM ${NODE_IMAGE} AS base
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 HOSTNAME=0.0.0.0
+LABEL org.opencontainers.image.source="https://github.com/ddotsmedia/introyale"
 WORKDIR /app
 # Runtime needs no npm/corepack; removing them drops their bundled deps from the scan surface.
 RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
@@ -42,7 +44,7 @@ CMD ["node", "/app/server/apps/web/server.js"]
 
 # CLI: migrate, worker and seed scripts (Payload runtime deps, no Next server).
 FROM base AS cli
-COPY --from=build --chown=10001:10001 /repo/apps/web/dist/ /app/cli/dist/
+COPY --from=build --chown=10001:10001 /repo/apps/web/dist-cli/ /app/cli/dist/
 COPY --from=build --chown=10001:10001 /out/node_modules /app/cli/node_modules
 COPY --from=build --chown=10001:10001 /out/package.json /app/cli/package.json
 USER 10001:10001

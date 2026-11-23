@@ -45,3 +45,9 @@ Hosting: Hostinger VPS, Docker + Docker Compose only. Never Vercel/Netlify/share
 - Visual quality must be premium (image-led, full-bleed, rich sections) — never ship a bare skeleton for review.
 - Check port availability (Get-NetTCPConnection) before assigning any port; never stop another process to free one.
 - Apply all instructions already given in CLAUDE.md, docs/ and docs/decisions-log.md; do not ask the owner to repeat them.
+
+## VPS image footprint (owner, permanent)
+
+- Never store large Docker images on the VPS. Keep ONLY the running tag of each introyale image; rollback re-pulls from ghcr.io.
+- Image budgets (CI fails if exceeded): introyale-web ≤ 500 MB, introyale-cli ≤ 400 MB, introyale-backup ≤ 100 MB. Total introyale images on VPS ≤ 1.5 GB.
+- Never build images or keep build cache on the VPS. Deploy aborts if free disk < image size + 3 GB.

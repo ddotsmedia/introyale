@@ -14,6 +14,7 @@ if [ "${DRY_RUN:-0}" = 1 ]; then
   exit 0
 fi
 check_disk "${MIN_FREE_GB:-5}"
+check_disk_for "$GH_OWNER" "$tag"
 dc "$env" pull migrate web worker backup
 preflight "$env" "$WEB_IMAGE"
 # Pre-deploy dump (pg_dump + restic) must succeed before anything changes.
@@ -26,7 +27,7 @@ dc "$env" up -d --no-deps web worker
 [ -f "$last" ] || export SMOKE_HEALTH_ONLY=1
 if wait_healthy "introyale-${env}-web-1" 120 && "$(dirname "$0")/smoke.sh" "${SMOKE_BASE:-http://127.0.0.1:${WEB_PORT}}"; then
   mkdir -p "$base" && echo "$tag" > "$last"; echo "deployed $env $tag"
-  prune_old_images "$GH_OWNER" "$tag" "$(cat "$last")" || true
+  prune_old_images "$GH_OWNER" "$tag" || true   # only the running tag stays on the VPS
 else
   echo "deploy FAILED, rolling back" >&2
   if [ -f "$last" ]; then "$(dirname "$0")/rollback.sh" "$env" "$(cat "$last")"; fi

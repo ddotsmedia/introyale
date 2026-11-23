@@ -49,14 +49,34 @@ stale_tags() {
     [ "$keep" = 1 ] || echo "$t"
   done
 }
-# prune_old_images <owner> <running-tag> <last-good-tag>: removes superseded introyale image tags by exact ref. No prune, no -f: images in use stay.
+# prune_old_images <owner> <running-tag>: keeps ONLY the running tag of each introyale image (rollback re-pulls from ghcr.io).
+# Removes by exact ref (no prune, no -f: images in use stay), then dangling layers carrying our source label.
 prune_old_images() {
-  local owner="$1" run="$2" good="$3" repo t
+  local owner="$1" run="$2" repo t id
   for repo in introyale-web introyale-cli introyale-backup; do
-    docker image ls --format '{{.Tag}}' "ghcr.io/${owner}/${repo}" | stale_tags "$run" "$good" | while IFS= read -r t; do
+    docker image ls --format '{{.Tag}}' "ghcr.io/${owner}/${repo}" | stale_tags "$run" | while IFS= read -r t; do
       docker rmi "ghcr.io/${owner}/${repo}:${t}" >/dev/null 2>&1 && echo "removed ${repo}:${t}" || echo "kept ${repo}:${t} (in use)"
     done
   done
+  for id in $(docker image ls -q --filter dangling=true --filter "label=org.opencontainers.image.source=${IMAGE_SOURCE}"); do
+    docker rmi "$id" >/dev/null 2>&1 && echo "removed dangling $id" || true
+  done
+}
+IMAGE_SOURCE="https://github.com/ddotsmedia/introyale"
+# image_bytes <ref>: registry manifest size (config + layers, compressed) via `docker manifest inspect`; 0 if unavailable.
+image_bytes() {
+  docker manifest inspect "$1" 2>/dev/null | grep -o '"size": *[0-9]*' | tr -dc '0-9
+' | awk '{s+=$1} END{print s+0}'
+}
+# check_disk_for <GH_OWNER> <tag>: abort before pulling unless free disk >= unpacked size of the new images (2x compressed manifest) + 3 GB.
+check_disk_for() {
+  local owner="$1" tag="$2" r b total=0 need free
+  for r in introyale-web introyale-cli introyale-backup; do b="$(image_bytes "ghcr.io/${owner}/${r}:${tag}")"; total=$((total + b)); done
+  [ "$total" -gt 0 ] || total=$((750 * 1024 * 1024))   # manifest unreadable: assume the 1.5 GB image budget unpacked
+  need=$(( (total * 2 + 3 * 1024 * 1024 * 1024 + 1073741823) / 1073741824 ))
+  free="$(df -BG --output=avail / | tail -1 | tr -dc '0-9')"
+  [ "${free:-0}" -ge "$need" ] || { echo "deploy aborted: ${free}G free on /, need ${need}G (new images ~$((total * 2 / 1048576)) MB + 3 GB headroom)" >&2; return 1; }
+  echo "disk ok: ${free}G free, need ${need}G"
 }
 # check_disk <min-GB> [path]: abort a deploy before pulling if free space is too low.
 check_disk() {

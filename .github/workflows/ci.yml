@@ -40,6 +40,17 @@ jobs:
         run: docker build -f docker/web.Dockerfile --target runtime -t introyale-web:ci .
       - name: build cli image
         run: docker build -f docker/web.Dockerfile --target cli -t introyale-cli:ci .
+      - name: build backup image
+        run: docker build -f docker/backup.Dockerfile -t introyale-backup:ci .
+      - name: image size budgets (web 500, cli 400, backup 100 MB)
+        run: |
+          fail=0; { echo '| image | size MB | budget MB |'; echo '|---|---|---|'; } >> "$GITHUB_STEP_SUMMARY"
+          for e in web:500 cli:400 backup:100; do
+            n="${e%%:*}"; b="${e##*:}"; sz=$(( $(docker image inspect "introyale-$n:ci" --format '{{.Size}}') / 1000000 ))
+            echo "| $n | $sz | $b |" >> "$GITHUB_STEP_SUMMARY"; echo "introyale-$n: $sz MB (budget $b)"
+            [ "$sz" -le "$b" ] || { echo "::error::introyale-$n is $sz MB, over the $b MB budget"; fail=1; }
+          done
+          exit $fail
       - name: trivy (fail on fixable HIGH/CRITICAL)
         uses: aquasecurity/trivy-action@v0.36.0
         with:
