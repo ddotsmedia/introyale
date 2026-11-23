@@ -14,9 +14,9 @@ Dev DB uses a host port on a non-internal network (Docker does not publish ports
 
 ## Deploy / rollback (VPS, M11+)
 
-- There is no staging environment (owner decision). CI deploys **production** on every push to main, after verify, image scan (Trivy), browser (Playwright + axe) and publish pass: `deploy-production` over SSH as `introyale-deploy`. By hand: `INTROYALE_BASE=<base> scripts/deploy.sh production <tag>`; `DRY_RUN=1` runs the preflight and config check only. Host dir owners: `media/` uid 10001, `backups/` uid 10002 (backup container). Every deploy first takes a pre-deploy backup (pg_dump + restic); if it fails, nothing changes.
+- There is no staging environment (owner decision). CI deploys **production** on every push to main, after verify, image scan (Trivy), browser (Playwright + axe) and publish pass: `deploy-production` over SSH as `<deploy-user>`. By hand: `INTROYALE_BASE=<base> scripts/deploy.sh production <tag>`; `DRY_RUN=1` runs the preflight and config check only. Host dir owners: `media/` uid 10001, `backups/` uid 10002 (backup container). Every deploy first takes a pre-deploy backup (pg_dump + restic); if it fails, nothing changes.
 - Images: `introyale-web` (Next standalone only, ~470 MB) runs the site; `introyale-cli` (Payload runtime: migrate, worker, seed scripts) runs `migrate`/`worker`; `introyale-backup`. Deploy aborts before pulling if free disk < 5 GB (`MIN_FREE_GB`), and after a healthy deploy removes every other tag of these three images by exact ref (never prune, never -f; images in use are kept), leaving only the running tag (= `.last_good_tag`).
-- Failed health or smoke → automatic rollback to `<base>/<env>/.last_good_tag` (base = `/opt/introyale`; on the VPS `/home/introyale-deploy/introyale`, because Snap Docker cannot bind-mount `/opt`).
+- Failed health or smoke → automatic rollback to `<base>/<env>/.last_good_tag` (base = `/opt/introyale`; on the VPS `<deploy-home>/introyale`, because Snap Docker cannot bind-mount `/opt`).
 - Manual: `GH_OWNER=<owner> scripts/rollback.sh <env> <tag>`.
 
 ## Restore
@@ -76,14 +76,14 @@ Facts are marked verified with source introyale.com on the owner's instruction. 
 
 ## Production (introyale.online)
 
-- Host Nginx (`/etc/nginx/sites-available/introyale-online`, repo copies `docker/nginx/introyale-online.conf`) → `127.0.0.1:3140`. HSTS on, indexable (no basic auth, `ROBOTS_NOINDEX=false`). `www.introyale.online` returns 301 to `https://introyale.online`. Certificates: certbot webroot (`certbot certonly --webroot -w /var/www/html -d introyale.online -d www.introyale.online`).
+- Host Nginx (the host Nginx site file for introyale.online, repo copies `docker/nginx/introyale-online.conf`) → `127.0.0.1:<web-port>` (set in the production env file). HSTS on, indexable (no basic auth, `ROBOTS_NOINDEX=false`). `www.introyale.online` returns 301 to `https://introyale.online`. Certificates: certbot webroot (`certbot certonly --webroot -w /var/www/html -d introyale.online -d www.introyale.online`).
 - Per-host config: `<base>/production/.env.compose` (GH_OWNER, WEB_PORT, FEATURE_EMAIL). Secrets: `<base>/production/secrets/` (`scripts/gen-secrets.sh`). SMTP: add `secrets/smtp.env` (SMTP_HOST, SMTP_PORT, SMTP_USER, MAIL_FROM, STAFF_EMAIL) and the password in `smtp_password.txt`, then set `FEATURE_EMAIL=true`. Until then leads are stored and email jobs are paused.
 - The stack was promoted from the former staging stack on 2026-11-22: the data directories were moved (not copied) to `<base>/production` after a pg_dump and a media archive (kept in `<base>/production/backups/pre-production-*`).
 - Legal pages (Privacy, Terms, Cookies, Accessibility) are CMS pages with an admin-only review note. Create or restore them with `SEED_ADMIN_EMAIL=<admin> scripts/seed-legal.sh <tag>` (never overwrites edits; `RESEED_LEGAL=1` replaces them with the template text, only before the owner has edited them).
 
 ### Registry access and CI (private repo)
 
-- The GitHub repo and the GHCR packages are private. The VPS reads the repo with a read-only deploy key (`introyale-vps-read`, private key in `~introyale-deploy/.ssh/repo_deploy`, remote `git@github.com:ddotsmedia/introyale.git`). Rotate: create a new key on the VPS, add it with `gh repo deploy-key add`, delete the old one.
+- The GitHub repo is public (keep it free of secrets and server details); the GHCR packages stay private. The VPS reads the repo with a read-only deploy key (`introyale-vps-read`, private key in the deploy user's `~/.ssh/repo_deploy`, remote `git@github.com:ddotsmedia/introyale.git`). Rotate: create a new key on the VPS, add it with `gh repo deploy-key add`, delete the old one.
 - Image pulls use the CI run's `GITHUB_TOKEN` (piped over SSH, logged out on exit). Nothing is stored on the VPS. To deploy by hand from the VPS, `docker login ghcr.io` with a classic token that has `read:packages` and log out afterwards.
 - Package visibility has no API: GitHub → profile → Packages → `introyale-web` / `introyale-backup` → Package settings → Change visibility → Private.
 - CI `browser` job: `scripts/ci-stack.sh up` builds the image and starts a throwaway stack with random secrets (ENV=local, placeholder images), runs the whole Playwright suite, then `down`. Run it locally on free ports: `CI_WEB_PORT=3190 CI_MAILPIT_PORT=8190 RUNNER_TEMP=<abs tmp> scripts/ci-stack.sh up`.

@@ -39,7 +39,7 @@ date: '21 November 2026 · v1.0 · for approval before production code'
 
 ## 1.2 Assumptions requiring confirmation
 
-- **A1:** Hostinger VPS (srv988590 or the newer VPS) has capacity for the production stack (there is no staging). Estimated footprint: about 3 GB RAM and 20 GB disk to start, plus media growth.
+- **A1:** Hostinger VPS (<vps-hostname> or the newer VPS) has capacity for the production stack (there is no staging). Estimated footprint: about 3 GB RAM and 20 GB disk to start, plus media growth.
 - **A2:** DNS for introyale.com can be pointed at the VPS at cutover. The registrar or DNS host is **[CONFIRM]**.
 - **A3:** An SMTP mailbox is available for transactional email (e.g. Hostinger mail or the existing introyale.com mail), with SPF/DKIM/DMARC configurable.
 - **A4:** WhatsApp handoff uses a click-to-chat link to **[CONFIRM +971 52 77 54 585]**. No WhatsApp API is used at launch.
@@ -121,9 +121,9 @@ All deploy scripts act only on the `introyale-<env>` Compose project. There are 
 
 The VPS runs the **Snap build of Docker**. Deploys must follow these deviations:
 
-- **Paths:** Snap Docker cannot bind-mount anything under `/opt`. The production base is `/home/introyale-deploy/introyale/production` (set with `INTROYALE_BASE=/home/introyale-deploy/introyale`; scripts default to `/opt/introyale` elsewhere). The home directory is mode 711 so Nginx can serve `media/`.
+- **Paths:** Snap Docker cannot bind-mount anything under `/opt`. The production base is `<deploy-home>/introyale/production` (set with `INTROYALE_BASE=<deploy-home>/introyale`; scripts default to `/opt/introyale` elsewhere). The home directory is mode 711 so Nginx can serve `media/`.
 - **`no-new-privileges` is dropped on this host** (`security_opt: !reset []` in `compose.production.yaml`): Snap's AppArmor profile makes every exec fail when it is set. Compensating controls stay: `cap_drop: ALL`, read-only root, non-root user 10001, internal-only DB network. Local and CI keep it on.
-- **Deploy user:** `introyale-deploy` (docker group, no sudo). The repo is private; the VPS clones over SSH with a read-only GitHub deploy key (`~/.ssh/repo_deploy`). Images are private on GHCR; CI pipes the run's `GITHUB_TOKEN` to `docker login` on each deploy and logs out afterwards, so no registry token is stored on the VPS.
+- **Deploy user:** `<deploy-user>` (docker group, no sudo). The VPS clones over SSH with a read-only GitHub deploy key (`~/.ssh/repo_deploy`). Images are private on GHCR; CI pipes the run's `GITHUB_TOKEN` to `docker login` on each deploy and logs out afterwards, so no registry token is stored on the VPS.
 - **First deploy** checks health only (empty site); later deploys run the full smoke test.
 - **CI gates:** the `browser` job (Playwright + axe against a compose stack: db, migrate, web, worker, Mailpit, seeded via `scripts/ci-stack.sh`) must pass before `publish` and `deploy-production`.
 
@@ -288,7 +288,7 @@ The full crawl in M0 confirms there are no other indexed URLs.
 
 | ID  | Decision                                                                | Default if not decided                                            |
 | --- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| D1  | Which Hostinger VPS (srv988590 vs newer VPS) after capacity check       | Newer VPS if srv988590 lacks 3 GB RAM / 30 GB disk headroom       |
+| D1  | Which Hostinger VPS (<vps-hostname> vs newer VPS) after capacity check  | Newer VPS if <vps-hostname> lacks 3 GB RAM / 30 GB disk headroom  |
 | D2  | Proxy mode A (host Nginx + certbot) or B (Caddy in Compose)             | A on shared VPS; B on a dedicated VPS                             |
 | D3  | DNS host and cutover access; Cloudflare yes/no                          | DNS-only change at cutover; Cloudflare off                        |
 | D4  | SMTP provider and sender addresses                                      | Existing introyale.com mailbox                                    |

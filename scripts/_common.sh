@@ -1,6 +1,6 @@
 # Shared helpers. Every compose call is scoped to -p introyale-<env> (CLAUDE.md safety).
 # INTROYALE_BASE is the parent of the per-env dirs (default /opt/introyale). The Snap build of Docker cannot
-# bind-mount /opt, so the VPS sets it to /home/introyale-deploy/introyale (decisions-log).
+# bind-mount /opt, so the VPS sets it to <deploy-home>/introyale (decisions-log).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 env_base() { local b="${INTROYALE_BASE:-/opt/introyale}/$1"; [ -d "$b" ] || b="$ROOT/.local/$1"; echo "$b"; }
