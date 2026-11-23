@@ -66,7 +66,7 @@ IMAGE_SOURCE="https://github.com/ddotsmedia/introyale"
 # image_bytes <ref>: registry manifest size (config + layers, compressed) via `docker manifest inspect`; 0 if unavailable.
 image_bytes() {
   docker manifest inspect "$1" 2>/dev/null | grep -o '"size": *[0-9]*' | tr -dc '0-9
-' | awk '{s+=$1} END{print s+0}'
+' | awk '{s+=$1} END{print s+0}' || true   # unauthenticated/unreachable registry => 0, never abort
 }
 # check_disk_for <GH_OWNER> <tag>: abort before pulling unless free disk >= unpacked size of the new images (2x compressed manifest) + 3 GB.
 check_disk_for() {
