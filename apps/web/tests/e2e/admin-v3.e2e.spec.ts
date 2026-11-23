@@ -104,7 +104,10 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
   await openLayout(page)
   const row = page.getByRole('list', { name: 'Dashboard widgets' }).getByRole('listitem').first()
   await row.getByRole('checkbox').uncheck()
-  await page.getByRole('button', { name: 'Save layout' }).click()
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin')),
+    page.getByRole('button', { name: 'Save layout' }).click(),
+  ])
   await page.waitForLoadState('networkidle')
   await openLayout(page)
   await expect(
@@ -114,7 +117,10 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
       .first()
       .getByRole('checkbox'),
   ).not.toBeChecked()
-  await page.getByRole('button', { name: 'Reset to default' }).click()
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin')),
+    page.getByRole('button', { name: 'Reset to default' }).click(),
+  ])
   await page.waitForLoadState('networkidle')
   await page.reload()
   await page.waitForLoadState('networkidle')
