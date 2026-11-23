@@ -122,7 +122,12 @@ export async function Dashboard(props: AdminViewServerProps) {
                 </div>
               ),
             )}
-            <LayoutEditor items={items} save={saveDashboardLayout} reset={resetDashboardLayout} />
+            <LayoutEditor
+              key={items.map((i) => `${i.id}:${String(i.visible)}`).join('|')}
+              items={items}
+              save={saveDashboardLayout}
+              reset={resetDashboardLayout}
+            />
           </>
         )
       }}
