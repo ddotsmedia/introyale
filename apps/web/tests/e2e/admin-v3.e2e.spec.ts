@@ -89,15 +89,24 @@ test('the command palette opens with Ctrl+K and finds navigation targets', async
   await expect(page.getByRole('dialog', { name: 'Command palette' })).toBeHidden()
 })
 
+async function openLayout(page: import('@playwright/test').Page) {
+  // The editor may stay open across the save re-render; only open it when closed.
+  const box = page.locator('details.ir-layout')
+  if (!(await box.evaluate((d) => (d as HTMLDetailsElement).open))) {
+    await page.getByText('Customise this dashboard').click()
+  }
+  await expect(page.getByRole('list', { name: 'Dashboard widgets' })).toBeVisible()
+}
+
 test('the dashboard layout can be reordered, hidden and reset, per user', async ({ page }) => {
   await signIn(page)
   await open(page, '/admin')
-  await page.getByText('Customise this dashboard').click()
+  await openLayout(page)
   const row = page.getByRole('list', { name: 'Dashboard widgets' }).getByRole('listitem').first()
   await row.getByRole('checkbox').uncheck()
   await page.getByRole('button', { name: 'Save layout' }).click()
   await page.waitForLoadState('networkidle')
-  await page.getByText('Customise this dashboard').click()
+  await openLayout(page)
   await expect(
     page
       .getByRole('list', { name: 'Dashboard widgets' })
@@ -107,7 +116,7 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
   ).not.toBeChecked()
   await page.getByRole('button', { name: 'Reset to default' }).click()
   await page.waitForLoadState('networkidle')
-  await page.getByText('Customise this dashboard').click()
+  await openLayout(page)
   await expect(
     page
       .getByRole('list', { name: 'Dashboard widgets' })
