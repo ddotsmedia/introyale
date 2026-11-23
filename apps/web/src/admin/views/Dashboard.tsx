@@ -1,6 +1,6 @@
-import Link from 'next/link'
 import type { AdminViewServerProps } from 'payload'
 import { resetDashboardLayout, saveDashboardLayout } from '../actions'
+import { Welcome } from '../components/Welcome'
 import { LayoutEditor } from '../components/LayoutEditor'
 import { dashboardData } from '../data'
 import { execStats, trafficStats } from '../dashStats'
@@ -14,8 +14,9 @@ import { can } from '../../lib/roles'
 export async function Dashboard(props: AdminViewServerProps) {
   const lang = props.initPageResult.req.i18n.language
   return (
-    <Shell bare view={props} title={tr(lang, 'dashboard')} sub={tr(lang, 'dashboardSub')}>
-      {async ({ payload, user, req }) => {
+    <Shell bare noHeading view={props} title={tr(lang, 'dashboard')} sub={tr(lang, 'dashboardSub')}>
+      {async ({ payload, user, req, sp }) => {
+        const rangeDays = [7, 30, 90].includes(Number(sp['range'])) ? Number(sp['range']) : 30
         const saved = (user as unknown as { dashboardLayout?: unknown }).dashboardLayout
         const layout = resolveLayout(saved, user.role)
         const visible = layout.order.filter((id) => !layout.hidden.includes(id))
@@ -27,11 +28,11 @@ export async function Dashboard(props: AdminViewServerProps) {
         // Only the data the visible widgets need is loaded.
         const [d, ex, traffic, tasks, hl, bk, disk, dbBytes, mediaBytes] = await Promise.all([
           dashboardData(payload, user, req) as unknown as Promise<D>,
-          leadsAllowed && wants('exec', 'sectors', 'sources', 'leaderboard')
+          leadsAllowed && wants('kpi', 'goal', 'sectors', 'sources', 'leaderboard')
             ? execStats(payload, user, req)
             : null,
-          can(user.role, 'analytics.view') && wants('traffic', 'trend', 'heatmap', 'kpi')
-            ? trafficStats(payload)
+          can(user.role, 'analytics.view') && wants('trend', 'heatmap', 'kpi', 'pages', 'health')
+            ? trafficStats(payload, rangeDays)
             : null,
           leadsAllowed && wants('tasks') ? myTasksDue(payload, user.id, endOfDay) : [],
           wants('health') ? health(payload) : null,
@@ -53,6 +54,7 @@ export async function Dashboard(props: AdminViewServerProps) {
           dbBytes,
           mediaBytes,
           version: appVersion(),
+          rangeDays,
         }
         const byId = new Map(WIDGETS.map((w) => [w.id, w]))
         const items = [
@@ -64,64 +66,31 @@ export async function Dashboard(props: AdminViewServerProps) {
           const w = byId.get(id)
           return w ? [{ id, title: w.title, visible: !layout.hidden.includes(id) }] : []
         })
-        // Full-width widgets stand alone; half-width ones are paired in a two-column grid.
-        const rows: ({ full: true; id: string } | { full: false; ids: string[] })[] = []
-        for (const id of visible) {
-          const w = byId.get(id)
-          if (!w) continue
-          const last = rows[rows.length - 1]
-          if (w.size === 'full') rows.push({ full: true, id })
-          else if (last && !last.full) last.ids.push(id)
-          else rows.push({ full: false, ids: [id] })
-        }
         return (
           <>
-            <div className="ir-actions">
-              {can(user.role, 'project.write') && (
-                <Link className="ir-btn" href="/admin/collections/projects/create">
-                  {tr(lang, 'newProject')}
-                </Link>
-              )}
-              {can(user.role, 'content.write') && (
-                <Link className="ir-btn" href="/admin/collections/journal-posts/create">
-                  {tr(lang, 'newPost')}
-                </Link>
-              )}
-              {can(user.role, 'media.write') && (
-                <Link className="ir-btn ghost" href="/admin/collections/media/create">
-                  {tr(lang, 'uploadMedia')}
-                </Link>
-              )}
-              {leadsAllowed && (
-                <Link className="ir-btn ghost" href="/admin/leads-board">
-                  {tr(lang, 'openBoard')}
-                </Link>
-              )}
-              {can(user.role, 'analytics.view') && (
-                <Link className="ir-btn ghost" href="/admin/analytics">
-                  Analytics
-                </Link>
-              )}
-              <a className="ir-btn ghost" href="/" target="_blank" rel="noreferrer">
-                {tr(lang, 'viewSite')}
-                <span className="ir-sr"> (opens in a new tab)</span>
-              </a>
+            <Welcome
+              name={user.name}
+              range={rangeDays}
+              summary={[
+                leadsAllowed &&
+                  `${String(d.d1.cur)} new enquir${d.d1.cur === 1 ? 'y' : 'ies'} today`,
+                leadsAllowed &&
+                  `${String(d.due.length)} follow-up${d.due.length === 1 ? '' : 's'} due`,
+                d.awaiting > 0 &&
+                  `${String(d.awaiting)} item${d.awaiting === 1 ? '' : 's'} awaiting review`,
+              ].filter((x): x is string => !!x)}
+              showRange={can(user.role, 'analytics.view')}
+            />
+            <div className="ir-grid12">
+              {visible.map((id) => {
+                const w = byId.get(id)
+                return w ? (
+                  <div key={id} className={`ir-span-${String(w.span)}`}>
+                    {w.render(ctx)}
+                  </div>
+                ) : null
+              })}
             </div>
-            <p className="ir-muted ir-noprint">
-              Press <kbd>Ctrl</kbd> + <kbd>K</kbd> (or <kbd>⌘</kbd> + <kbd>K</kbd>) to search leads,
-              projects and pages.
-            </p>
-            {rows.map((row, i) =>
-              row.full ? (
-                <div key={row.id}>{byId.get(row.id)?.render(ctx)}</div>
-              ) : (
-                <div key={i} className="ir-cols">
-                  {row.ids.map((id) => (
-                    <div key={id}>{byId.get(id)?.render(ctx)}</div>
-                  ))}
-                </div>
-              ),
-            )}
             <LayoutEditor
               key={items.map((i) => `${i.id}:${String(i.visible)}`).join('|')}
               items={items}

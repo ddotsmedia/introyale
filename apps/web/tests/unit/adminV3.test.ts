@@ -65,10 +65,8 @@ describe('dashboard layout', () => {
   })
   it('widget visibility follows the role matrix', () => {
     const byId = new Map(WIDGETS.map((w) => [w.id, w]))
-    expect(byId.get('traffic')?.show('content_editor')).toBe(
-      can('content_editor', 'analytics.view'),
-    )
-    expect(byId.get('exec')?.show('publisher')).toBe(true)
+    expect(byId.get('trend')?.show('content_editor')).toBe(can('content_editor', 'analytics.view'))
+    expect(byId.get('kpi')?.show('publisher')).toBe(true)
     expect(byId.get('health')?.show('publisher')).toBe(false)
   })
 })

@@ -1,5 +1,12 @@
 import type { Payload } from 'payload'
-import { dailySeries, enquiryHeatmap, fresh, totalsOf } from '../lib/analytics/query'
+import {
+  dailySeries,
+  enquiryHeatmap,
+  fresh,
+  topKeys,
+  totalsOf,
+  vitals,
+} from '../lib/analytics/query'
 import { addDays } from '../lib/analytics/range'
 import { dubaiDay } from '../lib/analytics/store'
 import { slaFor } from '../lib/crmPlus'
@@ -182,16 +189,27 @@ export async function execStats(payload: Payload, user: U, req: Req): Promise<Ex
   }
 }
 
-/** Visitors and enquiries per day for the last 30 days (analytics roles only), plus totals for the tiles. */
-export async function trafficStats(payload: Payload) {
+/** Visitors and enquiries per day for the chosen window (analytics roles only), plus totals, top pages and web vitals. */
+export async function trafficStats(payload: Payload, windowDays = 30) {
   await fresh(payload)
   const to = dubaiDay()
-  const cur = { from: addDays(to, -29), to }
-  const prev = { from: addDays(to, -59), to: addDays(to, -30) }
-  const [days, prevDays, heat] = await Promise.all([
+  const cur = { from: addDays(to, -(windowDays - 1)), to }
+  const prev = { from: addDays(to, -(2 * windowDays - 1)), to: addDays(to, -windowDays) }
+  const [days, prevDays, heat, pages, projects, vit] = await Promise.all([
     dailySeries(payload, cur),
     dailySeries(payload, prev),
     enquiryHeatmap(payload, { from: addDays(to, -89), to }),
+    topKeys(payload, 'page', cur, 6, 'views'),
+    topKeys(payload, 'page', cur, 6, 'views', '/work/%'),
+    vitals(payload, cur).catch(() => []),
   ])
-  return { days, totals: totalsOf(days), prev: totalsOf(prevDays), heat }
+  return {
+    days,
+    totals: totalsOf(days),
+    prev: totalsOf(prevDays),
+    heat,
+    pages,
+    projects,
+    vitals: vit,
+  }
 }
