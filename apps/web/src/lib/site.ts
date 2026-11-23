@@ -66,6 +66,14 @@ export async function siteChrome() {
         : null,
     nav: items,
     footerCopy: footer.copy ?? null,
+    credit:
+      footer.showCredit !== false && footer.creditName
+        ? {
+            text: footer.creditText ?? null,
+            name: footer.creditName,
+            url: footer.creditUrl ?? null,
+          }
+        : null,
     footerColumns: (footer.columns ?? []).map((c) => ({
       title: c.title ?? '',
       links: (c.links ?? []).flatMap((l) =>

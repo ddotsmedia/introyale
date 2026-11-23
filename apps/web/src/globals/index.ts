@@ -87,6 +87,15 @@ export const Footer: GlobalConfig = {
   fields: [
     { name: 'copy', type: 'textarea', localized: true },
     {
+      name: 'showCredit',
+      type: 'checkbox',
+      defaultValue: true,
+      label: 'Show the developer credit in the footer',
+    },
+    { name: 'creditText', type: 'text', defaultValue: 'Built and managed by' },
+    { name: 'creditName', type: 'text', defaultValue: 'Ddotsmedia Technologies LLC' },
+    { name: 'creditUrl', type: 'text', defaultValue: 'https://ddotsmedia.com' },
+    {
       name: 'columns',
       type: 'array',
       fields: [

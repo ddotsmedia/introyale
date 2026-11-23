@@ -17,6 +17,7 @@ export function Footer({
   whatsappHref,
   email,
   social,
+  credit,
 }: {
   brand: string
   logo?: MediaInput
@@ -29,6 +30,7 @@ export function Footer({
   whatsappHref: string | null
   email: string | null
   social: { platform: string; url: string }[]
+  credit?: { text: string | null; name: string; url: string | null } | null
 }) {
   return (
     <footer className="bg-night text-ivory on-dark">
@@ -125,6 +127,23 @@ export function Footer({
             </ul>
           )}
         </div>
+        {credit && (
+          <p className="text-ivory/60 mt-2 text-center text-sm md:text-end">
+            {credit.text ? `${credit.text} ` : null}
+            {credit.url ? (
+              <a
+                href={credit.url}
+                target="_blank"
+                rel="noopener"
+                className="hover:text-ivory underline-offset-2 hover:underline"
+              >
+                {credit.name}
+              </a>
+            ) : (
+              credit.name
+            )}
+          </p>
+        )}
       </div>
     </footer>
   )

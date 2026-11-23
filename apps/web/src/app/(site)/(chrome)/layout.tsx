@@ -101,6 +101,7 @@ export default async function ChromeLayout({ children }: { children: ReactNode }
         whatsappHref={c.whatsappHref}
         email={c.email}
         social={c.social}
+        credit={c.credit}
       />
       <StickyActionBar
         callHref={digits ? `tel:${digits}` : null}

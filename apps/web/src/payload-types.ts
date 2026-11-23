@@ -59,500 +59,501 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | 'Pacific/Fiji'
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
-  };
-  blocks: {};
+    users: UserAuthOperations
+  }
+  blocks: {}
   collections: {
-    users: User;
-    media: Media;
-    projects: Project;
-    services: Service;
-    sectors: Sector;
-    'property-types': PropertyType;
-    'team-members': TeamMember;
-    testimonials: Testimonial;
-    clients: Client;
-    awards: Award;
-    'journal-posts': JournalPost;
-    'journal-categories': JournalCategory;
-    faqs: Faq;
-    pages: Page;
-    facts: Fact;
-    enquiries: Enquiry;
-    redirects: Redirect;
-    'audit-log': AuditLog;
-    'rate-limits': RateLimit;
-    'email-templates': EmailTemplate;
-    notifications: Notification;
-    'saved-views': SavedView;
-    'not-found-log': NotFoundLog;
-    'login-history': LoginHistory;
-    'payload-kv': PayloadKv;
-    'payload-jobs': PayloadJob;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
-  collectionsJoins: {};
+    users: User
+    media: Media
+    projects: Project
+    services: Service
+    sectors: Sector
+    'property-types': PropertyType
+    'team-members': TeamMember
+    testimonials: Testimonial
+    clients: Client
+    awards: Award
+    'journal-posts': JournalPost
+    'journal-categories': JournalCategory
+    faqs: Faq
+    pages: Page
+    facts: Fact
+    enquiries: Enquiry
+    redirects: Redirect
+    'audit-log': AuditLog
+    'rate-limits': RateLimit
+    'email-templates': EmailTemplate
+    notifications: Notification
+    'saved-views': SavedView
+    'not-found-log': NotFoundLog
+    'login-history': LoginHistory
+    'payload-kv': PayloadKv
+    'payload-jobs': PayloadJob
+    'payload-locked-documents': PayloadLockedDocument
+    'payload-preferences': PayloadPreference
+    'payload-migrations': PayloadMigration
+  }
+  collectionsJoins: {}
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    projects: ProjectsSelect<false> | ProjectsSelect<true>;
-    services: ServicesSelect<false> | ServicesSelect<true>;
-    sectors: SectorsSelect<false> | SectorsSelect<true>;
-    'property-types': PropertyTypesSelect<false> | PropertyTypesSelect<true>;
-    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
-    clients: ClientsSelect<false> | ClientsSelect<true>;
-    awards: AwardsSelect<false> | AwardsSelect<true>;
-    'journal-posts': JournalPostsSelect<false> | JournalPostsSelect<true>;
-    'journal-categories': JournalCategoriesSelect<false> | JournalCategoriesSelect<true>;
-    faqs: FaqsSelect<false> | FaqsSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
-    facts: FactsSelect<false> | FactsSelect<true>;
-    enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
-    redirects: RedirectsSelect<false> | RedirectsSelect<true>;
-    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>;
-    'rate-limits': RateLimitsSelect<false> | RateLimitsSelect<true>;
-    'email-templates': EmailTemplatesSelect<false> | EmailTemplatesSelect<true>;
-    notifications: NotificationsSelect<false> | NotificationsSelect<true>;
-    'saved-views': SavedViewsSelect<false> | SavedViewsSelect<true>;
-    'not-found-log': NotFoundLogSelect<false> | NotFoundLogSelect<true>;
-    'login-history': LoginHistorySelect<false> | LoginHistorySelect<true>;
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-  };
+    users: UsersSelect<false> | UsersSelect<true>
+    media: MediaSelect<false> | MediaSelect<true>
+    projects: ProjectsSelect<false> | ProjectsSelect<true>
+    services: ServicesSelect<false> | ServicesSelect<true>
+    sectors: SectorsSelect<false> | SectorsSelect<true>
+    'property-types': PropertyTypesSelect<false> | PropertyTypesSelect<true>
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>
+    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>
+    clients: ClientsSelect<false> | ClientsSelect<true>
+    awards: AwardsSelect<false> | AwardsSelect<true>
+    'journal-posts': JournalPostsSelect<false> | JournalPostsSelect<true>
+    'journal-categories': JournalCategoriesSelect<false> | JournalCategoriesSelect<true>
+    faqs: FaqsSelect<false> | FaqsSelect<true>
+    pages: PagesSelect<false> | PagesSelect<true>
+    facts: FactsSelect<false> | FactsSelect<true>
+    enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>
+    redirects: RedirectsSelect<false> | RedirectsSelect<true>
+    'audit-log': AuditLogSelect<false> | AuditLogSelect<true>
+    'rate-limits': RateLimitsSelect<false> | RateLimitsSelect<true>
+    'email-templates': EmailTemplatesSelect<false> | EmailTemplatesSelect<true>
+    notifications: NotificationsSelect<false> | NotificationsSelect<true>
+    'saved-views': SavedViewsSelect<false> | SavedViewsSelect<true>
+    'not-found-log': NotFoundLogSelect<false> | NotFoundLogSelect<true>
+    'login-history': LoginHistorySelect<false> | LoginHistorySelect<true>
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
+    'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>
+    'payload-locked-documents':
+      PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
+  }
   db: {
-    defaultIDType: number;
-  };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ar') | ('en' | 'ar')[];
+    defaultIDType: number
+  }
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ar') | ('en' | 'ar')[]
   globals: {
-    'site-settings': SiteSetting;
-    'home-page': HomePage;
-    'motion-settings': MotionSetting;
-    navigation: Navigation;
-    footer: Footer;
-    'contact-info': ContactInfo;
-    'social-profiles': SocialProfile;
-    'seo-defaults': SeoDefault;
-    'consultation-settings': ConsultationSetting;
-    'legal-entity': LegalEntity;
-    integrations: Integration;
-  };
+    'site-settings': SiteSetting
+    'home-page': HomePage
+    'motion-settings': MotionSetting
+    navigation: Navigation
+    footer: Footer
+    'contact-info': ContactInfo
+    'social-profiles': SocialProfile
+    'seo-defaults': SeoDefault
+    'consultation-settings': ConsultationSetting
+    'legal-entity': LegalEntity
+    integrations: Integration
+  }
   globalsSelect: {
-    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
-    'home-page': HomePageSelect<false> | HomePageSelect<true>;
-    'motion-settings': MotionSettingsSelect<false> | MotionSettingsSelect<true>;
-    navigation: NavigationSelect<false> | NavigationSelect<true>;
-    footer: FooterSelect<false> | FooterSelect<true>;
-    'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>;
-    'social-profiles': SocialProfilesSelect<false> | SocialProfilesSelect<true>;
-    'seo-defaults': SeoDefaultsSelect<false> | SeoDefaultsSelect<true>;
-    'consultation-settings': ConsultationSettingsSelect<false> | ConsultationSettingsSelect<true>;
-    'legal-entity': LegalEntitySelect<false> | LegalEntitySelect<true>;
-    integrations: IntegrationsSelect<false> | IntegrationsSelect<true>;
-  };
-  locale: 'en' | 'ar';
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>
+    'home-page': HomePageSelect<false> | HomePageSelect<true>
+    'motion-settings': MotionSettingsSelect<false> | MotionSettingsSelect<true>
+    navigation: NavigationSelect<false> | NavigationSelect<true>
+    footer: FooterSelect<false> | FooterSelect<true>
+    'contact-info': ContactInfoSelect<false> | ContactInfoSelect<true>
+    'social-profiles': SocialProfilesSelect<false> | SocialProfilesSelect<true>
+    'seo-defaults': SeoDefaultsSelect<false> | SeoDefaultsSelect<true>
+    'consultation-settings': ConsultationSettingsSelect<false> | ConsultationSettingsSelect<true>
+    'legal-entity': LegalEntitySelect<false> | LegalEntitySelect<true>
+    integrations: IntegrationsSelect<false> | IntegrationsSelect<true>
+  }
+  locale: 'en' | 'ar'
   widgets: {
-    collections: CollectionsWidget;
-  };
-  user: User;
+    collections: CollectionsWidget
+  }
+  user: User
   jobs: {
     tasks: {
-      deliverStaffEmail: TaskDeliverStaffEmail;
-      sendConfirmation: TaskSendConfirmation;
-      deliverCrm: TaskDeliverCrm;
-      purgeEnquiries: TaskPurgeEnquiries;
-      leadDigest: TaskLeadDigest;
-      unassignedAlert: TaskUnassignedAlert;
-      publishScheduled: TaskPublishScheduled;
-      analyticsNightly: TaskAnalyticsNightly;
-      analyticsWeeklyReport: TaskAnalyticsWeeklyReport;
-      schedulePublish: TaskSchedulePublish;
+      deliverStaffEmail: TaskDeliverStaffEmail
+      sendConfirmation: TaskSendConfirmation
+      deliverCrm: TaskDeliverCrm
+      purgeEnquiries: TaskPurgeEnquiries
+      leadDigest: TaskLeadDigest
+      unassignedAlert: TaskUnassignedAlert
+      publishScheduled: TaskPublishScheduled
+      analyticsNightly: TaskAnalyticsNightly
+      analyticsWeeklyReport: TaskAnalyticsWeeklyReport
+      schedulePublish: TaskSchedulePublish
       inline: {
-        input: unknown;
-        output: unknown;
-      };
-    };
-    workflows: unknown;
-  };
+        input: unknown
+        output: unknown
+      }
+    }
+    workflows: unknown
+  }
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   login: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   registerFirstUser: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   unlock: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
-  name: string;
+  id: number
+  name: string
   /**
    * Saved dashboard widget order and visibility (per user)
    */
   dashboardLayout?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  role: 'administrator' | 'content_editor' | 'project_editor' | 'marketing_reviewer' | 'publisher';
+    | null
+  role: 'administrator' | 'content_editor' | 'project_editor' | 'marketing_reviewer' | 'publisher'
   /**
    * MFA state. Secrets are encrypted and never readable through the API.
    */
   totp?: {
-    enabled?: boolean | null;
-    secret?: string | null;
-    failedAttempts?: number | null;
-    lockedUntil?: string | null;
+    enabled?: boolean | null
+    secret?: string | null
+    failedAttempts?: number | null
+    lockedUntil?: string | null
     recoveryCodes?:
       | {
-          hash: string;
-          id?: string | null;
+          hash: string
+          id?: string | null
         }[]
-      | null;
-  };
-  lastLoginAt?: string | null;
+      | null
+  }
+  lastLoginAt?: string | null
   /**
    * Also email me bell notifications
    */
-  notifyByEmail?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  resetPasswordRequestedAt?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
+  notifyByEmail?: boolean | null
+  updatedAt: string
+  createdAt: string
+  email: string
+  resetPasswordToken?: string | null
+  resetPasswordExpiration?: string | null
+  salt?: string | null
+  hash?: string | null
+  resetPasswordRequestedAt?: string | null
+  loginAttempts?: number | null
+  lockUntil?: string | null
   sessions?:
     | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
+        id: string
+        createdAt?: string | null
+        expiresAt: string
       }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+    | null
+  password?: string | null
+  collection: 'users'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
-  alt: string;
-  caption?: string | null;
-  credit?: string | null;
-  usageApproved?: boolean | null;
-  usageApprovedBy?: (number | null) | User;
-  confidential?: boolean | null;
-  lqip?: string | null;
-  dominant?: string | null;
-  tags?: string[] | null;
+  id: number
+  alt: string
+  caption?: string | null
+  credit?: string | null
+  usageApproved?: boolean | null
+  usageApprovedBy?: (number | null) | User
+  confidential?: boolean | null
+  lqip?: string | null
+  dominant?: string | null
+  tags?: string[] | null
   /**
    * Library folder, e.g. Residential/Villas
    */
-  folder?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+  folder?: string | null
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  thumbnailURL?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  focalX?: number | null
+  focalY?: number | null
   sizes?: {
     w480?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a480?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     w768?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a768?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     w1080?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a1080?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     w1440?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a1440?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     w1920?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a1920?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     w2560?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
     a2560?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
+      url?: string | null
+      width?: number | null
+      height?: number | null
+      mimeType?: string | null
+      filesize?: number | null
+      filename?: string | null
+    }
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects".
  */
 export interface Project {
-  id: number;
-  title: string;
+  id: number
+  title: string
   /**
    * Confidentiality-safe title shown publicly.
    */
-  publicTitle?: string | null;
-  slug: string;
-  sector?: (number | null) | Sector;
-  propertyType?: (number | null) | PropertyType;
+  publicTitle?: string | null
+  slug: string
+  sector?: (number | null) | Sector
+  propertyType?: (number | null) | PropertyType
   /**
    * District only, never an exact address. Leave empty when unknown.
    */
-  areaLabel?: string | null;
+  areaLabel?: string | null
   /**
    * Leave empty when unknown.
    */
-  year?: number | null;
+  year?: number | null
   /**
    * Internal note. Never shown on the site.
    */
-  adminNote?: string | null;
-  approxAreaSqm?: number | null;
-  services?: (number | Service)[] | null;
-  stage?: ('concept' | 'design' | 'delivery' | 'completed') | null;
-  brief?: string | null;
-  constraints?: string | null;
-  concept?: string | null;
-  spacePlanning?: string | null;
-  materials?: string | null;
-  joinery?: string | null;
-  technicalMep?: string | null;
-  deliveryModel?: string | null;
-  timelineLabel?: string | null;
-  outcome?: string | null;
-  hero?: (number | null) | Media;
-  gallery?: (number | Media)[] | null;
+  adminNote?: string | null
+  approxAreaSqm?: number | null
+  services?: (number | Service)[] | null
+  stage?: ('concept' | 'design' | 'delivery' | 'completed') | null
+  brief?: string | null
+  constraints?: string | null
+  concept?: string | null
+  spacePlanning?: string | null
+  materials?: string | null
+  joinery?: string | null
+  technicalMep?: string | null
+  deliveryModel?: string | null
+  timelineLabel?: string | null
+  outcome?: string | null
+  hero?: (number | null) | Media
+  gallery?: (number | Media)[] | null
   beforeAfter?:
     | {
-        before?: (number | null) | Media;
-        after?: (number | null) | Media;
-        caption?: string | null;
-        id?: string | null;
+        before?: (number | null) | Media
+        after?: (number | null) | Media
+        caption?: string | null
+        id?: string | null
       }[]
-    | null;
+    | null
   plans?:
     | {
-        image?: (number | null) | Media;
+        image?: (number | null) | Media
         hotspots?:
           | {
-              x: number;
-              y: number;
-              label: string;
-              media?: (number | null) | Media;
-              id?: string | null;
+              x: number
+              y: number
+              label: string
+              media?: (number | null) | Media
+              id?: string | null
             }[]
-          | null;
-        id?: string | null;
+          | null
+        id?: string | null
       }[]
-    | null;
-  testimonial?: (number | null) | Testimonial;
-  team?: (number | TeamMember)[] | null;
-  related?: (number | Project)[] | null;
-  featured?: boolean | null;
+    | null
+  testimonial?: (number | null) | Testimonial
+  team?: (number | TeamMember)[] | null
+  related?: (number | Project)[] | null
+  featured?: boolean | null
   clientApproval?: {
-    approved?: boolean | null;
-    approvedBy?: string | null;
-    date?: string | null;
-    evidence?: string | null;
-  };
+    approved?: boolean | null
+    approvedBy?: string | null
+    date?: string | null
+    evidence?: string | null
+  }
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "sectors".
  */
 export interface Sector {
-  id: number;
-  title: string;
-  slug: string;
-  intro?: string | null;
-  hero?: (number | null) | Media;
-  featuredProjects?: (number | Project)[] | null;
-  faqs?: (number | Faq)[] | null;
+  id: number
+  title: string
+  slug: string
+  intro?: string | null
+  hero?: (number | null) | Media
+  featuredProjects?: (number | Project)[] | null
+  faqs?: (number | Faq)[] | null
   /**
    * Add, reorder, edit or hide sections. Changes appear on the site after publishing
    */
   layout?:
     | (
         | {
-            eyebrow?: string | null;
-            headline: string;
-            subhead?: string | null;
-            image?: (number | null) | Media;
+            eyebrow?: string | null
+            headline: string
+            subhead?: string | null
+            image?: (number | null) | Media
             /**
              * Darkness of the image overlay, 0–80
              */
-            overlay?: number | null;
-            size?: ('full' | 'banner') | null;
+            overlay?: number | null
+            size?: ('full' | 'banner') | null
             primaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             secondaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'hero';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'hero'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Each number comes from a verified fact in the Facts Register
              */
@@ -561,361 +562,361 @@ export interface Sector {
                   /**
                    * Facts Register key
                    */
-                  factKey: string;
-                  label?: string | null;
-                  id?: string | null;
+                  factKey: string
+                  label?: string | null
+                  id?: string | null
                 }[]
-              | null;
+              | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'introStats';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'introStats'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Pick projects. Leave empty to show the latest published ones
              */
-            projects?: (number | Project)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'horizontal') | null;
+            projects?: (number | Project)[] | null
+            limit?: number | null
+            display?: ('grid' | 'horizontal') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'featuredWork';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'featuredWork'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published sector
              */
-            sectors?: (number | Sector)[] | null;
+            sectors?: (number | Sector)[] | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'sectorTiles';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'sectorTiles'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published service
              */
-            services?: (number | Service)[] | null;
+            services?: (number | Service)[] | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'servicesList';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'servicesList'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             steps?:
               | {
-                  title: string;
-                  body?: string | null;
-                  id?: string | null;
+                  title: string
+                  body?: string | null
+                  id?: string | null
                 }[]
-              | null;
-            tone?: ('dark' | 'light') | null;
+              | null
+            tone?: ('dark' | 'light') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'processSteps';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'processSteps'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every client with logo permission
              */
-            clients?: (number | Client)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'marquee') | null;
+            clients?: (number | Client)[] | null
+            limit?: number | null
+            display?: ('grid' | 'marquee') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'clientWall';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'clientWall'
           }
         | {
-            eyebrow?: string | null;
-            statement: string;
+            eyebrow?: string | null
+            statement: string
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'statement';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'statement'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
             /**
              * A project that has before/after images. Leave empty to use the first published project that has them
              */
-            project?: (number | null) | Project;
+            project?: (number | null) | Project
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'beforeAfterSpotlight';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'beforeAfterSpotlight'
           }
         | {
-            heading: string;
-            text?: string | null;
-            image?: (number | null) | Media;
+            heading: string
+            text?: string | null
+            image?: (number | null) | Media
             button?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'ctaBand';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'ctaBand'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            image?: (number | null) | Media;
-            imageSide?: ('right' | 'left') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            image?: (number | null) | Media
+            imageSide?: ('right' | 'left') | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageText';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'imageText'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            columns?: ('1' | '2') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            columns?: ('1' | '2') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textSection';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'textSection'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            showHours?: boolean | null;
+            heading?: string | null
+            intro?: string | null
+            showHours?: boolean | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contactInfo';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'contactInfo'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            form?: ('contact' | 'consultation') | null;
+            heading?: string | null
+            intro?: string | null
+            form?: ('contact' | 'consultation') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'enquiryForm';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'enquiryForm'
           }
       )[]
-    | null;
+    | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs".
  */
 export interface Faq {
-  id: number;
-  question: string;
-  answer: string;
-  topic?: string | null;
-  eligibleForSchema?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  question: string
+  answer: string
+  topic?: string | null
+  eligibleForSchema?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
-  id: number;
-  title: string;
-  slug: string;
-  summary?: string | null;
-  audience?: string | null;
+  id: number
+  title: string
+  slug: string
+  summary?: string | null
+  audience?: string | null
   scope?:
     | {
-        item: string;
-        id?: string | null;
+        item: string
+        id?: string | null
       }[]
-    | null;
+    | null
   deliverables?:
     | {
-        item: string;
-        id?: string | null;
+        item: string
+        id?: string | null
       }[]
-    | null;
+    | null
   processSteps?:
     | {
-        step: string;
-        id?: string | null;
+        step: string
+        id?: string | null
       }[]
-    | null;
-  faqs?: (number | Faq)[] | null;
-  proofProjects?: (number | Project)[] | null;
-  sector?: (number | null) | Sector;
-  image?: (number | null) | Media;
+    | null
+  faqs?: (number | Faq)[] | null
+  proofProjects?: (number | Project)[] | null
+  sector?: (number | null) | Sector
+  image?: (number | null) | Media
   /**
    * Add, reorder, edit or hide sections. Changes appear on the site after publishing
    */
   layout?:
     | (
         | {
-            eyebrow?: string | null;
-            headline: string;
-            subhead?: string | null;
-            image?: (number | null) | Media;
+            eyebrow?: string | null
+            headline: string
+            subhead?: string | null
+            image?: (number | null) | Media
             /**
              * Darkness of the image overlay, 0–80
              */
-            overlay?: number | null;
-            size?: ('full' | 'banner') | null;
+            overlay?: number | null
+            size?: ('full' | 'banner') | null
             primaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             secondaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'hero';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'hero'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Each number comes from a verified fact in the Facts Register
              */
@@ -924,533 +925,533 @@ export interface Service {
                   /**
                    * Facts Register key
                    */
-                  factKey: string;
-                  label?: string | null;
-                  id?: string | null;
+                  factKey: string
+                  label?: string | null
+                  id?: string | null
                 }[]
-              | null;
+              | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'introStats';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'introStats'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Pick projects. Leave empty to show the latest published ones
              */
-            projects?: (number | Project)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'horizontal') | null;
+            projects?: (number | Project)[] | null
+            limit?: number | null
+            display?: ('grid' | 'horizontal') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'featuredWork';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'featuredWork'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published sector
              */
-            sectors?: (number | Sector)[] | null;
+            sectors?: (number | Sector)[] | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'sectorTiles';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'sectorTiles'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published service
              */
-            services?: (number | Service)[] | null;
+            services?: (number | Service)[] | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'servicesList';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'servicesList'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             steps?:
               | {
-                  title: string;
-                  body?: string | null;
-                  id?: string | null;
+                  title: string
+                  body?: string | null
+                  id?: string | null
                 }[]
-              | null;
-            tone?: ('dark' | 'light') | null;
+              | null
+            tone?: ('dark' | 'light') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'processSteps';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'processSteps'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every client with logo permission
              */
-            clients?: (number | Client)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'marquee') | null;
+            clients?: (number | Client)[] | null
+            limit?: number | null
+            display?: ('grid' | 'marquee') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'clientWall';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'clientWall'
           }
         | {
-            eyebrow?: string | null;
-            statement: string;
+            eyebrow?: string | null
+            statement: string
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'statement';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'statement'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
             /**
              * A project that has before/after images. Leave empty to use the first published project that has them
              */
-            project?: (number | null) | Project;
+            project?: (number | null) | Project
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'beforeAfterSpotlight';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'beforeAfterSpotlight'
           }
         | {
-            heading: string;
-            text?: string | null;
-            image?: (number | null) | Media;
+            heading: string
+            text?: string | null
+            image?: (number | null) | Media
             button?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'ctaBand';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'ctaBand'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            image?: (number | null) | Media;
-            imageSide?: ('right' | 'left') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            image?: (number | null) | Media
+            imageSide?: ('right' | 'left') | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageText';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'imageText'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            columns?: ('1' | '2') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            columns?: ('1' | '2') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textSection';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'textSection'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            showHours?: boolean | null;
+            heading?: string | null
+            intro?: string | null
+            showHours?: boolean | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contactInfo';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'contactInfo'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            form?: ('contact' | 'consultation') | null;
+            heading?: string | null
+            intro?: string | null
+            form?: ('contact' | 'consultation') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'enquiryForm';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'enquiryForm'
           }
       )[]
-    | null;
+    | null
   /**
    * Publish only when confirmed (D6).
    */
-  confirmed?: boolean | null;
+  confirmed?: boolean | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clients".
  */
 export interface Client {
-  id: number;
+  id: number
   /**
    * Internal. Logos render without names.
    */
-  name: string;
-  order?: number | null;
-  logo?: (number | null) | Media;
-  sector?: (number | null) | Sector;
-  logoPermission?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  name: string
+  order?: number | null
+  logo?: (number | null) | Media
+  sector?: (number | null) | Sector
+  logoPermission?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "property-types".
  */
 export interface PropertyType {
-  id: number;
-  title: string;
-  slug: string;
-  sector?: (number | null) | Sector;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  title: string
+  slug: string
+  sector?: (number | null) | Sector
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
  */
 export interface Testimonial {
-  id: number;
-  quote: string;
-  attributionName: string;
-  attributionRole?: string | null;
-  project?: (number | null) | Project;
+  id: number
+  quote: string
+  attributionName: string
+  attributionRole?: string | null
+  project?: (number | null) | Project
   permission?: {
-    given?: boolean | null;
-    evidence?: string | null;
-  };
+    given?: boolean | null
+    evidence?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "team-members".
  */
 export interface TeamMember {
-  id: number;
-  name: string;
-  slug: string;
-  role: string;
-  bio?: string | null;
+  id: number
+  name: string
+  slug: string
+  role: string
+  bio?: string | null
   credentials?:
     | {
-        item: string;
-        id?: string | null;
+        item: string
+        id?: string | null
       }[]
-    | null;
-  photo?: (number | null) | Media;
-  order?: number | null;
+    | null
+  photo?: (number | null) | Media
+  order?: number | null
   consent?: {
-    given?: boolean | null;
-    date?: string | null;
-    evidence?: string | null;
-  };
+    given?: boolean | null
+    date?: string | null
+    evidence?: string | null
+  }
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "awards".
  */
 export interface Award {
-  id: number;
-  name: string;
-  issuer?: string | null;
-  year?: number | null;
-  evidenceUrl?: string | null;
-  evidenceFile?: (number | null) | Media;
-  project?: (number | null) | Project;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  name: string
+  issuer?: string | null
+  year?: number | null
+  evidenceUrl?: string | null
+  evidenceFile?: (number | null) | Media
+  project?: (number | null) | Project
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-posts".
  */
 export interface JournalPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt?: string | null;
+  id: number
+  title: string
+  slug: string
+  excerpt?: string | null
   body?: {
     root: {
-      type: string;
+      type: string
       children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  author?: (number | null) | TeamMember;
-  categories?: (number | JournalCategory)[] | null;
-  heroImage?: (number | null) | Media;
-  reviewedAt?: string | null;
+        type: any
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
+  author?: (number | null) | TeamMember
+  categories?: (number | JournalCategory)[] | null
+  heroImage?: (number | null) | Media
+  reviewedAt?: string | null
   citations?:
     | {
-        item: string;
-        id?: string | null;
+        item: string
+        id?: string | null
       }[]
-    | null;
-  relatedProjects?: (number | Project)[] | null;
-  relatedServices?: (number | Service)[] | null;
+    | null
+  relatedProjects?: (number | Project)[] | null
+  relatedServices?: (number | Service)[] | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-categories".
  */
 export interface JournalCategory {
-  id: number;
-  title: string;
-  slug: string;
-  description?: string | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  title: string
+  slug: string
+  description?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
-  title: string;
-  slug: string;
-  intro?: string | null;
-  hero?: (number | null) | Media;
-  body?: string | null;
+  id: number
+  title: string
+  slug: string
+  intro?: string | null
+  hero?: (number | null) | Media
+  body?: string | null
   /**
    * Add, reorder, edit or hide sections. Changes appear on the site after publishing
    */
   layout?:
     | (
         | {
-            eyebrow?: string | null;
-            headline: string;
-            subhead?: string | null;
-            image?: (number | null) | Media;
+            eyebrow?: string | null
+            headline: string
+            subhead?: string | null
+            image?: (number | null) | Media
             /**
              * Darkness of the image overlay, 0–80
              */
-            overlay?: number | null;
-            size?: ('full' | 'banner') | null;
+            overlay?: number | null
+            size?: ('full' | 'banner') | null
             primaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             secondaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'hero';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'hero'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Each number comes from a verified fact in the Facts Register
              */
@@ -1459,580 +1460,580 @@ export interface Page {
                   /**
                    * Facts Register key
                    */
-                  factKey: string;
-                  label?: string | null;
-                  id?: string | null;
+                  factKey: string
+                  label?: string | null
+                  id?: string | null
                 }[]
-              | null;
+              | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'introStats';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'introStats'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Pick projects. Leave empty to show the latest published ones
              */
-            projects?: (number | Project)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'horizontal') | null;
+            projects?: (number | Project)[] | null
+            limit?: number | null
+            display?: ('grid' | 'horizontal') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'featuredWork';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'featuredWork'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published sector
              */
-            sectors?: (number | Sector)[] | null;
+            sectors?: (number | Sector)[] | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'sectorTiles';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'sectorTiles'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published service
              */
-            services?: (number | Service)[] | null;
+            services?: (number | Service)[] | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'servicesList';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'servicesList'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             steps?:
               | {
-                  title: string;
-                  body?: string | null;
-                  id?: string | null;
+                  title: string
+                  body?: string | null
+                  id?: string | null
                 }[]
-              | null;
-            tone?: ('dark' | 'light') | null;
+              | null
+            tone?: ('dark' | 'light') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'processSteps';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'processSteps'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every client with logo permission
              */
-            clients?: (number | Client)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'marquee') | null;
+            clients?: (number | Client)[] | null
+            limit?: number | null
+            display?: ('grid' | 'marquee') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'clientWall';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'clientWall'
           }
         | {
-            eyebrow?: string | null;
-            statement: string;
+            eyebrow?: string | null
+            statement: string
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'statement';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'statement'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
             /**
              * A project that has before/after images. Leave empty to use the first published project that has them
              */
-            project?: (number | null) | Project;
+            project?: (number | null) | Project
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'beforeAfterSpotlight';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'beforeAfterSpotlight'
           }
         | {
-            heading: string;
-            text?: string | null;
-            image?: (number | null) | Media;
+            heading: string
+            text?: string | null
+            image?: (number | null) | Media
             button?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'ctaBand';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'ctaBand'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            image?: (number | null) | Media;
-            imageSide?: ('right' | 'left') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            image?: (number | null) | Media
+            imageSide?: ('right' | 'left') | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageText';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'imageText'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            columns?: ('1' | '2') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            columns?: ('1' | '2') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textSection';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'textSection'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            showHours?: boolean | null;
+            heading?: string | null
+            intro?: string | null
+            showHours?: boolean | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contactInfo';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'contactInfo'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            form?: ('contact' | 'consultation') | null;
+            heading?: string | null
+            intro?: string | null
+            form?: ('contact' | 'consultation') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'enquiryForm';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'enquiryForm'
           }
       )[]
-    | null;
+    | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
+    focusKeyword?: string | null
+  }
   workflow: {
-    status: 'draft' | 'in_review' | 'approved' | 'published';
-    submittedBy?: (number | null) | User;
-    reviewedBy?: (number | null) | User;
-    approvedBy?: (number | null) | User;
-    publishedBy?: (number | null) | User;
-    reviewNotes?: string | null;
+    status: 'draft' | 'in_review' | 'approved' | 'published'
+    submittedBy?: (number | null) | User
+    reviewedBy?: (number | null) | User
+    approvedBy?: (number | null) | User
+    publishedBy?: (number | null) | User
+    reviewNotes?: string | null
     /**
      * Scheduled publication (approved items only; the worker publishes at this time)
      */
-    publishAt?: string | null;
-    scheduledBy?: (number | null) | User;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+    publishAt?: string | null
+    scheduledBy?: (number | null) | User
+  }
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "facts".
  */
 export interface Fact {
-  id: number;
-  key: string;
-  value?: string | null;
-  displayText?: string | null;
-  source?: string | null;
-  evidence?: string | null;
-  verifiedBy?: (number | null) | User;
-  verifiedAt?: string | null;
-  status: 'unverified' | 'verified' | 'retired';
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  key: string
+  value?: string | null
+  displayText?: string | null
+  source?: string | null
+  evidence?: string | null
+  verifiedBy?: (number | null) | User
+  verifiedAt?: string | null
+  status: 'unverified' | 'verified' | 'retired'
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enquiries".
  */
 export interface Enquiry {
-  id: number;
+  id: number
   /**
    * IR-YYYY-NNNN
    */
-  ref: string;
-  type?: ('consultation' | 'general') | null;
-  projectType?: string | null;
-  sector?: string | null;
-  location?: string | null;
-  propertyType?: string | null;
-  approxArea?: string | null;
-  services?: string[] | null;
-  stage?: string | null;
-  targetStart?: string | null;
-  budgetBand?: string | null;
-  brief?: string | null;
-  plansLink?: string | null;
-  name?: string | null;
-  email?: string | null;
-  phone?: string | null;
-  preferredMethod?: string | null;
-  preferredTime?: string | null;
+  ref: string
+  type?: ('consultation' | 'general') | null
+  projectType?: string | null
+  sector?: string | null
+  location?: string | null
+  propertyType?: string | null
+  approxArea?: string | null
+  services?: string[] | null
+  stage?: string | null
+  targetStart?: string | null
+  budgetBand?: string | null
+  brief?: string | null
+  plansLink?: string | null
+  name?: string | null
+  email?: string | null
+  phone?: string | null
+  preferredMethod?: string | null
+  preferredTime?: string | null
   consent?: {
-    given?: boolean | null;
-    textVersion?: string | null;
-    at?: string | null;
-  };
-  sourcePage?: string | null;
+    given?: boolean | null
+    textVersion?: string | null
+    at?: string | null
+  }
+  sourcePage?: string | null
   utm?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
   /**
    * First and last touch, pages viewed before submit (first-party analytics, same-day visitor)
    */
   attribution?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
   /**
    * Automatic lead score 0-100
    */
-  score?: number | null;
+  score?: number | null
   scoreReasons?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
   /**
    * First response to the enquirer (SLA clock stops)
    */
-  firstContactAt?: string | null;
-  assignedTo?: (number | null) | User;
-  status?: ('new' | 'contacted' | 'site_visit' | 'proposal_sent' | 'won' | 'lost') | null;
-  lostReason?: string | null;
-  priority?: ('low' | 'normal' | 'high') | null;
-  followUpAt?: string | null;
+  firstContactAt?: string | null
+  assignedTo?: (number | null) | User
+  status?: ('new' | 'contacted' | 'site_visit' | 'proposal_sent' | 'won' | 'lost') | null
+  lostReason?: string | null
+  priority?: ('low' | 'normal' | 'high') | null
+  followUpAt?: string | null
   /**
    * AED
    */
-  estimatedValue?: number | null;
-  tags?: string[] | null;
+  estimatedValue?: number | null
+  tags?: string[] | null
   notes?:
     | {
-        author?: (number | null) | User;
-        text: string;
-        at: string;
-        id?: string | null;
+        author?: (number | null) | User
+        text: string
+        at: string
+        id?: string | null
       }[]
-    | null;
+    | null
   /**
    * Automatic timeline: status changes, assignments, emails
    */
   activity?:
     | {
-        kind: string;
-        text: string;
-        actor?: (number | null) | User;
-        at: string;
-        id?: string | null;
+        kind: string
+        text: string
+        actor?: (number | null) | User
+        at: string
+        id?: string | null
       }[]
-    | null;
-  related?: (number | Enquiry)[] | null;
+    | null
+  related?: (number | Enquiry)[] | null
   /**
    * Local demo data
    */
-  isTest?: boolean | null;
-  unassignedAlertAt?: string | null;
+  isTest?: boolean | null
+  unassignedAlertAt?: string | null
   deliveryStatus?: {
-    email?: string | null;
-    crm?: string | null;
-    attempts?: number | null;
-    lastError?: string | null;
-  };
-  retentionUntil?: string | null;
-  updatedAt: string;
-  createdAt: string;
+    email?: string | null
+    crm?: string | null
+    attempts?: number | null
+    lastError?: string | null
+  }
+  retentionUntil?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: number;
-  from: string;
-  to?: string | null;
-  type: '301' | '302' | '410';
-  notes?: string | null;
-  active?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  from: string
+  to?: string | null
+  type: '301' | '302' | '410'
+  notes?: string | null
+  active?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "audit-log".
  */
 export interface AuditLog {
-  id: number;
-  actor?: (number | null) | User;
-  action: string;
-  collection: string;
-  docId: string;
-  fromStatus?: string | null;
-  toStatus?: string | null;
-  diffSummary?: string | null;
-  ip?: string | null;
-  at: string;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  actor?: (number | null) | User
+  action: string
+  collection: string
+  docId: string
+  fromStatus?: string | null
+  toStatus?: string | null
+  diffSummary?: string | null
+  ip?: string | null
+  at: string
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "rate-limits".
  */
 export interface RateLimit {
-  id: number;
-  key: string;
-  count: number;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  key: string
+  count: number
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "email-templates".
  */
 export interface EmailTemplate {
-  id: number;
-  name: string;
-  subject: string;
+  id: number
+  name: string
+  subject: string
   /**
    * Use {{name}} and {{ref}}
    */
-  body: string;
-  updatedAt: string;
-  createdAt: string;
+  body: string
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "notifications".
  */
 export interface Notification {
-  id: number;
-  user: number | User;
-  kind: string;
-  text: string;
-  link?: string | null;
-  read?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  user: number | User
+  kind: string
+  text: string
+  link?: string | null
+  read?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "saved-views".
  */
 export interface SavedView {
-  id: number;
-  user: number | User;
-  name: string;
-  query: string;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  user: number | User
+  name: string
+  query: string
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "not-found-log".
  */
 export interface NotFoundLog {
-  id: number;
-  path: string;
-  count?: number | null;
-  lastSeenAt?: string | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  path: string
+  count?: number | null
+  lastSeenAt?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "login-history".
  */
 export interface LoginHistory {
-  id: number;
-  user?: (number | null) | User;
-  at: string;
-  ip?: string | null;
-  userAgent?: string | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  user?: (number | null) | User
+  at: string
+  ip?: string | null
+  userAgent?: string | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
-  key: string;
+  id: number
+  key: string
   data:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: number;
+  id: number
   /**
    * Input data provided to the job
    */
   input?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
   taskStatus?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  completedAt?: string | null;
-  totalTried?: number | null;
+    | null
+  completedAt?: string | null
+  totalTried?: number | null
   /**
    * If hasError is true this job will not be retried
    */
-  hasError?: boolean | null;
+  hasError?: boolean | null
   /**
    * If hasError is true, this is the error that caused it
    */
   error?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
   /**
    * Task execution log
    */
   log?:
     | {
-        executedAt: string;
-        completedAt: string;
+        executedAt: string
+        completedAt: string
         taskSlug:
           | 'inline'
           | 'deliverStaffEmail'
@@ -2044,39 +2045,39 @@ export interface PayloadJob {
           | 'publishScheduled'
           | 'analyticsNightly'
           | 'analyticsWeeklyReport'
-          | 'schedulePublish';
-        taskID: string;
+          | 'schedulePublish'
+        taskID: string
         input?:
           | {
-              [k: string]: unknown;
+              [k: string]: unknown
             }
           | unknown[]
           | string
           | number
           | boolean
-          | null;
+          | null
         output?:
           | {
-              [k: string]: unknown;
+              [k: string]: unknown
             }
           | unknown[]
           | string
           | number
           | boolean
-          | null;
-        state: 'failed' | 'succeeded';
+          | null
+        state: 'failed' | 'succeeded'
         error?:
           | {
-              [k: string]: unknown;
+              [k: string]: unknown
             }
           | unknown[]
           | string
           | number
           | boolean
-          | null;
-        id?: string | null;
+          | null
+        id?: string | null
       }[]
-    | null;
+    | null
   taskSlug?:
     | (
         | 'inline'
@@ -2091,1790 +2092,1790 @@ export interface PayloadJob {
         | 'analyticsWeeklyReport'
         | 'schedulePublish'
       )
-    | null;
-  queue?: string | null;
-  waitUntil?: string | null;
-  processing?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  queue?: string | null
+  waitUntil?: string | null
+  processing?: boolean | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: number
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'users'
+        value: number | User
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'media'
+        value: number | Media
       } | null)
     | ({
-        relationTo: 'projects';
-        value: number | Project;
+        relationTo: 'projects'
+        value: number | Project
       } | null)
     | ({
-        relationTo: 'services';
-        value: number | Service;
+        relationTo: 'services'
+        value: number | Service
       } | null)
     | ({
-        relationTo: 'sectors';
-        value: number | Sector;
+        relationTo: 'sectors'
+        value: number | Sector
       } | null)
     | ({
-        relationTo: 'property-types';
-        value: number | PropertyType;
+        relationTo: 'property-types'
+        value: number | PropertyType
       } | null)
     | ({
-        relationTo: 'team-members';
-        value: number | TeamMember;
+        relationTo: 'team-members'
+        value: number | TeamMember
       } | null)
     | ({
-        relationTo: 'testimonials';
-        value: number | Testimonial;
+        relationTo: 'testimonials'
+        value: number | Testimonial
       } | null)
     | ({
-        relationTo: 'clients';
-        value: number | Client;
+        relationTo: 'clients'
+        value: number | Client
       } | null)
     | ({
-        relationTo: 'awards';
-        value: number | Award;
+        relationTo: 'awards'
+        value: number | Award
       } | null)
     | ({
-        relationTo: 'journal-posts';
-        value: number | JournalPost;
+        relationTo: 'journal-posts'
+        value: number | JournalPost
       } | null)
     | ({
-        relationTo: 'journal-categories';
-        value: number | JournalCategory;
+        relationTo: 'journal-categories'
+        value: number | JournalCategory
       } | null)
     | ({
-        relationTo: 'faqs';
-        value: number | Faq;
+        relationTo: 'faqs'
+        value: number | Faq
       } | null)
     | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'pages'
+        value: number | Page
       } | null)
     | ({
-        relationTo: 'facts';
-        value: number | Fact;
+        relationTo: 'facts'
+        value: number | Fact
       } | null)
     | ({
-        relationTo: 'enquiries';
-        value: number | Enquiry;
+        relationTo: 'enquiries'
+        value: number | Enquiry
       } | null)
     | ({
-        relationTo: 'redirects';
-        value: number | Redirect;
+        relationTo: 'redirects'
+        value: number | Redirect
       } | null)
     | ({
-        relationTo: 'audit-log';
-        value: number | AuditLog;
+        relationTo: 'audit-log'
+        value: number | AuditLog
       } | null)
     | ({
-        relationTo: 'rate-limits';
-        value: number | RateLimit;
+        relationTo: 'rate-limits'
+        value: number | RateLimit
       } | null)
     | ({
-        relationTo: 'email-templates';
-        value: number | EmailTemplate;
+        relationTo: 'email-templates'
+        value: number | EmailTemplate
       } | null)
     | ({
-        relationTo: 'notifications';
-        value: number | Notification;
+        relationTo: 'notifications'
+        value: number | Notification
       } | null)
     | ({
-        relationTo: 'saved-views';
-        value: number | SavedView;
+        relationTo: 'saved-views'
+        value: number | SavedView
       } | null)
     | ({
-        relationTo: 'not-found-log';
-        value: number | NotFoundLog;
+        relationTo: 'not-found-log'
+        value: number | NotFoundLog
       } | null)
     | ({
-        relationTo: 'login-history';
-        value: number | LoginHistory;
-      } | null);
-  globalSlug?: string | null;
+        relationTo: 'login-history'
+        value: number | LoginHistory
+      } | null)
+  globalSlug?: string | null
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  updatedAt: string;
-  createdAt: string;
+    relationTo: 'users'
+    value: number | User
+  }
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: number
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  key?: string | null;
+    relationTo: 'users'
+    value: number | User
+  }
+  key?: string | null
   value?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  name?: string | null
+  batch?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  dashboardLayout?: T;
-  role?: T;
+  name?: T
+  dashboardLayout?: T
+  role?: T
   totp?:
     | T
     | {
-        enabled?: T;
-        secret?: T;
-        failedAttempts?: T;
-        lockedUntil?: T;
+        enabled?: T
+        secret?: T
+        failedAttempts?: T
+        lockedUntil?: T
         recoveryCodes?:
           | T
           | {
-              hash?: T;
-              id?: T;
-            };
-      };
-  lastLoginAt?: T;
-  notifyByEmail?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  resetPasswordRequestedAt?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
+              hash?: T
+              id?: T
+            }
+      }
+  lastLoginAt?: T
+  notifyByEmail?: T
+  updatedAt?: T
+  createdAt?: T
+  email?: T
+  resetPasswordToken?: T
+  resetPasswordExpiration?: T
+  salt?: T
+  hash?: T
+  resetPasswordRequestedAt?: T
+  loginAttempts?: T
+  lockUntil?: T
   sessions?:
     | T
     | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+        id?: T
+        createdAt?: T
+        expiresAt?: T
+      }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  caption?: T;
-  credit?: T;
-  usageApproved?: T;
-  usageApprovedBy?: T;
-  confidential?: T;
-  lqip?: T;
-  dominant?: T;
-  tags?: T;
-  folder?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
+  alt?: T
+  caption?: T
+  credit?: T
+  usageApproved?: T
+  usageApprovedBy?: T
+  confidential?: T
+  lqip?: T
+  dominant?: T
+  tags?: T
+  folder?: T
+  updatedAt?: T
+  createdAt?: T
+  url?: T
+  thumbnailURL?: T
+  filename?: T
+  mimeType?: T
+  filesize?: T
+  width?: T
+  height?: T
+  focalX?: T
+  focalY?: T
   sizes?:
     | T
     | {
         w480?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a480?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         w768?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a768?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         w1080?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a1080?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         w1440?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a1440?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         w1920?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a1920?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         w2560?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
         a2560?:
           | T
           | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
+              url?: T
+              width?: T
+              height?: T
+              mimeType?: T
+              filesize?: T
+              filename?: T
+            }
+      }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  publicTitle?: T;
-  slug?: T;
-  sector?: T;
-  propertyType?: T;
-  areaLabel?: T;
-  year?: T;
-  adminNote?: T;
-  approxAreaSqm?: T;
-  services?: T;
-  stage?: T;
-  brief?: T;
-  constraints?: T;
-  concept?: T;
-  spacePlanning?: T;
-  materials?: T;
-  joinery?: T;
-  technicalMep?: T;
-  deliveryModel?: T;
-  timelineLabel?: T;
-  outcome?: T;
-  hero?: T;
-  gallery?: T;
+  title?: T
+  publicTitle?: T
+  slug?: T
+  sector?: T
+  propertyType?: T
+  areaLabel?: T
+  year?: T
+  adminNote?: T
+  approxAreaSqm?: T
+  services?: T
+  stage?: T
+  brief?: T
+  constraints?: T
+  concept?: T
+  spacePlanning?: T
+  materials?: T
+  joinery?: T
+  technicalMep?: T
+  deliveryModel?: T
+  timelineLabel?: T
+  outcome?: T
+  hero?: T
+  gallery?: T
   beforeAfter?:
     | T
     | {
-        before?: T;
-        after?: T;
-        caption?: T;
-        id?: T;
-      };
+        before?: T
+        after?: T
+        caption?: T
+        id?: T
+      }
   plans?:
     | T
     | {
-        image?: T;
+        image?: T
         hotspots?:
           | T
           | {
-              x?: T;
-              y?: T;
-              label?: T;
-              media?: T;
-              id?: T;
-            };
-        id?: T;
-      };
-  testimonial?: T;
-  team?: T;
-  related?: T;
-  featured?: T;
+              x?: T
+              y?: T
+              label?: T
+              media?: T
+              id?: T
+            }
+        id?: T
+      }
+  testimonial?: T
+  team?: T
+  related?: T
+  featured?: T
   clientApproval?:
     | T
     | {
-        approved?: T;
-        approvedBy?: T;
-        date?: T;
-        evidence?: T;
-      };
+        approved?: T
+        approvedBy?: T
+        date?: T
+        evidence?: T
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  summary?: T;
-  audience?: T;
+  title?: T
+  slug?: T
+  summary?: T
+  audience?: T
   scope?:
     | T
     | {
-        item?: T;
-        id?: T;
-      };
+        item?: T
+        id?: T
+      }
   deliverables?:
     | T
     | {
-        item?: T;
-        id?: T;
-      };
+        item?: T
+        id?: T
+      }
   processSteps?:
     | T
     | {
-        step?: T;
-        id?: T;
-      };
-  faqs?: T;
-  proofProjects?: T;
-  sector?: T;
-  image?: T;
+        step?: T
+        id?: T
+      }
+  faqs?: T
+  proofProjects?: T
+  sector?: T
+  image?: T
   layout?:
     | T
     | {
         hero?:
           | T
           | {
-              eyebrow?: T;
-              headline?: T;
-              subhead?: T;
-              image?: T;
-              overlay?: T;
-              size?: T;
+              eyebrow?: T
+              headline?: T
+              subhead?: T
+              image?: T
+              overlay?: T
+              size?: T
               primaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               secondaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         introStats?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               stats?:
                 | T
                 | {
-                    factKey?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    factKey?: T
+                    label?: T
+                    id?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         featuredWork?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              projects?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              projects?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         sectorTiles?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              sectors?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              sectors?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         servicesList?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              services?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              services?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         processSteps?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
               steps?:
                 | T
                 | {
-                    title?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              tone?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    title?: T
+                    body?: T
+                    id?: T
+                  }
+              tone?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         clientWall?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              clients?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              clients?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         statement?:
           | T
           | {
-              eyebrow?: T;
-              statement?: T;
+              eyebrow?: T
+              statement?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         beforeAfterSpotlight?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              project?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              project?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         ctaBand?:
           | T
           | {
-              heading?: T;
-              text?: T;
-              image?: T;
+              heading?: T
+              text?: T
+              image?: T
               button?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         imageText?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              image?: T;
-              imageSide?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
+              image?: T
+              imageSide?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         textSection?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              columns?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              body?: T
+              columns?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         contactInfo?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              showHours?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              heading?: T
+              intro?: T
+              showHours?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         enquiryForm?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              form?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  confirmed?: T;
+              heading?: T
+              intro?: T
+              form?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
+      }
+  confirmed?: T
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "sectors_select".
  */
 export interface SectorsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  intro?: T;
-  hero?: T;
-  featuredProjects?: T;
-  faqs?: T;
+  title?: T
+  slug?: T
+  intro?: T
+  hero?: T
+  featuredProjects?: T
+  faqs?: T
   layout?:
     | T
     | {
         hero?:
           | T
           | {
-              eyebrow?: T;
-              headline?: T;
-              subhead?: T;
-              image?: T;
-              overlay?: T;
-              size?: T;
+              eyebrow?: T
+              headline?: T
+              subhead?: T
+              image?: T
+              overlay?: T
+              size?: T
               primaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               secondaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         introStats?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               stats?:
                 | T
                 | {
-                    factKey?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    factKey?: T
+                    label?: T
+                    id?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         featuredWork?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              projects?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              projects?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         sectorTiles?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              sectors?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              sectors?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         servicesList?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              services?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              services?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         processSteps?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
               steps?:
                 | T
                 | {
-                    title?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              tone?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    title?: T
+                    body?: T
+                    id?: T
+                  }
+              tone?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         clientWall?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              clients?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              clients?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         statement?:
           | T
           | {
-              eyebrow?: T;
-              statement?: T;
+              eyebrow?: T
+              statement?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         beforeAfterSpotlight?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              project?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              project?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         ctaBand?:
           | T
           | {
-              heading?: T;
-              text?: T;
-              image?: T;
+              heading?: T
+              text?: T
+              image?: T
               button?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         imageText?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              image?: T;
-              imageSide?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
+              image?: T
+              imageSide?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         textSection?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              columns?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              body?: T
+              columns?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         contactInfo?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              showHours?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              heading?: T
+              intro?: T
+              showHours?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         enquiryForm?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              form?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
+              heading?: T
+              intro?: T
+              form?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "property-types_select".
  */
 export interface PropertyTypesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  sector?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  slug?: T
+  sector?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "team-members_select".
  */
 export interface TeamMembersSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  role?: T;
-  bio?: T;
+  name?: T
+  slug?: T
+  role?: T
+  bio?: T
   credentials?:
     | T
     | {
-        item?: T;
-        id?: T;
-      };
-  photo?: T;
-  order?: T;
+        item?: T
+        id?: T
+      }
+  photo?: T
+  order?: T
   consent?:
     | T
     | {
-        given?: T;
-        date?: T;
-        evidence?: T;
-      };
+        given?: T
+        date?: T
+        evidence?: T
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials_select".
  */
 export interface TestimonialsSelect<T extends boolean = true> {
-  quote?: T;
-  attributionName?: T;
-  attributionRole?: T;
-  project?: T;
+  quote?: T
+  attributionName?: T
+  attributionRole?: T
+  project?: T
   permission?:
     | T
     | {
-        given?: T;
-        evidence?: T;
-      };
+        given?: T
+        evidence?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "clients_select".
  */
 export interface ClientsSelect<T extends boolean = true> {
-  name?: T;
-  order?: T;
-  logo?: T;
-  sector?: T;
-  logoPermission?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  order?: T
+  logo?: T
+  sector?: T
+  logoPermission?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "awards_select".
  */
 export interface AwardsSelect<T extends boolean = true> {
-  name?: T;
-  issuer?: T;
-  year?: T;
-  evidenceUrl?: T;
-  evidenceFile?: T;
-  project?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  issuer?: T
+  year?: T
+  evidenceUrl?: T
+  evidenceFile?: T
+  project?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-posts_select".
  */
 export interface JournalPostsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  excerpt?: T;
-  body?: T;
-  author?: T;
-  categories?: T;
-  heroImage?: T;
-  reviewedAt?: T;
+  title?: T
+  slug?: T
+  excerpt?: T
+  body?: T
+  author?: T
+  categories?: T
+  heroImage?: T
+  reviewedAt?: T
   citations?:
     | T
     | {
-        item?: T;
-        id?: T;
-      };
-  relatedProjects?: T;
-  relatedServices?: T;
+        item?: T
+        id?: T
+      }
+  relatedProjects?: T
+  relatedServices?: T
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "journal-categories_select".
  */
 export interface JournalCategoriesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  description?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  slug?: T
+  description?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs_select".
  */
 export interface FaqsSelect<T extends boolean = true> {
-  question?: T;
-  answer?: T;
-  topic?: T;
-  eligibleForSchema?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  question?: T
+  answer?: T
+  topic?: T
+  eligibleForSchema?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  intro?: T;
-  hero?: T;
-  body?: T;
+  title?: T
+  slug?: T
+  intro?: T
+  hero?: T
+  body?: T
   layout?:
     | T
     | {
         hero?:
           | T
           | {
-              eyebrow?: T;
-              headline?: T;
-              subhead?: T;
-              image?: T;
-              overlay?: T;
-              size?: T;
+              eyebrow?: T
+              headline?: T
+              subhead?: T
+              image?: T
+              overlay?: T
+              size?: T
               primaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               secondaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         introStats?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               stats?:
                 | T
                 | {
-                    factKey?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    factKey?: T
+                    label?: T
+                    id?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         featuredWork?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              projects?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              projects?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         sectorTiles?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              sectors?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              sectors?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         servicesList?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              services?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              services?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         processSteps?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
               steps?:
                 | T
                 | {
-                    title?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              tone?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    title?: T
+                    body?: T
+                    id?: T
+                  }
+              tone?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         clientWall?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              clients?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              clients?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         statement?:
           | T
           | {
-              eyebrow?: T;
-              statement?: T;
+              eyebrow?: T
+              statement?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         beforeAfterSpotlight?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              project?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              project?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         ctaBand?:
           | T
           | {
-              heading?: T;
-              text?: T;
-              image?: T;
+              heading?: T
+              text?: T
+              image?: T
               button?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         imageText?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              image?: T;
-              imageSide?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
+              image?: T
+              imageSide?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         textSection?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              columns?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              body?: T
+              columns?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         contactInfo?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              showHours?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              heading?: T
+              intro?: T
+              showHours?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         enquiryForm?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              form?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
+              heading?: T
+              intro?: T
+              form?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
   workflow?:
     | T
     | {
-        status?: T;
-        submittedBy?: T;
-        reviewedBy?: T;
-        approvedBy?: T;
-        publishedBy?: T;
-        reviewNotes?: T;
-        publishAt?: T;
-        scheduledBy?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+        status?: T
+        submittedBy?: T
+        reviewedBy?: T
+        approvedBy?: T
+        publishedBy?: T
+        reviewNotes?: T
+        publishAt?: T
+        scheduledBy?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "facts_select".
  */
 export interface FactsSelect<T extends boolean = true> {
-  key?: T;
-  value?: T;
-  displayText?: T;
-  source?: T;
-  evidence?: T;
-  verifiedBy?: T;
-  verifiedAt?: T;
-  status?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  key?: T
+  value?: T
+  displayText?: T
+  source?: T
+  evidence?: T
+  verifiedBy?: T
+  verifiedAt?: T
+  status?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enquiries_select".
  */
 export interface EnquiriesSelect<T extends boolean = true> {
-  ref?: T;
-  type?: T;
-  projectType?: T;
-  sector?: T;
-  location?: T;
-  propertyType?: T;
-  approxArea?: T;
-  services?: T;
-  stage?: T;
-  targetStart?: T;
-  budgetBand?: T;
-  brief?: T;
-  plansLink?: T;
-  name?: T;
-  email?: T;
-  phone?: T;
-  preferredMethod?: T;
-  preferredTime?: T;
+  ref?: T
+  type?: T
+  projectType?: T
+  sector?: T
+  location?: T
+  propertyType?: T
+  approxArea?: T
+  services?: T
+  stage?: T
+  targetStart?: T
+  budgetBand?: T
+  brief?: T
+  plansLink?: T
+  name?: T
+  email?: T
+  phone?: T
+  preferredMethod?: T
+  preferredTime?: T
   consent?:
     | T
     | {
-        given?: T;
-        textVersion?: T;
-        at?: T;
-      };
-  sourcePage?: T;
-  utm?: T;
-  attribution?: T;
-  score?: T;
-  scoreReasons?: T;
-  firstContactAt?: T;
-  assignedTo?: T;
-  status?: T;
-  lostReason?: T;
-  priority?: T;
-  followUpAt?: T;
-  estimatedValue?: T;
-  tags?: T;
+        given?: T
+        textVersion?: T
+        at?: T
+      }
+  sourcePage?: T
+  utm?: T
+  attribution?: T
+  score?: T
+  scoreReasons?: T
+  firstContactAt?: T
+  assignedTo?: T
+  status?: T
+  lostReason?: T
+  priority?: T
+  followUpAt?: T
+  estimatedValue?: T
+  tags?: T
   notes?:
     | T
     | {
-        author?: T;
-        text?: T;
-        at?: T;
-        id?: T;
-      };
+        author?: T
+        text?: T
+        at?: T
+        id?: T
+      }
   activity?:
     | T
     | {
-        kind?: T;
-        text?: T;
-        actor?: T;
-        at?: T;
-        id?: T;
-      };
-  related?: T;
-  isTest?: T;
-  unassignedAlertAt?: T;
+        kind?: T
+        text?: T
+        actor?: T
+        at?: T
+        id?: T
+      }
+  related?: T
+  isTest?: T
+  unassignedAlertAt?: T
   deliveryStatus?:
     | T
     | {
-        email?: T;
-        crm?: T;
-        attempts?: T;
-        lastError?: T;
-      };
-  retentionUntil?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        email?: T
+        crm?: T
+        attempts?: T
+        lastError?: T
+      }
+  retentionUntil?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects_select".
  */
 export interface RedirectsSelect<T extends boolean = true> {
-  from?: T;
-  to?: T;
-  type?: T;
-  notes?: T;
-  active?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  from?: T
+  to?: T
+  type?: T
+  notes?: T
+  active?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "audit-log_select".
  */
 export interface AuditLogSelect<T extends boolean = true> {
-  actor?: T;
-  action?: T;
-  collection?: T;
-  docId?: T;
-  fromStatus?: T;
-  toStatus?: T;
-  diffSummary?: T;
-  ip?: T;
-  at?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  actor?: T
+  action?: T
+  collection?: T
+  docId?: T
+  fromStatus?: T
+  toStatus?: T
+  diffSummary?: T
+  ip?: T
+  at?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "rate-limits_select".
  */
 export interface RateLimitsSelect<T extends boolean = true> {
-  key?: T;
-  count?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  key?: T
+  count?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "email-templates_select".
  */
 export interface EmailTemplatesSelect<T extends boolean = true> {
-  name?: T;
-  subject?: T;
-  body?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  subject?: T
+  body?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "notifications_select".
  */
 export interface NotificationsSelect<T extends boolean = true> {
-  user?: T;
-  kind?: T;
-  text?: T;
-  link?: T;
-  read?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  kind?: T
+  text?: T
+  link?: T
+  read?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "saved-views_select".
  */
 export interface SavedViewsSelect<T extends boolean = true> {
-  user?: T;
-  name?: T;
-  query?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  name?: T
+  query?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "not-found-log_select".
  */
 export interface NotFoundLogSelect<T extends boolean = true> {
-  path?: T;
-  count?: T;
-  lastSeenAt?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  path?: T
+  count?: T
+  lastSeenAt?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "login-history_select".
  */
 export interface LoginHistorySelect<T extends boolean = true> {
-  user?: T;
-  at?: T;
-  ip?: T;
-  userAgent?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  at?: T
+  ip?: T
+  userAgent?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T;
-  data?: T;
+  key?: T
+  data?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
-  input?: T;
-  taskStatus?: T;
-  completedAt?: T;
-  totalTried?: T;
-  hasError?: T;
-  error?: T;
+  input?: T
+  taskStatus?: T
+  completedAt?: T
+  totalTried?: T
+  hasError?: T
+  error?: T
   log?:
     | T
     | {
-        executedAt?: T;
-        completedAt?: T;
-        taskSlug?: T;
-        taskID?: T;
-        input?: T;
-        output?: T;
-        state?: T;
-        error?: T;
-        id?: T;
-      };
-  taskSlug?: T;
-  queue?: T;
-  waitUntil?: T;
-  processing?: T;
-  updatedAt?: T;
-  createdAt?: T;
+        executedAt?: T
+        completedAt?: T
+        taskSlug?: T
+        taskID?: T
+        input?: T
+        output?: T
+        state?: T
+        error?: T
+        id?: T
+      }
+  taskSlug?: T
+  queue?: T
+  waitUntil?: T
+  processing?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  document?: T
+  globalSlug?: T
+  user?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  key?: T
+  value?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  batch?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
  */
 export interface SiteSetting {
-  id: number;
-  name: string;
-  logo?: (number | null) | Media;
-  footerLogo?: (number | null) | Media;
-  defaultOgImage?: (number | null) | Media;
-  tagline?: string | null;
-  ctaLabel?: string | null;
-  ctaLink?: string | null;
+  id: number
+  name: string
+  logo?: (number | null) | Media
+  footerLogo?: (number | null) | Media
+  defaultOgImage?: (number | null) | Media
+  tagline?: string | null
+  ctaLabel?: string | null
+  ctaLink?: string | null
   /**
    * Announcement or maintenance banner shown above the site header
    */
   banner?: {
-    enabled?: boolean | null;
-    tone?: ('info' | 'maintenance') | null;
-    message?: string | null;
-  };
+    enabled?: boolean | null
+    tone?: ('info' | 'maintenance') | null
+    message?: string | null
+  }
   /**
    * Hero image on the admin sign-in page
    */
-  adminLoginImage?: (number | null) | Media;
+  adminLoginImage?: (number | null) | Media
   /**
    * Closing call-to-action band used at the end of case studies
    */
   closingCta?: {
-    heading?: string | null;
-    text?: string | null;
-    image?: (number | null) | Media;
-    buttonLabel?: string | null;
-    buttonHref?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    heading?: string | null
+    text?: string | null
+    image?: (number | null) | Media
+    buttonLabel?: string | null
+    buttonHref?: string | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page".
  */
 export interface HomePage {
-  id: number;
+  id: number
   /**
    * Add, reorder, edit or hide sections. Changes appear on the site after publishing
    */
   layout?:
     | (
         | {
-            eyebrow?: string | null;
-            headline: string;
-            subhead?: string | null;
-            image?: (number | null) | Media;
+            eyebrow?: string | null
+            headline: string
+            subhead?: string | null
+            image?: (number | null) | Media
             /**
              * Darkness of the image overlay, 0–80
              */
-            overlay?: number | null;
-            size?: ('full' | 'banner') | null;
+            overlay?: number | null
+            size?: ('full' | 'banner') | null
             primaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             secondaryCta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'hero';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'hero'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Each number comes from a verified fact in the Facts Register
              */
@@ -3883,437 +3884,441 @@ export interface HomePage {
                   /**
                    * Facts Register key
                    */
-                  factKey: string;
-                  label?: string | null;
-                  id?: string | null;
+                  factKey: string
+                  label?: string | null
+                  id?: string | null
                 }[]
-              | null;
+              | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'introStats';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'introStats'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Pick projects. Leave empty to show the latest published ones
              */
-            projects?: (number | Project)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'horizontal') | null;
+            projects?: (number | Project)[] | null
+            limit?: number | null
+            display?: ('grid' | 'horizontal') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'featuredWork';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'featuredWork'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published sector
              */
-            sectors?: (number | Sector)[] | null;
+            sectors?: (number | Sector)[] | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'sectorTiles';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'sectorTiles'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every published service
              */
-            services?: (number | Service)[] | null;
+            services?: (number | Service)[] | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'servicesList';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'servicesList'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             steps?:
               | {
-                  title: string;
-                  body?: string | null;
-                  id?: string | null;
+                  title: string
+                  body?: string | null
+                  id?: string | null
                 }[]
-              | null;
-            tone?: ('dark' | 'light') | null;
+              | null
+            tone?: ('dark' | 'light') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'processSteps';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'processSteps'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            intro?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
+            intro?: string | null
             /**
              * Leave empty to show every client with logo permission
              */
-            clients?: (number | Client)[] | null;
-            limit?: number | null;
-            display?: ('grid' | 'marquee') | null;
+            clients?: (number | Client)[] | null
+            limit?: number | null
+            display?: ('grid' | 'marquee') | null
             viewAll?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'clientWall';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'clientWall'
           }
         | {
-            eyebrow?: string | null;
-            statement: string;
+            eyebrow?: string | null
+            statement: string
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'statement';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'statement'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
+            eyebrow?: string | null
+            heading?: string | null
             /**
              * A project that has before/after images. Leave empty to use the first published project that has them
              */
-            project?: (number | null) | Project;
+            project?: (number | null) | Project
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'beforeAfterSpotlight';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'beforeAfterSpotlight'
           }
         | {
-            heading: string;
-            text?: string | null;
-            image?: (number | null) | Media;
+            heading: string
+            text?: string | null
+            image?: (number | null) | Media
             button?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'ctaBand';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'ctaBand'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            image?: (number | null) | Media;
-            imageSide?: ('right' | 'left') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            image?: (number | null) | Media
+            imageSide?: ('right' | 'left') | null
             cta?: {
-              label?: string | null;
+              label?: string | null
               /**
                * Path such as /start, or a full URL
                */
-              href?: string | null;
-            };
+              href?: string | null
+            }
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'imageText';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'imageText'
           }
         | {
-            eyebrow?: string | null;
-            heading?: string | null;
-            body?: string | null;
-            columns?: ('1' | '2') | null;
+            eyebrow?: string | null
+            heading?: string | null
+            body?: string | null
+            columns?: ('1' | '2') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'textSection';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'textSection'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            showHours?: boolean | null;
+            heading?: string | null
+            intro?: string | null
+            showHours?: boolean | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'contactInfo';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'contactInfo'
           }
         | {
-            heading?: string | null;
-            intro?: string | null;
-            form?: ('contact' | 'consultation') | null;
+            heading?: string | null
+            intro?: string | null
+            form?: ('contact' | 'consultation') | null
             /**
              * Hide this block on the site without deleting it
              */
-            hidden?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'enquiryForm';
+            hidden?: boolean | null
+            id?: string | null
+            blockName?: string | null
+            blockType: 'enquiryForm'
           }
       )[]
-    | null;
+    | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-    ogImage?: (number | null) | Media;
-    canonicalOverride?: string | null;
-    noindex?: boolean | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+    ogImage?: (number | null) | Media
+    canonicalOverride?: string | null
+    noindex?: boolean | null
     /**
      * Checked against the title, description and URL in the panel above
      */
-    focusKeyword?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    focusKeyword?: string | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "motion-settings".
  */
 export interface MotionSetting {
-  id: number;
+  id: number
   /**
    * Master switch. Off shows the static site: all content, no animation.
    */
-  enabled?: boolean | null;
-  intensity?: ('subtle' | 'standard' | 'expressive') | null;
+  enabled?: boolean | null
+  intensity?: ('subtle' | 'standard' | 'expressive') | null
   /**
    * Extra images for the home hero slideshow (3 to 5 in total with the hero image). Empty shows the single hero image.
    */
-  heroSlides?: (number | Media)[] | null;
+  heroSlides?: (number | Media)[] | null
   /**
    * Seconds each hero slide stays
    */
-  slideSeconds?: number | null;
+  slideSeconds?: number | null
   /**
    * Turn individual effects on or off
    */
   effects?: {
-    heroSlideshow?: boolean | null;
-    headlineReveal?: boolean | null;
-    scrollCue?: boolean | null;
-    pageTransitions?: boolean | null;
-    header?: boolean | null;
-    mobileMenu?: boolean | null;
-    magnetic?: boolean | null;
-    imageReveals?: boolean | null;
-    parallax?: boolean | null;
-    headingReveals?: boolean | null;
-    statement?: boolean | null;
-    countUp?: boolean | null;
-    processLine?: boolean | null;
-    horizontalGallery?: boolean | null;
-    curtain?: boolean | null;
-    cards?: boolean | null;
-    servicesFloat?: boolean | null;
-    sectorPanels?: boolean | null;
-    marquee?: boolean | null;
-    beforeAfterHint?: boolean | null;
-    blurUp?: boolean | null;
-    lightbox?: boolean | null;
-    caseStudy?: boolean | null;
-    notFound?: boolean | null;
-    formSteps?: boolean | null;
-    backToTop?: boolean | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    heroSlideshow?: boolean | null
+    headlineReveal?: boolean | null
+    scrollCue?: boolean | null
+    pageTransitions?: boolean | null
+    header?: boolean | null
+    mobileMenu?: boolean | null
+    magnetic?: boolean | null
+    imageReveals?: boolean | null
+    parallax?: boolean | null
+    headingReveals?: boolean | null
+    statement?: boolean | null
+    countUp?: boolean | null
+    processLine?: boolean | null
+    horizontalGallery?: boolean | null
+    curtain?: boolean | null
+    cards?: boolean | null
+    servicesFloat?: boolean | null
+    sectorPanels?: boolean | null
+    marquee?: boolean | null
+    beforeAfterHint?: boolean | null
+    blurUp?: boolean | null
+    lightbox?: boolean | null
+    caseStudy?: boolean | null
+    notFound?: boolean | null
+    formSteps?: boolean | null
+    backToTop?: boolean | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation".
  */
 export interface Navigation {
-  id: number;
+  id: number
   items?:
     | {
-        label: string;
-        link: string;
+        label: string
+        link: string
         /**
          * Hidden automatically when empty (SPEC §5.3)
          */
-        section?: string | null;
-        id?: string | null;
+        section?: string | null
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: number;
-  copy?: string | null;
+  id: number
+  copy?: string | null
+  showCredit?: boolean | null
+  creditText?: string | null
+  creditName?: string | null
+  creditUrl?: string | null
   columns?:
     | {
-        title?: string | null;
+        title?: string | null
         links?:
           | {
-              label?: string | null;
-              link?: string | null;
-              id?: string | null;
+              label?: string | null
+              link?: string | null
+              id?: string | null
             }[]
-          | null;
-        id?: string | null;
+          | null
+        id?: string | null
       }[]
-    | null;
+    | null
   links?:
     | {
-        label?: string | null;
-        link?: string | null;
-        id?: string | null;
+        label?: string | null
+        link?: string | null
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-info".
  */
 export interface ContactInfo {
-  id: number;
+  id: number
   /**
    * Facts Register key
    */
-  addressFactKey?: string | null;
+  addressFactKey?: string | null
   /**
    * Facts Register key
    */
-  phoneFactKey?: string | null;
+  phoneFactKey?: string | null
   /**
    * Facts Register key
    */
-  whatsappFactKey?: string | null;
+  whatsappFactKey?: string | null
   /**
    * Facts Register key
    */
-  emailFactKey?: string | null;
+  emailFactKey?: string | null
   /**
    * Facts Register key
    */
-  salesEmailFactKey?: string | null;
-  hours?: string | null;
+  salesEmailFactKey?: string | null
+  hours?: string | null
   geo?: {
-    latitude?: number | null;
-    longitude?: number | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    latitude?: number | null
+    longitude?: number | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "social-profiles".
  */
 export interface SocialProfile {
-  id: number;
+  id: number
   items?:
     | {
-        platform: string;
-        url: string;
-        id?: string | null;
+        platform: string
+        url: string
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "seo-defaults".
  */
 export interface SeoDefault {
-  id: number;
-  titleTemplate?: string | null;
-  description?: string | null;
-  ogImage?: (number | null) | Media;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  id: number
+  titleTemplate?: string | null
+  description?: string | null
+  ogImage?: (number | null) | Media
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "consultation-settings".
  */
 export interface ConsultationSetting {
-  id: number;
+  id: number
   /**
    * Hidden until set (D12).
    */
   budgetBands?:
     | {
-        label: string;
-        min?: number | null;
-        max?: number | null;
-        id?: string | null;
+        label: string
+        min?: number | null
+        max?: number | null
+        id?: string | null
       }[]
-    | null;
-  slaText?: string | null;
+    | null
+  slaText?: string | null
   /**
    * Targets and pipeline weights used by the admin dashboard
    */
@@ -4321,108 +4326,108 @@ export interface ConsultationSetting {
     /**
      * Enquiries per month
      */
-    monthlyLeadGoal?: number | null;
+    monthlyLeadGoal?: number | null
     /**
      * First response target, business hours
      */
-    slaHours?: number | null;
+    slaHours?: number | null
     /**
      * Win probability %
      */
-    probNew?: number | null;
-    probContacted?: number | null;
-    probSiteVisit?: number | null;
-    probProposal?: number | null;
-  };
+    probNew?: number | null
+    probContacted?: number | null
+    probSiteVisit?: number | null
+    probProposal?: number | null
+  }
   /**
    * Label for the consent checkbox on the contact and consultation forms
    */
-  consentText?: string | null;
+  consentText?: string | null
   routingRules?:
     | {
-        sector?: (number | null) | Sector;
-        assignee?: (number | null) | User;
-        id?: string | null;
+        sector?: (number | null) | Sector
+        assignee?: (number | null) | User
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "legal-entity".
  */
 export interface LegalEntity {
-  id: number;
-  legalName?: string | null;
+  id: number
+  legalName?: string | null
   /**
    * Facts Register key [CONFIRM]
    */
-  licenceNumberFactKey?: string | null;
-  issuingAuthority?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  licenceNumberFactKey?: string | null
+  issuingAuthority?: string | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "integrations".
  */
 export interface Integration {
-  id: number;
+  id: number
   featureFlags?: {
-    crm?: boolean | null;
-    cloudflare?: boolean | null;
-    umami?: boolean | null;
-    booking?: boolean | null;
-  };
+    crm?: boolean | null
+    cloudflare?: boolean | null
+    umami?: boolean | null
+    booking?: boolean | null
+  }
   /**
    * Date of the last backup restore drill
    */
-  lastRestoreDrill?: string | null;
+  lastRestoreDrill?: string | null
   /**
    * Names of Docker secrets only. Values never live in the database.
    */
   secretNames?:
     | {
-        name: string;
-        id?: string | null;
+        name: string
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
-  name?: T;
-  logo?: T;
-  footerLogo?: T;
-  defaultOgImage?: T;
-  tagline?: T;
-  ctaLabel?: T;
-  ctaLink?: T;
+  name?: T
+  logo?: T
+  footerLogo?: T
+  defaultOgImage?: T
+  tagline?: T
+  ctaLabel?: T
+  ctaLink?: T
   banner?:
     | T
     | {
-        enabled?: T;
-        tone?: T;
-        message?: T;
-      };
-  adminLoginImage?: T;
+        enabled?: T
+        tone?: T
+        message?: T
+      }
+  adminLoginImage?: T
   closingCta?:
     | T
     | {
-        heading?: T;
-        text?: T;
-        image?: T;
-        buttonLabel?: T;
-        buttonHref?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        heading?: T
+        text?: T
+        image?: T
+        buttonLabel?: T
+        buttonHref?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4435,282 +4440,282 @@ export interface HomePageSelect<T extends boolean = true> {
         hero?:
           | T
           | {
-              eyebrow?: T;
-              headline?: T;
-              subhead?: T;
-              image?: T;
-              overlay?: T;
-              size?: T;
+              eyebrow?: T
+              headline?: T
+              subhead?: T
+              image?: T
+              overlay?: T
+              size?: T
               primaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               secondaryCta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         introStats?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
+                    label?: T
+                    href?: T
+                  }
               stats?:
                 | T
                 | {
-                    factKey?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    factKey?: T
+                    label?: T
+                    id?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         featuredWork?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              projects?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              projects?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         sectorTiles?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              sectors?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              sectors?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         servicesList?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              services?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              services?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         processSteps?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
               steps?:
                 | T
                 | {
-                    title?: T;
-                    body?: T;
-                    id?: T;
-                  };
-              tone?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    title?: T
+                    body?: T
+                    id?: T
+                  }
+              tone?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         clientWall?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              intro?: T;
-              clients?: T;
-              limit?: T;
-              display?: T;
+              eyebrow?: T
+              heading?: T
+              intro?: T
+              clients?: T
+              limit?: T
+              display?: T
               viewAll?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         statement?:
           | T
           | {
-              eyebrow?: T;
-              statement?: T;
+              eyebrow?: T
+              statement?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         beforeAfterSpotlight?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              project?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              project?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         ctaBand?:
           | T
           | {
-              heading?: T;
-              text?: T;
-              image?: T;
+              heading?: T
+              text?: T
+              image?: T
               button?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         imageText?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              image?: T;
-              imageSide?: T;
+              eyebrow?: T
+              heading?: T
+              body?: T
+              image?: T
+              imageSide?: T
               cta?:
                 | T
                 | {
-                    label?: T;
-                    href?: T;
-                  };
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+                    label?: T
+                    href?: T
+                  }
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         textSection?:
           | T
           | {
-              eyebrow?: T;
-              heading?: T;
-              body?: T;
-              columns?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              eyebrow?: T
+              heading?: T
+              body?: T
+              columns?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         contactInfo?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              showHours?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
+              heading?: T
+              intro?: T
+              showHours?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
         enquiryForm?:
           | T
           | {
-              heading?: T;
-              intro?: T;
-              form?: T;
-              hidden?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
+              heading?: T
+              intro?: T
+              form?: T
+              hidden?: T
+              id?: T
+              blockName?: T
+            }
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-        ogImage?: T;
-        canonicalOverride?: T;
-        noindex?: T;
-        focusKeyword?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        metaTitle?: T
+        metaDescription?: T
+        ogImage?: T
+        canonicalOverride?: T
+        noindex?: T
+        focusKeyword?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "motion-settings_select".
  */
 export interface MotionSettingsSelect<T extends boolean = true> {
-  enabled?: T;
-  intensity?: T;
-  heroSlides?: T;
-  slideSeconds?: T;
+  enabled?: T
+  intensity?: T
+  heroSlides?: T
+  slideSeconds?: T
   effects?:
     | T
     | {
-        heroSlideshow?: T;
-        headlineReveal?: T;
-        scrollCue?: T;
-        pageTransitions?: T;
-        header?: T;
-        mobileMenu?: T;
-        magnetic?: T;
-        imageReveals?: T;
-        parallax?: T;
-        headingReveals?: T;
-        statement?: T;
-        countUp?: T;
-        processLine?: T;
-        horizontalGallery?: T;
-        curtain?: T;
-        cards?: T;
-        servicesFloat?: T;
-        sectorPanels?: T;
-        marquee?: T;
-        beforeAfterHint?: T;
-        blurUp?: T;
-        lightbox?: T;
-        caseStudy?: T;
-        notFound?: T;
-        formSteps?: T;
-        backToTop?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        heroSlideshow?: T
+        headlineReveal?: T
+        scrollCue?: T
+        pageTransitions?: T
+        header?: T
+        mobileMenu?: T
+        magnetic?: T
+        imageReveals?: T
+        parallax?: T
+        headingReveals?: T
+        statement?: T
+        countUp?: T
+        processLine?: T
+        horizontalGallery?: T
+        curtain?: T
+        cards?: T
+        servicesFloat?: T
+        sectorPanels?: T
+        marquee?: T
+        beforeAfterHint?: T
+        blurUp?: T
+        lightbox?: T
+        caseStudy?: T
+        notFound?: T
+        formSteps?: T
+        backToTop?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4720,65 +4725,69 @@ export interface NavigationSelect<T extends boolean = true> {
   items?:
     | T
     | {
-        label?: T;
-        link?: T;
-        section?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        label?: T
+        link?: T
+        section?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  copy?: T;
+  copy?: T
+  showCredit?: T
+  creditText?: T
+  creditName?: T
+  creditUrl?: T
   columns?:
     | T
     | {
-        title?: T;
+        title?: T
         links?:
           | T
           | {
-              label?: T;
-              link?: T;
-              id?: T;
-            };
-        id?: T;
-      };
+              label?: T
+              link?: T
+              id?: T
+            }
+        id?: T
+      }
   links?:
     | T
     | {
-        label?: T;
-        link?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        label?: T
+        link?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-info_select".
  */
 export interface ContactInfoSelect<T extends boolean = true> {
-  addressFactKey?: T;
-  phoneFactKey?: T;
-  whatsappFactKey?: T;
-  emailFactKey?: T;
-  salesEmailFactKey?: T;
-  hours?: T;
+  addressFactKey?: T
+  phoneFactKey?: T
+  whatsappFactKey?: T
+  emailFactKey?: T
+  salesEmailFactKey?: T
+  hours?: T
   geo?:
     | T
     | {
-        latitude?: T;
-        longitude?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        latitude?: T
+        longitude?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4788,25 +4797,25 @@ export interface SocialProfilesSelect<T extends boolean = true> {
   items?:
     | T
     | {
-        platform?: T;
-        url?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        platform?: T
+        url?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "seo-defaults_select".
  */
 export interface SeoDefaultsSelect<T extends boolean = true> {
-  titleTemplate?: T;
-  description?: T;
-  ogImage?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+  titleTemplate?: T
+  description?: T
+  ogImage?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4816,45 +4825,45 @@ export interface ConsultationSettingsSelect<T extends boolean = true> {
   budgetBands?:
     | T
     | {
-        label?: T;
-        min?: T;
-        max?: T;
-        id?: T;
-      };
-  slaText?: T;
+        label?: T
+        min?: T
+        max?: T
+        id?: T
+      }
+  slaText?: T
   crm?:
     | T
     | {
-        monthlyLeadGoal?: T;
-        slaHours?: T;
-        probNew?: T;
-        probContacted?: T;
-        probSiteVisit?: T;
-        probProposal?: T;
-      };
-  consentText?: T;
+        monthlyLeadGoal?: T
+        slaHours?: T
+        probNew?: T
+        probContacted?: T
+        probSiteVisit?: T
+        probProposal?: T
+      }
+  consentText?: T
   routingRules?:
     | T
     | {
-        sector?: T;
-        assignee?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        sector?: T
+        assignee?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "legal-entity_select".
  */
 export interface LegalEntitySelect<T extends boolean = true> {
-  legalName?: T;
-  licenceNumberFactKey?: T;
-  issuingAuthority?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+  legalName?: T
+  licenceNumberFactKey?: T
+  issuingAuthority?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4864,21 +4873,21 @@ export interface IntegrationsSelect<T extends boolean = true> {
   featureFlags?:
     | T
     | {
-        crm?: T;
-        cloudflare?: T;
-        umami?: T;
-        booking?: T;
-      };
-  lastRestoreDrill?: T;
+        crm?: T
+        cloudflare?: T
+        umami?: T
+        booking?: T
+      }
+  lastRestoreDrill?: T
   secretNames?:
     | T
     | {
-        name?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        name?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4886,9 +4895,9 @@ export interface IntegrationsSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown;
-  };
-  width: 'full';
+    [k: string]: unknown
+  }
+  width: 'full'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4896,11 +4905,11 @@ export interface CollectionsWidget {
  */
 export interface TaskDeliverStaffEmail {
   input: {
-    enquiryId: number;
-  };
+    enquiryId: number
+  }
   output: {
-    sent?: boolean | null;
-  };
+    sent?: boolean | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4908,11 +4917,11 @@ export interface TaskDeliverStaffEmail {
  */
 export interface TaskSendConfirmation {
   input: {
-    enquiryId: number;
-  };
+    enquiryId: number
+  }
   output: {
-    sent?: boolean | null;
-  };
+    sent?: boolean | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4920,72 +4929,72 @@ export interface TaskSendConfirmation {
  */
 export interface TaskDeliverCrm {
   input: {
-    enquiryId: number;
-  };
+    enquiryId: number
+  }
   output: {
-    delivered?: boolean | null;
-  };
+    delivered?: boolean | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskPurgeEnquiries".
  */
 export interface TaskPurgeEnquiries {
-  input?: unknown;
+  input?: unknown
   output: {
-    purged?: number | null;
-  };
+    purged?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskLeadDigest".
  */
 export interface TaskLeadDigest {
-  input?: unknown;
+  input?: unknown
   output: {
-    sent?: number | null;
-  };
+    sent?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskUnassignedAlert".
  */
 export interface TaskUnassignedAlert {
-  input?: unknown;
+  input?: unknown
   output: {
-    alerted?: number | null;
-  };
+    alerted?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskPublishScheduled".
  */
 export interface TaskPublishScheduled {
-  input?: unknown;
+  input?: unknown
   output: {
-    published?: number | null;
-  };
+    published?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskAnalyticsNightly".
  */
 export interface TaskAnalyticsNightly {
-  input?: unknown;
+  input?: unknown
   output: {
-    events?: number | null;
-    aggregates?: number | null;
-  };
+    events?: number | null
+    aggregates?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskAnalyticsWeeklyReport".
  */
 export interface TaskAnalyticsWeeklyReport {
-  input?: unknown;
+  input?: unknown
   output: {
-    sent?: number | null;
-  };
+    sent?: number | null
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4993,53 +5002,52 @@ export interface TaskAnalyticsWeeklyReport {
  */
 export interface TaskSchedulePublish {
   input: {
-    type?: ('publish' | 'unpublish') | null;
-    locale?: string | null;
+    type?: ('publish' | 'unpublish') | null
+    locale?: string | null
     doc?:
       | ({
-          relationTo: 'projects';
-          value: number | Project;
+          relationTo: 'projects'
+          value: number | Project
         } | null)
       | ({
-          relationTo: 'services';
-          value: number | Service;
+          relationTo: 'services'
+          value: number | Service
         } | null)
       | ({
-          relationTo: 'sectors';
-          value: number | Sector;
+          relationTo: 'sectors'
+          value: number | Sector
         } | null)
       | ({
-          relationTo: 'team-members';
-          value: number | TeamMember;
+          relationTo: 'team-members'
+          value: number | TeamMember
         } | null)
       | ({
-          relationTo: 'testimonials';
-          value: number | Testimonial;
+          relationTo: 'testimonials'
+          value: number | Testimonial
         } | null)
       | ({
-          relationTo: 'journal-posts';
-          value: number | JournalPost;
+          relationTo: 'journal-posts'
+          value: number | JournalPost
         } | null)
       | ({
-          relationTo: 'pages';
-          value: number | Page;
-        } | null);
-    global?: string | null;
+          relationTo: 'pages'
+          value: number | Page
+        } | null)
+    global?: string | null
     user?: {
-      relationTo: 'users';
-      value: number | User;
-    } | null;
-  };
-  output?: unknown;
+      relationTo: 'users'
+      value: number | User
+    } | null
+  }
+  output?: unknown
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown;
+  [k: string]: unknown
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}

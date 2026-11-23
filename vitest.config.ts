@@ -2,8 +2,10 @@ import path from 'node:path'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
+  esbuild: { jsx: 'automatic' },
   resolve: {
     alias: {
+      '@': path.resolve(import.meta.dirname, 'apps/web/src'),
       '@payload-config': path.resolve(import.meta.dirname, 'apps/web/src/payload.config.ts'),
     },
   },
