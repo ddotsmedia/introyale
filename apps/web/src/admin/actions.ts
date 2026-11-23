@@ -464,7 +464,7 @@ export async function resetDashboardLayout(): Promise<void> {
   await payload.update({
     collection: 'users',
     id: user.id,
-    data: { dashboardLayout: null },
+    data: { dashboardLayout: { order: [], hidden: [] } }, // resolveLayout fills the role default
     overrideAccess: true,
   })
   revalidatePath('/admin')

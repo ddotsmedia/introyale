@@ -116,6 +116,8 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
   ).not.toBeChecked()
   await page.getByRole('button', { name: 'Reset to default' }).click()
   await page.waitForLoadState('networkidle')
+  await page.reload()
+  await page.waitForLoadState('networkidle')
   await openLayout(page)
   await expect(
     page
