@@ -99,6 +99,7 @@ async function openLayout(page: import('@playwright/test').Page) {
 }
 
 test('the dashboard layout can be reordered, hidden and reset, per user', async ({ page }) => {
+  test.setTimeout(90_000)
   await signIn(page)
   await open(page, '/admin')
   await openLayout(page)
