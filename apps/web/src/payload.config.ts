@@ -31,7 +31,7 @@ import { migrations } from './migrations'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
-// Sidebar groups: Leads, Content, Projects, Media, Site, System (admin v2). Custom views are linked above these by NavLinks.
+// Sidebar groups are drawn by the custom Nav (src/admin/components/Nav.tsx); GROUPS only organises the collections Payload would list.
 const GROUPS: Record<string, string> = {
   enquiries: 'Leads',
   'email-templates': 'Leads',
@@ -94,8 +94,8 @@ export default buildConfig({
       },
       beforeLogin: ['/admin/components/Branding#BeforeLogin'],
       providers: ['/admin/components/CommandPalette#CommandPalette'],
-      beforeNavLinks: ['/admin/components/Branding#NavLinks'],
-      actions: ['/admin/components/Branding#Bell'],
+      Nav: '/admin/components/Nav#Nav',
+      actions: ['/admin/components/TopActions#TopActions', '/admin/components/Branding#Bell'],
       views: {
         dashboard: { Component: '/admin/views/Dashboard#Dashboard' },
         leadsBoard: { Component: '/admin/views/LeadsBoard#LeadsBoard', path: '/leads-board' },

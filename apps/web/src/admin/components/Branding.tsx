@@ -1,8 +1,8 @@
 import config from '@payload-config'
+import { Bell as BellIcon } from 'lucide-react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import { markAllRead } from '../actions'
-import { can, type Role } from '../../lib/roles'
 import { fmtDate } from '../ui'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -60,83 +60,6 @@ export async function BeforeLogin() {
   )
 }
 
-type NavProps = { user?: { role?: Role } | null }
-
-const GROUPS: {
-  name: string
-  links: { href: string; label: string; need?: Parameters<typeof can>[1] }[]
-}[] = [
-  {
-    name: 'Dashboard',
-    links: [
-      { href: '/admin', label: 'Dashboard' },
-      { href: '/admin/analytics', label: 'Analytics', need: 'analytics.view' },
-    ],
-  },
-  {
-    name: 'Leads',
-    links: [
-      { href: '/admin/leads-board', label: 'Leads board', need: 'enquiries.read' },
-      { href: '/admin/leads', label: 'Leads table', need: 'enquiries.read' },
-      { href: '/admin/calendar', label: 'Calendar & tasks', need: 'enquiries.read' },
-    ],
-  },
-  {
-    name: 'Content',
-    links: [
-      { href: '/admin/workflow', label: 'Workflow board', need: 'comment' },
-      { href: '/admin/content-health', label: 'Content health', need: 'content.health' },
-    ],
-  },
-  {
-    name: 'Media',
-    links: [{ href: '/admin/media-library', label: 'Media library', need: 'comment' }],
-  },
-  {
-    name: 'Site',
-    links: [
-      {
-        href: '/admin/site-tools',
-        label: 'Redirects, 404s, integrations',
-        need: 'redirects.manage',
-      },
-    ],
-  },
-  {
-    name: 'System',
-    links: [
-      { href: '/admin/system', label: 'System status', need: 'system.view' },
-      { href: '/admin/security', label: 'Users & security', need: 'users.manage' },
-      { href: '/admin/audit', label: 'Audit log', need: 'users.manage' },
-    ],
-  },
-]
-
-/** Custom views, grouped and collapsible, above Payload's own collection groups. */
-export function NavLinks({ user }: NavProps) {
-  const role = user?.role
-  return (
-    <nav aria-label="Studio" className="ir" style={{ padding: 0 }}>
-      {GROUPS.map((g) => {
-        const links = g.links.filter((l) => !l.need || can(role, l.need))
-        if (!links.length) return null
-        return (
-          <details key={g.name} open style={{ marginBlockEnd: 8 }}>
-            <summary style={{ cursor: 'pointer', fontWeight: 600 }}>{g.name}</summary>
-            <ul className="ir-list" style={{ paddingInlineStart: 12 }}>
-              {links.map((l) => (
-                <li key={l.href} style={{ border: 0, padding: '3px 0' }}>
-                  <Link href={l.href}>{l.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </details>
-        )
-      })}
-    </nav>
-  )
-}
-
 type Note = { id: number; text: string; link?: string | null; createdAt: string }
 
 /** Bell in the admin header: native <details>, no client JS. Mark-read is a server action. */
@@ -164,7 +87,8 @@ export async function Bell({ user }: { user?: { id: number | string } | null }) 
       <ThemeToggle />
       <details className="ir-bell">
         <summary aria-label={`Notifications, ${String(unread)} unread`}>
-          🔔{unread ? <span className="ir-count">{unread}</span> : null}
+          <BellIcon size={18} aria-hidden="true" />
+          {unread ? <span className="ir-count">{unread}</span> : null}
         </summary>
         <div>
           {notes.length === 0 ? (

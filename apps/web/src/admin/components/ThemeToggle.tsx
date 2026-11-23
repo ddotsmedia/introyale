@@ -1,4 +1,5 @@
 'use client'
+import { Moon, Sun } from 'lucide-react'
 import { useState } from 'react'
 
 /** Light/dark switch; writes the cookie Payload reads so the choice survives reloads. */
@@ -9,7 +10,8 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="ir-btn ghost"
+      className="ir-icon-btn"
+      aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={dark}
       onClick={() => {
         const next = dark ? 'light' : 'dark'
@@ -18,7 +20,7 @@ export function ThemeToggle() {
         setDark(!dark)
       }}
     >
-      {dark ? 'Light mode' : 'Dark mode'}
+      {dark ? <Sun size={18} /> : <Moon size={18} />}
     </button>
   )
 }

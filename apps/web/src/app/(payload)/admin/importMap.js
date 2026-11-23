@@ -25,11 +25,12 @@ import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997e
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { Avatar as Avatar_7755d814caa876cc147a54fb2cf67784 } from '../../../admin/components/Avatar'
+import { Nav as Nav_4e2fd1f2ddee185304cca245e07e098e } from '../../../admin/components/Nav'
 import { Icon as Icon_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { Logo as Logo_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
+import { TopActions as TopActions_5cd1bd8420b1044736bdba4d80f6a98e } from '../../../admin/components/TopActions'
 import { Bell as Bell_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { BeforeLogin as BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
-import { NavLinks as NavLinks_4a6b8348bce4701645eb9bbaaeda305b } from '../../../admin/components/Branding'
 import { CommandPalette as CommandPalette_c5b5e50c99ff3a9c47ecb26a2da19524 } from '../../../admin/components/CommandPalette'
 import { Dashboard as Dashboard_c7d7fc284b3b0552574b75a0421f4260 } from '../../../admin/views/Dashboard'
 import { LeadsBoard as LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02 } from '../../../admin/views/LeadsBoard'
@@ -75,11 +76,12 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "/admin/components/Avatar#Avatar": Avatar_7755d814caa876cc147a54fb2cf67784,
+  "/admin/components/Nav#Nav": Nav_4e2fd1f2ddee185304cca245e07e098e,
   "/admin/components/Branding#Icon": Icon_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#Logo": Logo_4a6b8348bce4701645eb9bbaaeda305b,
+  "/admin/components/TopActions#TopActions": TopActions_5cd1bd8420b1044736bdba4d80f6a98e,
   "/admin/components/Branding#Bell": Bell_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/Branding#BeforeLogin": BeforeLogin_4a6b8348bce4701645eb9bbaaeda305b,
-  "/admin/components/Branding#NavLinks": NavLinks_4a6b8348bce4701645eb9bbaaeda305b,
   "/admin/components/CommandPalette#CommandPalette": CommandPalette_c5b5e50c99ff3a9c47ecb26a2da19524,
   "/admin/views/Dashboard#Dashboard": Dashboard_c7d7fc284b3b0552574b75a0421f4260,
   "/admin/views/LeadsBoard#LeadsBoard": LeadsBoard_3504f88cb2ccef2e68acd7de4b809c02,
