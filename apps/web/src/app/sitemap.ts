@@ -80,5 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // The journal is hidden until three articles are published (SPEC C15).
   if (journal.totalDocs >= 3) for (const j of journal.docs) out.push(entry(`/journal/${j.slug}`))
   for (const t of team.docs) out.push(entry(`/studio/team/${t.slug}`))
-  return out
+  const seen = new Set<string>() // sector pages are also in STATIC_PATHS
+  return out.filter((e) => !seen.has(e.url) && !!seen.add(e.url))
 }

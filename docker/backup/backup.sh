@@ -1,6 +1,7 @@
 #!/bin/sh
 # pg_dump -Fc + restic snapshot of media. Writes /backups/last_success for the healthcheck.
 set -eu
+umask 077   # dumps hold personal data: owner-only
 stamp="$(date -u +%Y%m%dT%H%M%SZ)"
 dump="/backups/dumps/introyale-${stamp}.dump"
 mkdir -p /backups/dumps

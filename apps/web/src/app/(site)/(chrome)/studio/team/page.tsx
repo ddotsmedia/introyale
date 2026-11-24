@@ -1,9 +1,14 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+import { pageMetadata } from '@/lib/seo'
 import { ui } from '@/messages/en'
 import { Breadcrumbs, TeamCard } from '@/components/Structure'
 import { listPublished } from '@/lib/cms'
 
 export const dynamic = 'force-dynamic'
+
+export const generateMetadata = (): Promise<Metadata> =>
+  pageMetadata({ fallbackTitle: 'Team', path: '/studio/team' })
 
 export default async function TeamIndex() {
   const team = await listPublished('team-members', 100)

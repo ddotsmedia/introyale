@@ -12,6 +12,7 @@ import * as migration_20261122_095533_m12_motion from './20261122_095533_m12_mot
 import * as migration_20261122_191429_m16_analytics_crm from './20261122_191429_m16_analytics_crm'
 import * as migration_20261122_191500_m16_analytics_tables from './20261122_191500_m16_analytics_tables'
 import * as migration_20261123_120000_footer_credit from './20261123_120000_footer_credit'
+import * as migration_20261124_120000_job_slugs from './20261124_120000_job_slugs'
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20261123_120000_footer_credit.up,
     down: migration_20261123_120000_footer_credit.down,
     name: '20261123_120000_footer_credit',
+  },
+  {
+    up: migration_20261124_120000_job_slugs.up,
+    down: migration_20261124_120000_job_slugs.down,
+    name: '20261124_120000_job_slugs',
   },
 ]
