@@ -101,6 +101,7 @@ async function openLayout(page: import('@playwright/test').Page) {
 /** Clicks a server-action button and waits for its POST; retries the click if it landed before hydration. */
 async function clickAndAwaitAction(page: Page, name: string): Promise<void> {
   await expect(async () => {
+    await openLayout(page) // the <details> can re-render closed after a server refresh
     const [res] = await Promise.all([
       page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin'), {
         timeout: 8_000,
