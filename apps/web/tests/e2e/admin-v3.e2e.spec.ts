@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright'
-import { expect, request as pwRequest, test } from '@playwright/test'
+import { expect, request as pwRequest, test, type Page } from '@playwright/test'
 
 // Admin v3: analytics, dashboard, calendar, leads, palette, collector, CSV. Needs the CI stack's E2E_ADMIN_PW user.
 const WCAG = ['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']
@@ -98,6 +98,19 @@ async function openLayout(page: import('@playwright/test').Page) {
   await expect(page.getByRole('list', { name: 'Dashboard widgets' })).toBeVisible()
 }
 
+/** Clicks a server-action button and waits for its POST; retries the click if it landed before hydration. */
+async function clickAndAwaitAction(page: Page, name: string): Promise<void> {
+  await expect(async () => {
+    const [res] = await Promise.all([
+      page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin'), {
+        timeout: 8_000,
+      }),
+      page.getByRole('button', { name }).click(),
+    ])
+    expect(res.status()).toBeLessThan(500)
+  }).toPass({ timeout: 60_000 })
+}
+
 test('the dashboard layout can be reordered, hidden and reset, per user', async ({ page }) => {
   test.setTimeout(90_000)
   await signIn(page)
@@ -105,10 +118,7 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
   await openLayout(page)
   const row = page.getByRole('list', { name: 'Dashboard widgets' }).getByRole('listitem').first()
   await row.getByRole('checkbox').uncheck()
-  await Promise.all([
-    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin')),
-    page.getByRole('button', { name: 'Save layout' }).click(),
-  ])
+  await clickAndAwaitAction(page, 'Save layout')
   await page.waitForLoadState('networkidle')
   await openLayout(page)
   await expect(
@@ -119,10 +129,7 @@ test('the dashboard layout can be reordered, hidden and reset, per user', async 
       .getByRole('checkbox'),
   ).not.toBeChecked()
   await page.waitForLoadState('networkidle') // charts have settled, so the button is not moving
-  await Promise.all([
-    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/admin')),
-    page.getByRole('button', { name: 'Reset to default' }).click(),
-  ])
+  await clickAndAwaitAction(page, 'Reset to default')
   await page.waitForLoadState('networkidle')
   await page.reload()
   await page.waitForLoadState('networkidle')
