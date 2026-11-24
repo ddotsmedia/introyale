@@ -127,6 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: publish
     concurrency: deploy-production
+    permissions: { contents: read, packages: read } # token is used on the VPS for docker login (pull)
     steps:
       - name: deploy over SSH
         env:
